@@ -11,91 +11,65 @@
   <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
 
   <style>
-    :root{
+    :root {
       --bg:#0b0c10;
-      --card:#0f1115;
       --muted:#9aa4b2;
       --accent:#6ee7b7;
       --glow: 0 10px 30px rgba(110,231,183,0.08);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     }
-    *{box-sizing:border-box}
+    *{box-sizing:border-box;margin:0;padding:0}
     html,body{
-      height:100%;margin:0;
+      height:100%;
       background:#000;
       color:#e6eef6;
       overflow-x:hidden;
     }
-    #matrixBackground {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: -1;
-      background: #000;
+    #matrixBackground{
+      position:fixed;
+      top:0;left:0;
+      width:100%;height:100%;
+      z-index:-1;
+      background:#000;
     }
     .container{max-width:1000px;margin:36px auto;padding:24px;position:relative;z-index:10}
     header{display:flex;align-items:center;gap:18px}
-    .avatar{width:92px;height:92px;border-radius:50%;background:linear-gradient(135deg,#0ea5a4,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:26px;box-shadow:var(--glow)}
+    .avatar{width:92px;height:92px;border-radius:50%;
+      background:linear-gradient(135deg,#0ea5a4,#7c3aed);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;font-size:26px;box-shadow:var(--glow)}
     h1{margin:0;font-size:26px;letter-spacing:0.6px}
     .sub{color:var(--muted);margin-top:6px}
     .hero{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
     .left{flex:1}
     .typed{color:var(--accent);font-weight:600}
     .card{background:rgba(255,255,255,0.03);border-radius:12px;padding:18px;margin-top:18px;box-shadow:var(--glow);backdrop-filter:blur(6px)}
-    .about{display:flex;gap:20px;align-items:flex-start}
-    .about p{color:var(--muted);line-height:1.6;margin:0}
+    .about p{color:var(--muted);line-height:1.6}
     .ctf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:14px}
     
-    /* --- FLIP CARDS --- */
-    .ctf-card{
-      perspective:1000px;
-      cursor:pointer;
-      height:220px;
-    }
-    .ctf-card-inner{
-      position:relative;
-      width:100%;height:100%;
+    /* Flip Cards */
+    .ctf-card{perspective:1000px;cursor:pointer;height:220px}
+    .ctf-card-inner{position:relative;width:100%;height:100%;
       transition:transform 0.6s cubic-bezier(.2,.9,.2,1);
-      transform-style:preserve-3d;
-    }
-    .ctf-card:hover .ctf-card-inner{
-      transform:rotateY(180deg);
-    }
+      transform-style:preserve-3d;}
+    .ctf-card:hover .ctf-card-inner{transform:rotateY(180deg);}
     .ctf-card-front,.ctf-card-back{
-      position:absolute;
-      width:100%;height:100%;
-      backface-visibility:hidden;
-      border-radius:10px;
+      position:absolute;width:100%;height:100%;
+      backface-visibility:hidden;border-radius:10px;
       border:1px solid rgba(255,255,255,0.03);
-      background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
-      padding:18px;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      text-align:center;
+      background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0.005));
+      padding:18px;display:flex;flex-direction:column;
+      justify-content:center;align-items:center;text-align:center;
       box-shadow:var(--glow);
     }
-    .ctf-card-front{
-      color:var(--accent);
-      font-weight:600;
-      font-size:17px;
-      padding:0 12px;
-    }
-    .ctf-card-back{
-      transform:rotateY(180deg);
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.5;
-      align-items:flex-start;
-      justify-content:flex-start;
-    }
+    .ctf-card-front{color:var(--accent);font-weight:600;font-size:17px}
+    .ctf-card-back{transform:rotateY(180deg);color:var(--muted);font-size:14px;line-height:1.5;align-items:flex-start;justify-content:flex-start}
     .ctf-card .meta{font-size:13px;color:var(--muted);margin-bottom:8px}
     .tag{display:inline-block;font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(110,231,183,0.08);color:var(--accent);margin:4px 3px}
     footer{color:var(--muted);font-size:13px;margin-top:26px;text-align:center}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width:640px){.hero{flex-direction:column;align-items:flex-start}.avatar{width:78px;height:78px}}
+    @media(max-width:640px){.hero{flex-direction:column;align-items:flex-start}.avatar{width:78px;height:78px}}
   </style>
 </head>
 <body>
@@ -130,115 +104,16 @@
       <p class="sub" style="margin-top:6px">Hover each card to reveal details 👇</p>
 
       <div class="ctf-grid">
-
-        <!-- 1 -->
-        <div class="ctf-card" data-aos="fade-right">
-          <div class="ctf-card-inner">
-            <div class="ctf-card-front">National Cyber Security Center of Jordan</div>
-            <div class="ctf-card-back">
-              <div class="meta">First CTF • Ranked Top 100 in Jordan</div>
-              <div><span class="tag">National</span><span class="tag">Beginner</span></div>
-              <p>My first official CTF participation organized by the National Cyber Security Center of Jordan — achieved a ranking within the top 100 competitors across the country.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2 -->
-        <div class="ctf-card" data-aos="fade-left">
-          <div class="ctf-card-inner">
-            <div class="ctf-card-front">Cyber Warrior v1</div>
-            <div class="ctf-card-back">
-              <div class="meta">Cyber War / Jordan</div>
-              <div><span class="tag">Forensics</span><span class="tag">Team</span></div>
-              <p>Participated in the first edition of Cyber Warrior held in Jordan — competed in digital forensics and analysis challenges.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3 -->
-        <div class="ctf-card" data-aos="fade-right">
-          <div class="ctf-card-inner">
-            <div class="ctf-card-front">Cyber Warrior v2</div>
-            <div class="ctf-card-back">
-              <div class="meta">Regional Competition</div>
-              <div><span class="tag">Network</span><span class="tag">Web</span></div>
-              <p>Joined the second edition of Cyber Warrior — advanced through multiple stages of analysis, web exploitation, and network defense challenges.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- 4 -->
-        <div class="ctf-card" data-aos="fade-left">
-          <div class="ctf-card-inner">
-            <div class="ctf-card-front">Boot2Root — AABU</div>
-            <div class="ctf-card-back">
-              <div class="meta">University Challenge</div>
-              <div><span class="tag">Boot2Root</span><span class="tag">Privilege Escalation</span></div>
-              <p>Completed a Boot2Root challenge hosted by Al al-Bayt University — focused on privilege escalation and system exploitation.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- 5 -->
-        <div class="ctf-card" data-aos="fade-right">
-          <div class="ctf-card-inner">
-            <div class="ctf-card-front">Orbit CTF</div>
-            <div class="ctf-card-back">
-              <div class="meta">University / Reverse & Web</div>
-              <div><span class="tag">Web</span><span class="tag">Reverse</span></div>
-              <p>Competed in Orbit CTF tackling reverse engineering and web security challenges involving binary decoding and server-side logic flaws.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- 6 -->
-        <div class="ctf-card" data-aos="fade-left">
-          <div class="ctf-card-inner">
-            <div class="ctf-card-front">Cypetra CTF — Green Circle</div>
-            <div class="ctf-card-back">
-              <div class="meta">Team Competition</div>
-              <div><span class="tag">Web</span><span class="tag">Forensics</span></div>
-              <p>Represented my team in the Cypetra CTF organized by Green Circle — solved web exploitation and forensics problems collaboratively.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- 7 -->
-        <div class="ctf-card" data-aos="fade-right">
-          <div class="ctf-card-inner">
-            <div class="ctf-card-front">Honeynet Collapse CTF</div>
-            <div class="ctf-card-back">
-              <div class="meta">Cybersecurity Simulation</div>
-              <div><span class="tag">Incident Response</span><span class="tag">Forensics</span></div>
-              <p>Participated in Honeynet Collapse CTF — focused on simulated attack analysis, log investigation, and malware trace recovery.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- 8 -->
-        <div class="ctf-card" data-aos="fade-left">
-          <div class="ctf-card-inner">
-            <div class="ctf-card-front">Industrial Intrusion</div>
-            <div class="ctf-card-back">
-              <div class="meta">ICS / Critical Infrastructure</div>
-              <div><span class="tag">ICS</span><span class="tag">Exploitation</span></div>
-              <p>Engaged in the Industrial Intrusion challenge focusing on Industrial Control Systems exploitation and critical infrastructure defense.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- 9 -->
-        <div class="ctf-card" data-aos="fade-right">
-          <div class="ctf-card-inner">
-            <div class="ctf-card-front">Black Hat MENA — v2</div>
-            <div class="ctf-card-back">
-              <div class="meta">Regional CTF</div>
-              <div><span class="tag">Competition</span><span class="tag">Teams</span></div>
-              <p>Competed in the second edition of Black Hat MENA — a top-tier regional CTF featuring Web, Crypto, and Pwn challenges.</p>
-            </div>
-          </div>
-        </div>
-
+        <!-- 9 CTF Cards -->
+        <div class="ctf-card" data-aos="fade-right"><div class="ctf-card-inner"><div class="ctf-card-front">National Cyber Security Center of Jordan</div><div class="ctf-card-back"><div class="meta">First CTF • Ranked Top 100 in Jordan</div><div><span class="tag">National</span><span class="tag">Beginner</span></div><p>My first official CTF participation organized by the National Cyber Security Center of Jordan — achieved a ranking within the top 100 competitors across the country.</p></div></div></div>
+        <div class="ctf-card" data-aos="fade-left"><div class="ctf-card-inner"><div class="ctf-card-front">Cyber Warrior v1</div><div class="ctf-card-back"><div class="meta">Cyber War / Jordan</div><div><span class="tag">Forensics</span><span class="tag">Team</span></div><p>Participated in the first edition of Cyber Warrior held in Jordan — competed in digital forensics and analysis challenges.</p></div></div></div>
+        <div class="ctf-card" data-aos="fade-right"><div class="ctf-card-inner"><div class="ctf-card-front">Cyber Warrior v2</div><div class="ctf-card-back"><div class="meta">Regional Competition</div><div><span class="tag">Network</span><span class="tag">Web</span></div><p>Joined the second edition of Cyber Warrior — advanced through multiple stages of analysis, web exploitation, and network defense challenges.</p></div></div></div>
+        <div class="ctf-card" data-aos="fade-left"><div class="ctf-card-inner"><div class="ctf-card-front">Boot2Root — AABU</div><div class="ctf-card-back"><div class="meta">University Challenge</div><div><span class="tag">Boot2Root</span><span class="tag">Privilege Escalation</span></div><p>Completed a Boot2Root challenge hosted by Al al-Bayt University — focused on privilege escalation and system exploitation.</p></div></div></div>
+        <div class="ctf-card" data-aos="fade-right"><div class="ctf-card-inner"><div class="ctf-card-front">Orbit CTF</div><div class="ctf-card-back"><div class="meta">University / Reverse & Web</div><div><span class="tag">Web</span><span class="tag">Reverse</span></div><p>Competed in Orbit CTF tackling reverse engineering and web security challenges involving binary decoding and server-side logic flaws.</p></div></div></div>
+        <div class="ctf-card" data-aos="fade-left"><div class="ctf-card-inner"><div class="ctf-card-front">Cypetra CTF — Green Circle</div><div class="ctf-card-back"><div class="meta">Team Competition</div><div><span class="tag">Web</span><span class="tag">Forensics</span></div><p>Represented my team in the Cypetra CTF organized by Green Circle — solved web exploitation and forensics problems collaboratively.</p></div></div></div>
+        <div class="ctf-card" data-aos="fade-right"><div class="ctf-card-inner"><div class="ctf-card-front">Honeynet Collapse CTF</div><div class="ctf-card-back"><div class="meta">Cybersecurity Simulation</div><div><span class="tag">Incident Response</span><span class="tag">Forensics</span></div><p>Participated in Honeynet Collapse CTF — focused on simulated attack analysis, log investigation, and malware trace recovery.</p></div></div></div>
+        <div class="ctf-card" data-aos="fade-left"><div class="ctf-card-inner"><div class="ctf-card-front">Industrial Intrusion</div><div class="ctf-card-back"><div class="meta">ICS / Critical Infrastructure</div><div><span class="tag">ICS</span><span class="tag">Exploitation</span></div><p>Engaged in the Industrial Intrusion challenge focusing on Industrial Control Systems exploitation and critical infrastructure defense.</p></div></div></div>
+        <div class="ctf-card" data-aos="fade-right"><div class="ctf-card-inner"><div class="ctf-card-front">Black Hat MENA — v2</div><div class="ctf-card-back"><div class="meta">Regional CTF</div><div><span class="tag">Competition</span><span class="tag">Teams</span></div><p>Competed in the second edition of Black Hat MENA — a top-tier regional CTF featuring Web, Crypto, and Pwn challenges.</p></div></div></div>
       </div>
     </section>
 
@@ -249,44 +124,34 @@
 
   <!-- Matrix Rain -->
   <script>
-  const canvas = document.getElementById('matrixBackground');
-  const ctx = canvas.getContext('2d');
-  function setupCanvas(){
-    canvas.height = window.innerHeight;
-    canvas.width = window.innerWidth;
-  }
+  const canvas=document.getElementById('matrixBackground');
+  const ctx=canvas.getContext('2d');
+  function setupCanvas(){canvas.height=window.innerHeight;canvas.width=window.innerWidth;}
   setupCanvas();
-  const letters = '01';
-  const fontSize = 14;
-  let columns = Math.floor(canvas.width / fontSize);
-  let drops = Array(columns).fill(1);
-
-  function draw() {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#00ff9d';
-    ctx.font = fontSize + 'px monospace';
-    for (let i = 0; i < drops.length; i++) {
-      const text = letters.charAt(Math.floor(Math.random() * letters.length));
-      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+  const letters='01';
+  const fontSize=14;
+  let columns=Math.floor(canvas.width/fontSize);
+  let drops=Array(columns).fill(1);
+  function draw(){
+    ctx.fillStyle='rgba(0,0,0,0.08)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle='#00ff9d';
+    ctx.font=fontSize+'px monospace';
+    for(let i=0;i<drops.length;i++){
+      const text=letters.charAt(Math.floor(Math.random()*letters.length));
+      ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+      if(drops[i]*fontSize>canvas.height&&Math.random()>0.975)drops[i]=0;
       drops[i]++;
     }
   }
-  let matrixInterval = setInterval(draw, 33);
-  window.addEventListener('resize', () => {
-    clearInterval(matrixInterval);
-    setupCanvas();
-    columns = Math.floor(canvas.width / fontSize);
-    drops = Array(columns).fill(1);
-    matrixInterval = setInterval(draw, 33);
-  });
+  let matrixInterval=setInterval(draw,33);
+  window.addEventListener('resize',()=>{clearInterval(matrixInterval);setupCanvas();columns=Math.floor(canvas.width/fontSize);drops=Array(columns).fill(1);matrixInterval=setInterval(draw,33);});
   </script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script>
-    AOS.init({duration:700, offset:60, once:true});
-    const typed = new Typed('#typed',{strings:["CTF Player","Pentester","Cyber Warrior"],typeSpeed:60,backSpeed:30,backDelay:1400,loop:true});
+    AOS.init({duration:700,offset:60,once:true});
+    const typed=new Typed('#typed',{strings:["CTF Player","Pentester","Cyber Warrior"],typeSpeed:60,backSpeed:30,backDelay:1400,loop:true});
   </script>
 </body>
 </html>
