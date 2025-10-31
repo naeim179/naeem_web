@@ -150,8 +150,27 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script>
-    AOS.init({duration:700,offset:60,once:true});
-    const typed=new Typed('#typed',{strings:["CTF Player","Pentester","Cyber Warrior"],typeSpeed:60,backSpeed:30,backDelay:1400,loop:true});
+    // ✅ تعديل لجعل كل الكروت تظهر فورًا بدون انتظار Scroll
+    AOS.init({
+      duration: 700,
+      offset: 0,
+      startEvent: 'DOMContentLoaded',
+      once: true
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('[data-aos]').forEach(el => {
+        el.classList.add('aos-animate');
+      });
+    });
+
+    const typed=new Typed('#typed',{
+      strings:["CTF Player","Pentester","Cyber Warrior"],
+      typeSpeed:60,
+      backSpeed:30,
+      backDelay:1400,
+      loop:true
+    });
   </script>
 </body>
 </html>
