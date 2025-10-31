@@ -50,12 +50,12 @@
     .ctf-card{
       perspective:1000px;
       cursor:pointer;
-      height:200px;
+      height:220px;
     }
     .ctf-card-inner{
       position:relative;
       width:100%;height:100%;
-      transition:transform 0.6s;
+      transition:transform 0.6s cubic-bezier(.2,.9,.2,1);
       transform-style:preserve-3d;
     }
     .ctf-card:hover .ctf-card-inner{
@@ -66,27 +66,31 @@
       width:100%;height:100%;
       backface-visibility:hidden;
       border-radius:10px;
-      border:1px solid rgba(255,255,255,0.05);
-      background:rgba(255,255,255,0.02);
-      padding:14px;
+      border:1px solid rgba(255,255,255,0.03);
+      background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+      padding:18px;
       display:flex;
-      align-items:center;
+      flex-direction:column;
       justify-content:center;
+      align-items:center;
       text-align:center;
       box-shadow:var(--glow);
     }
     .ctf-card-front{
       color:var(--accent);
       font-weight:600;
-      font-size:16px;
+      font-size:17px;
+      padding:0 12px;
     }
     .ctf-card-back{
       transform:rotateY(180deg);
       color:var(--muted);
       font-size:14px;
       line-height:1.5;
+      align-items:flex-start;
+      justify-content:flex-start;
     }
-    
+    .ctf-card .meta{font-size:13px;color:var(--muted);margin-bottom:8px}
     .tag{display:inline-block;font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(110,231,183,0.08);color:var(--accent);margin:4px 3px}
     footer{color:var(--muted);font-size:13px;margin-top:26px;text-align:center}
     a{color:var(--accent);text-decoration:none}
@@ -127,6 +131,7 @@
 
       <div class="ctf-grid">
 
+        <!-- 1 -->
         <div class="ctf-card" data-aos="fade-right">
           <div class="ctf-card-inner">
             <div class="ctf-card-front">National Cyber Security Center of Jordan</div>
@@ -138,6 +143,7 @@
           </div>
         </div>
 
+        <!-- 2 -->
         <div class="ctf-card" data-aos="fade-left">
           <div class="ctf-card-inner">
             <div class="ctf-card-front">Cyber Warrior v1</div>
@@ -149,6 +155,7 @@
           </div>
         </div>
 
+        <!-- 3 -->
         <div class="ctf-card" data-aos="fade-right">
           <div class="ctf-card-inner">
             <div class="ctf-card-front">Cyber Warrior v2</div>
@@ -160,6 +167,7 @@
           </div>
         </div>
 
+        <!-- 4 -->
         <div class="ctf-card" data-aos="fade-left">
           <div class="ctf-card-inner">
             <div class="ctf-card-front">Boot2Root — AABU</div>
@@ -167,6 +175,66 @@
               <div class="meta">University Challenge</div>
               <div><span class="tag">Boot2Root</span><span class="tag">Privilege Escalation</span></div>
               <p>Completed a Boot2Root challenge hosted by Al al-Bayt University — focused on privilege escalation and system exploitation.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="ctf-card" data-aos="fade-right">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Orbit CTF</div>
+            <div class="ctf-card-back">
+              <div class="meta">University / Reverse & Web</div>
+              <div><span class="tag">Web</span><span class="tag">Reverse</span></div>
+              <p>Competed in Orbit CTF tackling reverse engineering and web security challenges involving binary decoding and server-side logic flaws.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="ctf-card" data-aos="fade-left">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Cypetra CTF — Green Circle</div>
+            <div class="ctf-card-back">
+              <div class="meta">Team Competition</div>
+              <div><span class="tag">Web</span><span class="tag">Forensics</span></div>
+              <p>Represented my team in the Cypetra CTF organized by Green Circle — solved web exploitation and forensics problems collaboratively.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="ctf-card" data-aos="fade-right">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Honeynet Collapse CTF</div>
+            <div class="ctf-card-back">
+              <div class="meta">Cybersecurity Simulation</div>
+              <div><span class="tag">Incident Response</span><span class="tag">Forensics</span></div>
+              <p>Participated in Honeynet Collapse CTF — focused on simulated attack analysis, log investigation, and malware trace recovery.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="ctf-card" data-aos="fade-left">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Industrial Intrusion</div>
+            <div class="ctf-card-back">
+              <div class="meta">ICS / Critical Infrastructure</div>
+              <div><span class="tag">ICS</span><span class="tag">Exploitation</span></div>
+              <p>Engaged in the Industrial Intrusion challenge focusing on Industrial Control Systems exploitation and critical infrastructure defense.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9 -->
+        <div class="ctf-card" data-aos="fade-right">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Black Hat MENA — v2</div>
+            <div class="ctf-card-back">
+              <div class="meta">Regional CTF</div>
+              <div><span class="tag">Competition</span><span class="tag">Teams</span></div>
+              <p>Competed in the second edition of Black Hat MENA — a top-tier regional CTF featuring Web, Crypto, and Pwn challenges.</p>
             </div>
           </div>
         </div>
@@ -183,12 +251,15 @@
   <script>
   const canvas = document.getElementById('matrixBackground');
   const ctx = canvas.getContext('2d');
-  canvas.height = window.innerHeight;
-  canvas.width = window.innerWidth;
+  function setupCanvas(){
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+  }
+  setupCanvas();
   const letters = '01';
   const fontSize = 14;
-  const columns = canvas.width / fontSize;
-  const drops = Array(Math.floor(columns)).fill(1);
+  let columns = Math.floor(canvas.width / fontSize);
+  let drops = Array(columns).fill(1);
 
   function draw() {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
@@ -202,10 +273,13 @@
       drops[i]++;
     }
   }
-  setInterval(draw, 33);
+  let matrixInterval = setInterval(draw, 33);
   window.addEventListener('resize', () => {
-    canvas.height = window.innerHeight;
-    canvas.width = window.innerWidth;
+    clearInterval(matrixInterval);
+    setupCanvas();
+    columns = Math.floor(canvas.width / fontSize);
+    drops = Array(columns).fill(1);
+    matrixInterval = setInterval(draw, 33);
   });
   </script>
 
