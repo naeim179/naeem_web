@@ -15,6 +15,7 @@
       --bg:#0b0c10;
       --muted:#9aa4b2;
       --accent:#6ee7b7;
+      --accent-soft:rgba(110,231,183,0.08);
       --glow: 0 10px 30px rgba(110,231,183,0.08);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     }
@@ -25,6 +26,27 @@
       color:#e6eef6;
       overflow-x:hidden;
     }
+
+    /* 🔥 خلفية هاكنق متحركة فوق الماتريكس */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:-60px;
+      z-index:-2;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(110,231,183,0.22), transparent 55%),
+        radial-gradient(circle at 80% 80%, rgba(56,189,248,0.2), transparent 55%);
+      opacity:0.7;
+      filter:blur(6px);
+      pointer-events:none;
+      animation:drift 30s ease-in-out infinite alternate;
+    }
+    @keyframes drift{
+      0%{transform:translate3d(0,0,0) scale(1);}
+      50%{transform:translate3d(-20px,10px,0) scale(1.05);}
+      100%{transform:translate3d(20px,-10px,0) scale(1.08);}
+    }
+
     #matrixBackground{
       position:fixed;
       top:0;left:0;
@@ -32,44 +54,193 @@
       z-index:-1;
       background:#000;
     }
+
     .container{max-width:1000px;margin:36px auto;padding:24px;position:relative;z-index:10}
     header{display:flex;align-items:center;gap:18px}
-    .avatar{width:92px;height:92px;border-radius:50%;
-      background:linear-gradient(135deg,#0ea5a4,#7c3aed);
+    .avatar{
+      width:92px;height:92px;border-radius:50%;
+      background:radial-gradient(circle at 30% 20%,#22c55e,#0ea5e9 60%,#4c1d95 100%);
       display:flex;align-items:center;justify-content:center;
-      font-weight:700;font-size:26px;box-shadow:var(--glow)}
+      font-weight:700;font-size:26px;box-shadow:var(--glow)
+    }
     h1{margin:0;font-size:26px;letter-spacing:0.6px}
     .sub{color:var(--muted);margin-top:6px}
-    .hero{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+    .hero{display:flex;align-items:center;justify-content:space-between;padding:18px 0;gap:16px}
     .left{flex:1}
     .typed{color:var(--accent);font-weight:600}
-    .card{background:rgba(255,255,255,0.03);border-radius:12px;padding:18px;margin-top:18px;box-shadow:var(--glow);backdrop-filter:blur(6px)}
+    .card{
+      background:rgba(15,23,42,0.85);
+      border-radius:12px;
+      padding:18px;
+      margin-top:18px;
+      box-shadow:var(--glow);
+      backdrop-filter:blur(10px);
+      border:1px solid rgba(148,163,184,0.18);
+    }
     .about p{color:var(--muted);line-height:1.6}
-    .ctf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:14px}
-    
+    .ctf-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:14px;
+      margin-top:14px
+    }
+
     /* Flip Cards */
     .ctf-card{perspective:1000px;cursor:pointer;height:220px}
-    .ctf-card-inner{position:relative;width:100%;height:100%;
+    .ctf-card-inner{
+      position:relative;width:100%;height:100%;
       transition:transform 0.6s cubic-bezier(.2,.9,.2,1);
-      transform-style:preserve-3d;}
+      transform-style:preserve-3d;
+    }
     .ctf-card:hover .ctf-card-inner{transform:rotateY(180deg);}
     .ctf-card-front,.ctf-card-back{
       position:absolute;width:100%;height:100%;
       backface-visibility:hidden;border-radius:10px;
-      border:1px solid rgba(255,255,255,0.03);
-      background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0.005));
+      border:1px solid rgba(255,255,255,0.04);
+      background:linear-gradient(180deg,rgba(15,23,42,0.95),rgba(15,23,42,0.86));
       padding:18px;display:flex;flex-direction:column;
       justify-content:center;align-items:center;text-align:center;
       box-shadow:var(--glow);
     }
     .ctf-card-front{color:var(--accent);font-weight:600;font-size:17px}
-    .ctf-card-back{transform:rotateY(180deg);color:var(--muted);font-size:14px;line-height:1.5;align-items:flex-start;justify-content:flex-start}
+    .ctf-card-back{
+      transform:rotateY(180deg);
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+      align-items:flex-start;
+      justify-content:flex-start
+    }
     .ctf-card .meta{font-size:13px;color:var(--muted);margin-bottom:8px}
-    .tag{display:inline-block;font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(110,231,183,0.08);color:var(--accent);margin:4px 3px}
-    footer{color:var(--muted);font-size:13px;margin-top:26px;text-align:center}
+    .tag{
+      display:inline-block;font-size:12px;
+      padding:6px 8px;border-radius:999px;
+      background:var(--accent-soft);
+      color:var(--accent);margin:4px 3px
+    }
+
+    /* عناوين الأقسام و Grids جديدة */
+    .section-title{
+      font-size:20px;
+      margin:0 0 4px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .section-badge{
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      background:rgba(15,23,42,0.9);
+      border:1px solid rgba(148,163,184,0.5);
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:0.04em;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(15,23,42,0.9);
+      border:1px solid rgba(148,163,184,0.4);
+      color:var(--muted);
+      margin:3px 4px;
+    }
+    .pill strong{color:#e5e7eb;font-weight:500}
+
+    .projects-grid,
+    .certs-grid,
+    .writeups-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:14px;
+      margin-top:12px;
+    }
+
+    .item-card{
+      padding:14px;
+      border-radius:10px;
+      border:1px solid rgba(148,163,184,0.26);
+      background:linear-gradient(145deg,rgba(15,23,42,0.96),rgba(15,23,42,0.85));
+      box-shadow:0 8px 26px rgba(15,23,42,0.8);
+    }
+    .item-card h3{
+      margin:0 0 4px;
+      font-size:15px;
+    }
+    .item-meta{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+    .item-desc{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.5;
+      margin-bottom:8px;
+    }
+    .item-links a{
+      font-size:12px;
+      margin-right:10px;
+    }
+
+    /* Contact Section */
+    .contact-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:12px;
+    }
+    .contact-method{
+      flex:1 1 190px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.4);
+      background:rgba(15,23,42,0.96);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      font-size:13px;
+    }
+    .contact-left{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .contact-label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;}
+    .contact-value{font-weight:500;}
+    .btn-link{
+      font-size:12px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid rgba(110,231,183,0.4);
+      text-decoration:none;
+      color:var(--accent);
+      background:rgba(16,185,129,0.08);
+    }
+    .btn-link:hover{
+      text-decoration:none;
+      background:rgba(16,185,129,0.16);
+    }
+
+    footer{
+      color:var(--muted);
+      font-size:13px;
+      margin-top:26px;
+      text-align:center
+    }
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media(max-width:640px){.hero{flex-direction:column;align-items:flex-start}.avatar{width:78px;height:78px}}
+
+    @media(max-width:640px){
+      .hero{flex-direction:column;align-items:flex-start}
+      .avatar{width:78px;height:78px}
+      header{flex-wrap:wrap}
+    }
   </style>
 </head>
 <body>
@@ -85,40 +256,365 @@
       <div style="margin-left:auto;color:var(--muted);font-size:13px">GitHub Pages • Dark theme</div>
     </header>
 
+    <!-- Hero / About -->
     <section class="hero card" data-aos="fade-up">
       <div class="left">
-        <div style="font-size:18px;margin-bottom:8px">Hello 👋 I’m <strong>Ναιμός Μαχητής</strong></div>
-        <div style="font-size:16px"><span id="typed" class="typed"></span></div>
+        <div style="font-size:18px;margin-bottom:8px">
+          Hello 👋 I’m <strong>Ναιμός Μαχητής</strong>
+        </div>
+        <div style="font-size:16px">
+          <span id="typed" class="typed"></span>
+        </div>
 
         <div class="card about" style="margin-top:12px">
           <div style="flex:1">
             <h3 style="margin-top:0">About Me</h3>
-            <p>I’m a CTF player who enjoys forensics, web challenges, and Boot2Root missions. I constantly learn and strive to improve my skills in cybersecurity and digital forensics.</p>
+            <p>
+              I’m a CTF player who enjoys forensics, web challenges, and Boot2Root missions.
+              I constantly learn and strive to improve my skills in cybersecurity and digital forensics.
+            </p>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- CTF Battles -->
     <section class="card" data-aos="fade-up">
-      <h2 style="margin:0">My CTF Battles</h2>
+      <div class="section-title">
+        <span>My CTF Battles</span>
+        <span class="section-badge">Experience</span>
+      </div>
       <p class="sub" style="margin-top:6px">Hover each card to reveal details 👇</p>
 
       <div class="ctf-grid">
         <!-- 9 CTF Cards -->
-        <div class="ctf-card" data-aos="fade-right"><div class="ctf-card-inner"><div class="ctf-card-front">National Cyber Security Center of Jordan</div><div class="ctf-card-back"><div class="meta">First CTF • Ranked Top 100 in Jordan</div><div><span class="tag">National</span><span class="tag">Beginner</span></div><p>My first official CTF participation organized by the National Cyber Security Center of Jordan — achieved a ranking within the top 100 competitors across the country.</p></div></div></div>
-        <div class="ctf-card" data-aos="fade-left"><div class="ctf-card-inner"><div class="ctf-card-front">Cyber Warrior v1</div><div class="ctf-card-back"><div class="meta">Cyber War / Jordan</div><div><span class="tag">Forensics</span><span class="tag">Team</span></div><p>Participated in the first edition of Cyber Warrior held in Jordan — competed in digital forensics and analysis challenges.</p></div></div></div>
-        <div class="ctf-card" data-aos="fade-right"><div class="ctf-card-inner"><div class="ctf-card-front">Cyber Warrior v2</div><div class="ctf-card-back"><div class="meta">Regional Competition</div><div><span class="tag">Network</span><span class="tag">Web</span></div><p>Joined the second edition of Cyber Warrior — advanced through multiple stages of analysis, web exploitation, and network defense challenges.</p></div></div></div>
-        <div class="ctf-card" data-aos="fade-left"><div class="ctf-card-inner"><div class="ctf-card-front">Boot2Root — AABU</div><div class="ctf-card-back"><div class="meta">University Challenge</div><div><span class="tag">Boot2Root</span><span class="tag">Privilege Escalation</span></div><p>Completed a Boot2Root challenge hosted by Al al-Bayt University — focused on privilege escalation and system exploitation.</p></div></div></div>
-        <div class="ctf-card" data-aos="fade-right"><div class="ctf-card-inner"><div class="ctf-card-front">Orbit CTF</div><div class="ctf-card-back"><div class="meta">University / Reverse & Web</div><div><span class="tag">Web</span><span class="tag">Reverse</span></div><p>Competed in Orbit CTF tackling reverse engineering and web security challenges involving binary decoding and server-side logic flaws.</p></div></div></div>
-        <div class="ctf-card" data-aos="fade-left"><div class="ctf-card-inner"><div class="ctf-card-front">Cypetra CTF — Green Circle</div><div class="ctf-card-back"><div class="meta">Team Competition</div><div><span class="tag">Web</span><span class="tag">Forensics</span></div><p>Represented my team in the Cypetra CTF organized by Green Circle — solved web exploitation and forensics problems collaboratively.</p></div></div></div>
-        <div class="ctf-card" data-aos="fade-right"><div class="ctf-card-inner"><div class="ctf-card-front">Honeynet Collapse CTF</div><div class="ctf-card-back"><div class="meta">Cybersecurity Simulation</div><div><span class="tag">Incident Response</span><span class="tag">Forensics</span></div><p>Participated in Honeynet Collapse CTF — focused on simulated attack analysis, log investigation, and malware trace recovery.</p></div></div></div>
-        <div class="ctf-card" data-aos="fade-left"><div class="ctf-card-inner"><div class="ctf-card-front">Industrial Intrusion</div><div class="ctf-card-back"><div class="meta">ICS / Critical Infrastructure</div><div><span class="tag">ICS</span><span class="tag">Exploitation</span></div><p>Engaged in the Industrial Intrusion challenge focusing on Industrial Control Systems exploitation and critical infrastructure defense.</p></div></div></div>
-        <div class="ctf-card" data-aos="fade-right"><div class="ctf-card-inner"><div class="ctf-card-front">Black Hat MENA — v2</div><div class="ctf-card-back"><div class="meta">Regional CTF</div><div><span class="tag">Competition</span><span class="tag">Teams</span></div><p>Competed in the second edition of Black Hat MENA — a top-tier regional CTF featuring Web, Crypto, and Pwn challenges.</p></div></div></div>
+        <div class="ctf-card" data-aos="fade-right">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">National Cyber Security Center of Jordan</div>
+            <div class="ctf-card-back">
+              <div class="meta">First CTF • Ranked Top 100 in Jordan</div>
+              <div>
+                <span class="tag">National</span><span class="tag">Beginner</span>
+              </div>
+              <p>My first official CTF participation organized by the National Cyber Security Center of Jordan — achieved a ranking within the top 100 competitors across the country.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctf-card" data-aos="fade-left">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Cyber Warrior v1</div>
+            <div class="ctf-card-back">
+              <div class="meta">Cyber War / Jordan</div>
+              <div>
+                <span class="tag">Forensics</span><span class="tag">Team</span>
+              </div>
+              <p>Participated in the first edition of Cyber Warrior held in Jordan — competed in digital forensics and analysis challenges.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctf-card" data-aos="fade-right">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Cyber Warrior v2</div>
+            <div class="ctf-card-back">
+              <div class="meta">Regional Competition</div>
+              <div>
+                <span class="tag">Network</span><span class="tag">Web</span>
+              </div>
+              <p>Joined the second edition of Cyber Warrior — advanced through multiple stages of analysis, web exploitation, and network defense challenges.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctf-card" data-aos="fade-left">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Boot2Root — AABU</div>
+            <div class="ctf-card-back">
+              <div class="meta">University Challenge</div>
+              <div>
+                <span class="tag">Boot2Root</span><span class="tag">Privilege Escalation</span>
+              </div>
+              <p>Completed a Boot2Root challenge hosted by Al al-Bayt University — focused on privilege escalation and system exploitation.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctf-card" data-aos="fade-right">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Orbit CTF</div>
+            <div class="ctf-card-back">
+              <div class="meta">University / Reverse &amp; Web</div>
+              <div>
+                <span class="tag">Web</span><span class="tag">Reverse</span>
+              </div>
+              <p>Competed in Orbit CTF tackling reverse engineering and web security challenges involving binary decoding and server-side logic flaws.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctf-card" data-aos="fade-left">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Cypetra CTF — Green Circle</div>
+            <div class="ctf-card-back">
+              <div class="meta">Team Competition</div>
+              <div>
+                <span class="tag">Web</span><span class="tag">Forensics</span>
+              </div>
+              <p>Represented my team in the Cypetra CTF organized by Green Circle — solved web exploitation and forensics problems collaboratively.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctf-card" data-aos="fade-right">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Honeynet Collapse CTF</div>
+            <div class="ctf-card-back">
+              <div class="meta">Cybersecurity Simulation</div>
+              <div>
+                <span class="tag">Incident Response</span><span class="tag">Forensics</span>
+              </div>
+              <p>Participated in Honeynet Collapse CTF — focused on simulated attack analysis, log investigation, and malware trace recovery.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctf-card" data-aos="fade-left">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Industrial Intrusion</div>
+            <div class="ctf-card-back">
+              <div class="meta">ICS / Critical Infrastructure</div>
+              <div>
+                <span class="tag">ICS</span><span class="tag">Exploitation</span>
+              </div>
+              <p>Engaged in the Industrial Intrusion challenge focusing on Industrial Control Systems exploitation and critical infrastructure defense.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctf-card" data-aos="fade-right">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Black Hat MENA — v2</div>
+            <div class="ctf-card-back">
+              <div class="meta">Regional CTF</div>
+              <div>
+                <span class="tag">Competition</span><span class="tag">Teams</span>
+              </div>
+              <p>Competed in the second edition of Black Hat MENA — a top-tier regional CTF featuring Web, Crypto, and Pwn challenges.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
+    <!-- 🔧 Projects Section -->
+    <section id="projects" class="card" data-aos="fade-up">
+      <div class="section-title">
+        <span>Projects</span>
+        <span class="section-badge">Hands-on</span>
+      </div>
+      <p class="sub" style="margin-top:6px">Some of the labs and tools I built while leveling up my skills.</p>
+
+      <div class="projects-grid">
+        <!-- عدل المشاريع حسب شغلك -->
+        <div class="item-card">
+          <h3>VulnLab: Boot2Root Linux Box</h3>
+          <div class="item-meta">Custom vulnerable VM • PrivEsc &amp; Web</div>
+          <p class="item-desc">
+            A vulnerable Linux machine I created to practice local file inclusion, weak credentials,
+            and privilege escalation using misconfigured services.
+          </p>
+          <div class="item-links">
+            <!-- ضع رابط GitHub الحقيقي -->
+            <a href="#" target="_blank">View on GitHub ↗</a>
+          </div>
+          <div class="pill"><strong>Stack</strong> • Linux, Apache, Bash</div>
+        </div>
+
+        <div class="item-card">
+          <h3>Log Hunter</h3>
+          <div class="item-meta">Forensics / IR helper script</div>
+          <p class="item-desc">
+            A script that parses web server logs, extracts suspicious IPs and endpoints, and generates a quick incident-response summary.
+          </p>
+          <div class="item-links">
+            <a href="#" target="_blank">View on GitHub ↗</a>
+          </div>
+          <div class="pill"><strong>Stack</strong> • Python, Regex</div>
+        </div>
+
+        <div class="item-card">
+          <h3>Web Recon Pipeline</h3>
+          <div class="item-meta">Bug bounty recon automation</div>
+          <p class="item-desc">
+            A recon chain that automates subdomain discovery, screenshots, and basic tech fingerprinting for target scopes.
+          </p>
+          <div class="item-links">
+            <a href="#" target="_blank">View on GitHub ↗</a>
+          </div>
+          <div class="pill"><strong>Stack</strong> • Bash, Nmap, httpx</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 📜 Certificates Section -->
+    <section id="certs" class="card" data-aos="fade-up">
+      <div class="section-title">
+        <span>Certificates</span>
+        <span class="section-badge">Validation</span>
+      </div>
+      <p class="sub" style="margin-top:6px">Formal proof of my progress in cybersecurity &amp; related fields.</p>
+
+      <div class="certs-grid">
+        <!-- عدل أسماء الشهادات وروابطها -->
+        <div class="item-card">
+          <h3>Certified Cybersecurity Fundamentals</h3>
+          <div class="item-meta">National Cyber Security Center of Jordan</div>
+          <p class="item-desc">
+            Covered core security concepts, threat landscape, network security basics, and secure practices.
+          </p>
+          <div class="item-links">
+            <a href="#" target="_blank">View Credential ↗</a>
+          </div>
+          <div class="pill"><strong>Focus</strong> • Fundamentals, Network</div>
+        </div>
+
+        <div class="item-card">
+          <h3>TryHackMe Path</h3>
+          <div class="item-meta">e.g. Complete Beginner / SOC Level 1</div>
+          <p class="item-desc">
+            Completed multiple rooms focused on web exploitation, forensics, and privilege escalation.
+          </p>
+          <div class="item-links">
+            <a href="#" target="_blank">Profile / Badge ↗</a>
+          </div>
+          <div class="pill"><strong>Platform</strong> • TryHackMe</div>
+        </div>
+
+        <div class="item-card">
+          <h3>Hack The Box Labs</h3>
+          <div class="item-meta">Lab-based learning</div>
+          <p class="item-desc">
+            Solved various HTB machines and challenges focused on enumeration, exploitation, and privesc.
+          </p>
+          <div class="item-links">
+            <a href="#" target="_blank">HTB Profile ↗</a>
+          </div>
+          <div class="pill"><strong>Platform</strong> • Hack The Box</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✍️ Writeups Section -->
+    <section id="writeups" class="card" data-aos="fade-up">
+      <div class="section-title">
+        <span>Writeups</span>
+        <span class="section-badge">Knowledge Sharing</span>
+      </div>
+      <p class="sub" style="margin-top:6px">Selected writeups from CTFs, Boot2Root machines, and interesting bugs.</p>
+
+      <div class="writeups-grid">
+        <!-- عدل الروابط لعندك (GitHub / Blog / Notion ...) -->
+        <div class="item-card">
+          <h3>Boot2Root AABU — Full Walkthrough</h3>
+          <div class="item-meta">Privilege escalation &amp; misconfigurations</div>
+          <p class="item-desc">
+            Step-by-step exploitation from initial foothold to root, focusing on enumeration methodology and privesc techniques.
+          </p>
+          <div class="item-links">
+            <a href="#" target="_blank">Read Writeup ↗</a>
+          </div>
+          <div class="pill"><strong>Topics</strong> • Linux, SUID, Enumeration</div>
+        </div>
+
+        <div class="item-card">
+          <h3>Forensics Challenge — PCAP to Flag</h3>
+          <div class="item-meta">Network forensics</div>
+          <p class="item-desc">
+            Analyzed PCAP traffic, reconstructed sessions, and extracted hidden data to recover the final flag.
+          </p>
+          <div class="item-links">
+            <a href="#" target="_blank">Read Writeup ↗</a>
+          </div>
+          <div class="pill"><strong>Tools</strong> • Wireshark, tshark</div>
+        </div>
+
+        <div class="item-card">
+          <h3>Simple Web RCE via File Upload</h3>
+          <div class="item-meta">Web exploitation</div>
+          <p class="item-desc">
+            How a misconfigured file upload feature led to remote code execution, plus tips for secure hardening.
+          </p>
+          <div class="item-links">
+            <a href="#" target="_blank">Read Writeup ↗</a>
+          </div>
+          <div class="pill"><strong>Topics</strong> • Web, Upload bypass</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 📩 Contact Section -->
+    <section id="contact" class="card" data-aos="fade-up">
+      <div class="section-title">
+        <span>Contact Me</span>
+        <span class="section-badge">Let’s Hack Together</span>
+      </div>
+      <p class="sub" style="margin-top:6px">
+        Reach out for CTF teams, pentest work, or collab on security projects.
+      </p>
+
+      <div class="contact-row">
+        <!-- عدّل الإيميل و اليوزر نيم لكل منصة -->
+        <div class="contact-method">
+          <div class="contact-left">
+            <span class="contact-label">Email</span>
+            <span class="contact-value">you@example.com</span>
+          </div>
+          <a class="btn-link" href="mailto:you@example.com">Send Mail</a>
+        </div>
+
+        <div class="contact-method">
+          <div class="contact-left">
+            <span class="contact-label">GitHub</span>
+            <span class="contact-value">@naeim1</span>
+          </div>
+          <a class="btn-link" href="https://github.com/naeim1" target="_blank">Profile ↗</a>
+        </div>
+
+        <div class="contact-method">
+          <div class="contact-left">
+            <span class="contact-label">TryHackMe</span>
+            <span class="contact-value">username</span>
+          </div>
+          <a class="btn-link" href="#" target="_blank">THM Profile ↗</a>
+        </div>
+
+        <div class="contact-method">
+          <div class="contact-left">
+            <span class="contact-label">Hack The Box</span>
+            <span class="contact-value">username</span>
+          </div>
+          <a class="btn-link" href="#" target="_blank">HTB Profile ↗</a>
+        </div>
+      </div>
+
+      <!-- ملاحظة: لو حاب فورم حقيقي، استخدم خدمة مثل Formspree وغيّر action -->
+      <!--
+      <form method="POST" action="https://formspree.io/f/FORM_ID" style="margin-top:16px;display:grid;gap:10px">
+        <input type="email" name="email" placeholder="Your email" required
+               style="padding:8px 10px;border-radius:8px;border:1px solid rgba(148,163,184,0.4);background:rgba(15,23,42,0.9);color:#e5e7eb;font-size:13px">
+        <textarea name="message" rows="3" placeholder="Your message" required
+                  style="padding:8px 10px;border-radius:8px;border:1px solid rgba(148,163,184,0.4);background:rgba(15,23,42,0.9);color:#e5e7eb;font-size:13px"></textarea>
+        <button type="submit"
+                style="padding:8px 12px;border-radius:999px;border:none;background:rgba(16,185,129,0.9);color:#022c22;font-size:13px;font-weight:600;cursor:pointer;">
+          Send Message
+        </button>
+      </form>
+      -->
+    </section>
+
     <footer>
-      Built with ❤️ — `naeim1` · <a href="contact.html">Contact Me</a>
+      Built with ❤️ — <code>naeim1</code> · <a href="#contact">Contact Me</a>
     </footer>
   </div>
 
@@ -126,31 +622,44 @@
   <script>
   const canvas=document.getElementById('matrixBackground');
   const ctx=canvas.getContext('2d');
-  function setupCanvas(){canvas.height=window.innerHeight;canvas.width=window.innerWidth;}
+  function setupCanvas(){
+    canvas.height=window.innerHeight;
+    canvas.width=window.innerWidth;
+  }
   setupCanvas();
-  const letters='01';
+
+  // تحسين بسيط على الماتريكس عشان يصير Cyber أكثر
+  const letters='01ƛЖ#@$%&';
   const fontSize=14;
   let columns=Math.floor(canvas.width/fontSize);
   let drops=Array(columns).fill(1);
+
   function draw(){
-    ctx.fillStyle='rgba(0,0,0,0.08)';
+    ctx.fillStyle='rgba(0,0,0,0.1)';
     ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle='#00ff9d';
+    ctx.fillStyle='#22c55e';
     ctx.font=fontSize+'px monospace';
     for(let i=0;i<drops.length;i++){
       const text=letters.charAt(Math.floor(Math.random()*letters.length));
       ctx.fillText(text,i*fontSize,drops[i]*fontSize);
-      if(drops[i]*fontSize>canvas.height&&Math.random()>0.975)drops[i]=0;
+      if(drops[i]*fontSize>canvas.height && Math.random()>0.975)drops[i]=0;
       drops[i]++;
     }
   }
   let matrixInterval=setInterval(draw,33);
-  window.addEventListener('resize',()=>{clearInterval(matrixInterval);setupCanvas();columns=Math.floor(canvas.width/fontSize);drops=Array(columns).fill(1);matrixInterval=setInterval(draw,33);});
+
+  window.addEventListener('resize',()=>{
+    clearInterval(matrixInterval);
+    setupCanvas();
+    columns=Math.floor(canvas.width/fontSize);
+    drops=Array(columns).fill(1);
+    matrixInterval=setInterval(draw,33);
+  });
   </script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script>
-    // ✅ تعديل لجعل كل الكروت تظهر فورًا بدون انتظار Scroll
+    // AOS: خلي العناصر تظهر فورًا (زي ما عامل)
     AOS.init({
       duration: 700,
       offset: 0,
