@@ -28,7 +28,7 @@
       position:relative;
     }
 
-    /* 🔥 خلفية هاكنق متحركة فوق الماتريكس */
+    /* 🔥 خلفية هاكنق ناعمة فوق الماتريكس */
     body::before{
       content:"";
       position:fixed;
@@ -637,10 +637,60 @@
     </footer>
   </div>
 
-  <!-- سكربت الخلفية (Matrix) من الملف الخارجي -->
-  <script src="assets/js/background.js"></script>
+  <!-- سكربت الخلفية (Matrix 0/1) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const canvas = document.getElementById('matrixBackground');
+      if (!canvas) return;
 
-  <!-- AOS + تفعيل الأنيميشن -->
+      const ctx = canvas.getContext('2d');
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      resizeCanvas();
+      window.addEventListener('resize', () => {
+        resizeCanvas();
+        resetDrops();
+      });
+
+      const chars = "01";
+      const fontSize = 16;
+      let columns;
+      let drops;
+
+      function resetDrops() {
+        columns = Math.floor(canvas.width / fontSize);
+        drops = Array(columns).fill(1);
+      }
+
+      resetDrops();
+
+      function drawMatrix() {
+        ctx.fillStyle = "rgba(0,0,0,0.08)";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        ctx.fillStyle = "#00ff9d";
+        ctx.font = fontSize + "px monospace";
+
+        for (let i = 0; i < drops.length; i++) {
+          const char = chars[Math.floor(Math.random() * chars.length)];
+          ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+          if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i]++;
+        }
+      }
+
+      setInterval(drawMatrix, 35);
+    });
+  </script>
+
+  <!-- AOS + Typed -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script>
     AOS.init({
