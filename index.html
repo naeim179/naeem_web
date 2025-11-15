@@ -25,6 +25,7 @@
       background:#000;
       color:#e6eef6;
       overflow-x:hidden;
+      position:relative;
     }
 
     /* 🔥 خلفية هاكنق متحركة فوق الماتريكس */
@@ -119,7 +120,6 @@
       color:var(--accent);margin:4px 3px
     }
 
-    /* عناوين الأقسام و Grids جديدة */
     .section-title{
       font-size:20px;
       margin:0 0 4px;
@@ -188,7 +188,6 @@
       margin-right:10px;
     }
 
-    /* Contact Section */
     .contact-row{
       display:flex;
       flex-wrap:wrap;
@@ -244,6 +243,7 @@
   </style>
 </head>
 <body>
+  <!-- خلفية الماتريكس -->
   <canvas id="matrixBackground"></canvas>
 
   <div class="container">
@@ -406,7 +406,7 @@
       </div>
     </section>
 
-    <!-- 🔧 Projects Section -->
+    <!-- Projects -->
     <section id="projects" class="card" data-aos="fade-up">
       <div class="section-title">
         <span>Projects</span>
@@ -415,7 +415,6 @@
       <p class="sub" style="margin-top:6px">Some of the labs and tools I built while leveling up my skills.</p>
 
       <div class="projects-grid">
-        <!-- qrshilde -->
         <div class="item-card">
           <h3>qrshilde</h3>
           <div class="item-meta">QR Code Security Tool</div>
@@ -428,7 +427,6 @@
           <div class="pill"><strong>Stack</strong> • Python, QR Codes, Cryptography</div>
         </div>
 
-        <!-- Linux Encryption Tool -->
         <div class="item-card">
           <h3>Linux Encryption Tool</h3>
           <div class="item-meta">Encrypt/Decrypt Files on Linux</div>
@@ -441,7 +439,6 @@
           <div class="pill"><strong>Stack</strong> • Bash, OpenSSL, Linux</div>
         </div>
 
-        <!-- Existing Projects (placeholders اللي عجبتك) -->
         <div class="item-card">
           <h3>VulnLab: Boot2Root Linux Box</h3>
           <div class="item-meta">Custom vulnerable VM • PrivEsc &amp; Web</div>
@@ -481,7 +478,7 @@
       </div>
     </section>
 
-    <!-- 📜 Certificates Section -->
+    <!-- Certificates -->
     <section id="certs" class="card" data-aos="fade-up">
       <div class="section-title">
         <span>Certificates</span>
@@ -490,7 +487,6 @@
       <p class="sub" style="margin-top:6px">Formal proof of my progress in cybersecurity &amp; related fields.</p>
 
       <div class="certs-grid">
-        <!-- CEH -->
         <div class="item-card">
           <h3>Certified Ethical Hacker (CEH)</h3>
           <div class="item-meta">EC-Council • 03 Mar 2024</div>
@@ -500,7 +496,6 @@
           <div class="pill"><strong>Focus</strong> • Offensive Security, Exploitation</div>
         </div>
 
-        <!-- CCSK -->
         <div class="item-card">
           <h3>CCSK v4.1 Foundation Training</h3>
           <div class="item-meta">Cloud Security Alliance • 19 Oct 2023</div>
@@ -510,7 +505,6 @@
           <div class="pill"><strong>Focus</strong> • Cloud Security, CSA Guidance</div>
         </div>
 
-        <!-- Cybersecurity Essentials -->
         <div class="item-card">
           <h3>Cybersecurity Essentials</h3>
           <div class="item-meta">Cisco Networking Academy • 21 May 2023</div>
@@ -520,7 +514,6 @@
           <div class="pill"><strong>Platform</strong> • Cisco Networking Academy</div>
         </div>
 
-        <!-- Big Data & Analytics -->
         <div class="item-card">
           <h3>IoT Fundamentals: Big Data &amp; Analytics</h3>
           <div class="item-meta">Cisco Networking Academy • 01 Jan 2024</div>
@@ -530,7 +523,6 @@
           <div class="pill"><strong>Focus</strong> • IoT, Data Analytics</div>
         </div>
 
-        <!-- Introduction to IoT -->
         <div class="item-card">
           <h3>Introduction to IoT</h3>
           <div class="item-meta">Cisco Networking Academy • 29 Mar 2024</div>
@@ -540,7 +532,6 @@
           <div class="pill"><strong>Focus</strong> • IoT, Digital Transformation</div>
         </div>
 
-        <!-- Red Hat RH134 -->
         <div class="item-card">
           <h3>Red Hat System Administration II (RH134)</h3>
           <div class="item-meta">Red Hat Training • 13 Jun 2025</div>
@@ -550,7 +541,6 @@
           <div class="pill"><strong>Focus</strong> • Linux, System Administration</div>
         </div>
 
-        <!-- OrbitCTF Certificate -->
         <div class="item-card">
           <h3>OrbitCTF Certificate of Appreciation</h3>
           <div class="item-meta">AABU • 27 Oct 2025</div>
@@ -566,7 +556,7 @@
       </div>
     </section>
 
-    <!-- ✍️ Writeups Section -->
+    <!-- Writeups -->
     <section id="writeups" class="card" data-aos="fade-up">
       <div class="section-title">
         <span>Writeups</span>
@@ -589,7 +579,7 @@
       </div>
     </section>
 
-    <!-- 📩 Contact Section -->
+    <!-- Contact -->
     <section id="contact" class="card" data-aos="fade-up">
       <div class="section-title">
         <span>Contact Me</span>
@@ -600,7 +590,6 @@
       </p>
 
       <div class="contact-row">
-        <!-- Email -->
         <div class="contact-method">
           <div class="contact-left">
             <span class="contact-label">Email</span>
@@ -609,7 +598,6 @@
           <a class="btn-link" href="mailto:naeemmohmd8@gmail.com">Send Mail</a>
         </div>
 
-        <!-- GitHub -->
         <div class="contact-method">
           <div class="contact-left">
             <span class="contact-label">GitHub</span>
@@ -618,7 +606,6 @@
           <a class="btn-link" href="https://naeim179.github.io/" target="_blank">Profile ↗</a>
         </div>
 
-        <!-- TryHackMe -->
         <div class="contact-method">
           <div class="contact-left">
             <span class="contact-label">TryHackMe</span>
@@ -627,7 +614,6 @@
           <a class="btn-link" href="https://tryhackme.com/p/NK179" target="_blank">THM Profile ↗</a>
         </div>
 
-        <!-- Instagram -->
         <div class="contact-method">
           <div class="contact-left">
             <span class="contact-label">Instagram</span>
@@ -636,7 +622,6 @@
           <a class="btn-link" href="https://instagram.com/naeem__althabta" target="_blank">Instagram ↗</a>
         </div>
 
-        <!-- LinkedIn -->
         <div class="contact-method">
           <div class="contact-left">
             <span class="contact-label">LinkedIn</span>
@@ -652,44 +637,10 @@
     </footer>
   </div>
 
-  <!-- Matrix Rain -->
-  <script>
-  const canvas=document.getElementById('matrixBackground');
-  const ctx=canvas.getContext('2d');
-  function setupCanvas(){
-    canvas.height=window.innerHeight;
-    canvas.width=window.innerWidth;
-  }
-  setupCanvas();
+  <!-- سكربت الخلفية (Matrix) من الملف الخارجي -->
+  <script src="assets/js/background.js"></script>
 
-  const letters='01ƛЖ#@$%&';
-  const fontSize=14;
-  let columns=Math.floor(canvas.width/fontSize);
-  let drops=Array(columns).fill(1);
-
-  function draw(){
-    ctx.fillStyle='rgba(0,0,0,0.1)';
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle='#22c55e';
-    ctx.font=fontSize+'px monospace';
-    for(let i=0;i<drops.length;i++){
-      const text=letters.charAt(Math.floor(Math.random()*letters.length));
-      ctx.fillText(text,i*fontSize,drops[i]*fontSize);
-      if(drops[i]*fontSize>canvas.height && Math.random()>0.975)drops[i]=0;
-      drops[i]++;
-    }
-  }
-  let matrixInterval=setInterval(draw,33);
-
-  window.addEventListener('resize',()=>{
-    clearInterval(matrixInterval);
-    setupCanvas();
-    columns=Math.floor(canvas.width/fontSize);
-    drops=Array(columns).fill(1);
-    matrixInterval=setInterval(draw,33);
-  });
-  </script>
-
+  <!-- AOS + تفعيل الأنيميشن -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script>
     AOS.init({
@@ -705,7 +656,7 @@
       });
     });
 
-    const typed=new Typed('#typed',{
+    const typed = new Typed('#typed',{
       strings:["CTF Player","Pentester","Cyber Warrior"],
       typeSpeed:60,
       backSpeed:30,
