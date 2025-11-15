@@ -28,7 +28,7 @@
       position:relative;
     }
 
-    /* 🔥 خلفية هاكنق ناعمة فوق الماتريكس */
+    /* خلفية هكر ناعمة فوق الماتريكس */
     body::before{
       content:"";
       position:fixed;
@@ -48,6 +48,7 @@
       100%{transform:translate3d(20px,-10px,0) scale(1.08);}
     }
 
+    /* Canvas تبع الماتريكس */
     #matrixBackground{
       position:fixed;
       top:0;left:0;
@@ -70,7 +71,7 @@
     .left{flex:1}
     .typed{color:var(--accent);font-weight:600}
     .card{
-      background:rgba(15,23,42,0.85);
+      background:rgba(15,23,42,0.88);
       border-radius:12px;
       padding:18px;
       margin-top:18px;
@@ -86,7 +87,6 @@
       margin-top:14px
     }
 
-    /* Flip Cards */
     .ctf-card{perspective:1000px;cursor:pointer;height:220px}
     .ctf-card-inner{
       position:relative;width:100%;height:100%;
@@ -639,55 +639,51 @@
 
   <!-- سكربت الخلفية (Matrix 0/1) -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const canvas = document.getElementById('matrixBackground');
-      if (!canvas) return;
+    const canvas = document.getElementById('matrixBackground');
+    const ctx = canvas.getContext('2d');
 
-      const ctx = canvas.getContext('2d');
-
-      function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      }
-
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', () => {
       resizeCanvas();
-      window.addEventListener('resize', () => {
-        resizeCanvas();
-        resetDrops();
-      });
-
-      const chars = "01";
-      const fontSize = 16;
-      let columns;
-      let drops;
-
-      function resetDrops() {
-        columns = Math.floor(canvas.width / fontSize);
-        drops = Array(columns).fill(1);
-      }
-
       resetDrops();
-
-      function drawMatrix() {
-        ctx.fillStyle = "rgba(0,0,0,0.08)";
-        ctx.fillRect(0,0,canvas.width,canvas.height);
-
-        ctx.fillStyle = "#00ff9d";
-        ctx.font = fontSize + "px monospace";
-
-        for (let i = 0; i < drops.length; i++) {
-          const char = chars[Math.floor(Math.random() * chars.length)];
-          ctx.fillText(char, i * fontSize, drops[i] * fontSize);
-
-          if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-            drops[i] = 0;
-          }
-          drops[i]++;
-        }
-      }
-
-      setInterval(drawMatrix, 35);
     });
+
+    const chars = "01";
+    const fontSize = 18;
+    let columns;
+    let drops;
+
+    function resetDrops() {
+      columns = Math.floor(canvas.width / fontSize);
+      drops = Array(columns).fill(1);
+    }
+    resetDrops();
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0,0,0,0.25)";
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+
+      ctx.fillStyle = "#22c55e";
+      ctx.shadowColor = "#22c55e";
+      ctx.shadowBlur = 10;
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const char = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 40);
   </script>
 
   <!-- AOS + Typed -->
