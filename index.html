@@ -12,20 +12,41 @@
 
   <style>
     :root {
-      --bg:#0b0c10;
+      --bg:#020617;
+      --bg-soft:#0b1120;
+      --card-bg:rgba(15,23,42,0.9);
+      --card-border:rgba(148,163,184,0.3);
+      --text:#e6eef6;
       --muted:#9aa4b2;
       --accent:#6ee7b7;
       --accent-soft:rgba(110,231,183,0.08);
-      --glow: 0 10px 30px rgba(110,231,183,0.08);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      --glow: 0 10px 30px rgba(110,231,183,0.18);
+      --nav-bg:rgba(15,23,42,0.85);
     }
+
+    /* Light theme */
+    body.light {
+      --bg:#f3f4f6;
+      --bg-soft:#e5e7eb;
+      --card-bg:rgba(255,255,255,0.92);
+      --card-border:rgba(148,163,184,0.5);
+      --text:#020617;
+      --muted:#4b5563;
+      --accent:#10b981;
+      --accent-soft:rgba(16,185,129,0.08);
+      --nav-bg:rgba(243,244,246,0.9);
+      --glow:0 10px 25px rgba(15,23,42,0.1);
+    }
+
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{
       height:100%;
-      background:#000;
-      color:#e6eef6;
+      background:var(--bg);
+      color:var(--text);
       overflow-x:hidden;
       position:relative;
+      scroll-behavior:smooth;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     }
 
     /* خلفية هكر ناعمة فوق الماتريكس */
@@ -42,6 +63,9 @@
       pointer-events:none;
       animation:drift 30s ease-in-out infinite alternate;
     }
+    body.light::before{
+      opacity:0.4;
+    }
     @keyframes drift{
       0%{transform:translate3d(0,0,0) scale(1);}
       50%{transform:translate3d(-20px,10px,0) scale(1.05);}
@@ -56,8 +80,90 @@
       z-index:-1;
       background:#000;
     }
+    body.light #matrixBackground{
+      opacity:0.15; /* خفيفة باللايت مود */
+    }
 
-    .container{max-width:1000px;margin:36px auto;padding:24px;position:relative;z-index:10}
+    /* Navbar ثابت */
+    .top-nav{
+      position:fixed;
+      top:0;left:0;right:0;
+      z-index:20;
+      background:var(--nav-bg);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(148,163,184,0.3);
+      box-shadow:0 10px 30px rgba(15,23,42,0.45);
+    }
+    .nav-inner{
+      max-width:1000px;
+      margin:0 auto;
+      padding:10px 20px;
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+    .nav-brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .nav-logo{
+      width:34px;height:34px;
+      border-radius:999px;
+      background:radial-gradient(circle at 30% 20%,#22c55e,#0ea5e9 60%,#4c1d95 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:16px;
+      font-weight:700;
+      color:#e5e7eb;
+      box-shadow:var(--glow);
+    }
+    .nav-title{
+      font-size:14px;
+      font-weight:500;
+    }
+    .nav-links{
+      margin-left:auto;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      font-size:13px;
+    }
+    .nav-links a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid transparent;
+    }
+    .nav-links a:hover{
+      color:var(--accent);
+      border-color:rgba(110,231,183,0.3);
+      background:rgba(15,23,42,0.6);
+    }
+    body.light .nav-links a:hover{
+      background:rgba(209,213,219,0.5);
+    }
+
+    .theme-toggle{
+      margin-left:10px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.6);
+      background:transparent;
+      color:var(--muted);
+      font-size:12px;
+      padding:4px 9px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+      cursor:pointer;
+    }
+    .theme-toggle span.icon{
+      font-size:14px;
+    }
+
+    .container{max-width:1000px;margin:90px auto 36px;padding:24px;position:relative;z-index:10}
     header{display:flex;align-items:center;gap:18px}
     .avatar{
       width:92px;height:92px;border-radius:50%;
@@ -71,13 +177,13 @@
     .left{flex:1}
     .typed{color:var(--accent);font-weight:600}
     .card{
-      background:rgba(15,23,42,0.88);
+      background:var(--card-bg);
       border-radius:12px;
       padding:18px;
       margin-top:18px;
       box-shadow:var(--glow);
       backdrop-filter:blur(10px);
-      border:1px solid rgba(148,163,184,0.18);
+      border:1px solid var(--card-border);
     }
     .about p{color:var(--muted);line-height:1.6}
     .ctf-grid{
@@ -103,6 +209,12 @@
       justify-content:center;align-items:center;text-align:center;
       box-shadow:var(--glow);
     }
+    body.light .ctf-card-front,
+    body.light .ctf-card-back{
+      background:linear-gradient(180deg,rgba(248,250,252,0.98),rgba(226,232,240,0.95));
+      border-color:rgba(148,163,184,0.4);
+    }
+
     .ctf-card-front{color:var(--accent);font-weight:600;font-size:17px}
     .ctf-card-back{
       transform:rotateY(180deg);
@@ -137,6 +249,9 @@
       text-transform:uppercase;
       letter-spacing:0.04em;
     }
+    body.light .section-badge{
+      background:rgba(243,244,246,0.9);
+    }
 
     .pill{
       display:inline-flex;
@@ -151,10 +266,20 @@
       margin:3px 4px;
     }
     .pill strong{color:#e5e7eb;font-weight:500}
+    body.light .pill{
+      background:rgba(243,244,246,0.95);
+      color:#4b5563;
+    }
+    body.light .pill strong{
+      color:#111827;
+    }
 
     .projects-grid,
     .certs-grid,
-    .writeups-grid{
+    .writeups-grid,
+    .skills-grid,
+    .tools-grid,
+    .timeline-list{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
       gap:14px;
@@ -167,6 +292,11 @@
       border:1px solid rgba(148,163,184,0.26);
       background:linear-gradient(145deg,rgba(15,23,42,0.96),rgba(15,23,42,0.85));
       box-shadow:0 8px 26px rgba(15,23,42,0.8);
+    }
+    body.light .item-card{
+      background:linear-gradient(145deg,rgba(255,255,255,0.98),rgba(243,244,246,0.96));
+      border-color:rgba(148,163,184,0.45);
+      box-shadow:0 8px 22px rgba(148,163,184,0.35);
     }
     .item-card h3{
       margin:0 0 4px;
@@ -188,6 +318,63 @@
       margin-right:10px;
     }
 
+    /* Skills */
+    .skill-pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:space-between;
+      width:100%;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.4);
+      font-size:13px;
+      margin-bottom:6px;
+      background:rgba(15,23,42,0.9);
+    }
+    .skill-pill span.label{
+      color:var(--text);
+    }
+    .skill-pill span.level{
+      color:var(--muted);
+      font-size:11px;
+    }
+    body.light .skill-pill{
+      background:rgba(243,244,246,0.96);
+    }
+
+    /* Timeline */
+    .timeline{
+      margin-top:10px;
+      border-left:1px dashed rgba(148,163,184,0.5);
+      padding-left:14px;
+    }
+    .timeline-item{
+      margin-bottom:10px;
+      position:relative;
+    }
+    .timeline-dot{
+      width:10px;height:10px;border-radius:999px;
+      background:var(--accent);
+      position:absolute;
+      left:-19px;
+      top:4px;
+      box-shadow:0 0 10px rgba(110,231,183,0.8);
+    }
+    .timeline-year{
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+    }
+    .timeline-title{
+      font-size:14px;
+      font-weight:500;
+    }
+    .timeline-text{
+      font-size:13px;
+      color:var(--muted);
+    }
+
     .contact-row{
       display:flex;
       flex-wrap:wrap;
@@ -204,6 +391,10 @@
       align-items:center;
       justify-content:space-between;
       font-size:13px;
+    }
+    body.light .contact-method{
+      background:rgba(249,250,251,0.98);
+      border-color:rgba(148,163,184,0.6);
     }
     .contact-left{
       display:flex;
@@ -235,14 +426,46 @@
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
 
+    @media(max-width:840px){
+      .nav-links{
+        display:none; /* عشان ما نعقّد ريسبونسف ميني منيو الآن */
+      }
+    }
+
     @media(max-width:640px){
       .hero{flex-direction:column;align-items:flex-start}
       .avatar{width:78px;height:78px}
       header{flex-wrap:wrap}
+      .container{padding:18px;margin:86px auto 28px;}
     }
   </style>
 </head>
-<body>
+<body id="top">
+  <!-- Navbar -->
+  <nav class="top-nav">
+    <div class="nav-inner">
+      <div class="nav-brand">
+        <div class="nav-logo">ΝΜ</div>
+        <div class="nav-title">Naeem Althabata</div>
+      </div>
+      <div class="nav-links">
+        <a href="#top">Home</a>
+        <a href="#ctf">CTF</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#tools">Tools</a>
+        <a href="#timeline">Timeline</a>
+        <a href="#certs">Certs</a>
+        <a href="#writeups">Writeups</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <button class="theme-toggle" id="themeToggle">
+        <span class="icon" id="themeIcon">🌙</span>
+        <span id="themeLabel">Dark</span>
+      </button>
+    </div>
+  </nav>
+
   <!-- خلفية الماتريكس -->
   <canvas id="matrixBackground"></canvas>
 
@@ -278,8 +501,51 @@
       </div>
     </section>
 
+    <!-- Skills -->
+    <section id="skills" class="card" data-aos="fade-up">
+      <div class="section-title">
+        <span>Skills</span>
+        <span class="section-badge">Core Stack</span>
+      </div>
+      <p class="sub" style="margin-top:6px">What I use in CTFs, labs, and security work.</p>
+
+      <div class="skills-grid">
+        <div class="item-card">
+          <h3>Cybersecurity</h3>
+          <div class="item-meta">Offensive &amp; Defensive</div>
+          <div class="item-desc">
+            <div class="skill-pill"><span class="label">Web Exploitation</span><span class="level">CTFs &amp; labs</span></div>
+            <div class="skill-pill"><span class="label">Linux PrivEsc</span><span class="level">SUID, misconfig</span></div>
+            <div class="skill-pill"><span class="label">Forensics</span><span class="level">PCAP, disk, logs</span></div>
+            <div class="skill-pill"><span class="label">Network Attacks</span><span class="level">Enum &amp; services</span></div>
+          </div>
+        </div>
+
+        <div class="item-card">
+          <h3>Tools</h3>
+          <div class="item-meta">Daily Drivers</div>
+          <div class="item-desc">
+            <div class="skill-pill"><span class="label">Burp Suite</span><span class="level">Web testing</span></div>
+            <div class="skill-pill"><span class="label">Nmap</span><span class="level">Network recon</span></div>
+            <div class="skill-pill"><span class="label">Wireshark / tshark</span><span class="level">Network forensics</span></div>
+            <div class="skill-pill"><span class="label">Ghidra</span><span class="level">Reverse</span></div>
+          </div>
+        </div>
+
+        <div class="item-card">
+          <h3>Languages</h3>
+          <div class="item-meta">Coding for hacking</div>
+          <div class="item-desc">
+            <div class="skill-pill"><span class="label">Python</span><span class="level">Scripts &amp; tools</span></div>
+            <div class="skill-pill"><span class="label">Bash</span><span class="level">Automation</span></div>
+            <div class="skill-pill"><span class="label">Linux CLI</span><span class="level">Everyday usage</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- CTF Battles -->
-    <section class="card" data-aos="fade-up">
+    <section id="ctf" class="card" data-aos="fade-up">
       <div class="section-title">
         <span>My CTF Battles</span>
         <span class="section-badge">Experience</span>
@@ -410,11 +676,47 @@
     <section id="projects" class="card" data-aos="fade-up">
       <div class="section-title">
         <span>Projects</span>
-        <span class="section-badge">Hands-on</span>
+        <span class="section-badge">Labs &amp; Boxes</span>
       </div>
-      <p class="sub" style="margin-top:6px">Some of the labs and tools I built while leveling up my skills.</p>
+      <p class="sub" style="margin-top:6px">Some of the labs and environments I built to practice attack &amp; defense.</p>
 
       <div class="projects-grid">
+        <div class="item-card">
+          <h3>VulnLab: Boot2Root Linux Box</h3>
+          <div class="item-meta">Custom vulnerable VM • PrivEsc &amp; Web</div>
+          <p class="item-desc">
+            A vulnerable Linux machine I created to practice local file inclusion, weak credentials,
+            and privilege escalation using misconfigured services.
+          </p>
+          <div class="item-links">
+            <a href="#" target="_blank">View on GitHub ↗</a>
+          </div>
+          <div class="pill"><strong>Stack</strong> • Linux, Apache, Bash</div>
+        </div>
+
+        <div class="item-card">
+          <h3>Incident Playground</h3>
+          <div class="item-meta">Log &amp; PCAP simulation lab</div>
+          <p class="item-desc">
+            A small lab with web logs, PCAPs, and fake incidents used to practice detection, triage, and reporting.
+          </p>
+          <div class="item-links">
+            <a href="#" target="_blank">View on GitHub ↗</a>
+          </div>
+          <div class="pill"><strong>Focus</strong> • IR, Forensics</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tools -->
+    <section id="tools" class="card" data-aos="fade-up">
+      <div class="section-title">
+        <span>Tools</span>
+        <span class="section-badge">Built by Me</span>
+      </div>
+      <p class="sub" style="margin-top:6px">Small but useful tools I’m building to support my workflow.</p>
+
+      <div class="tools-grid">
         <div class="item-card">
           <h3>qrshilde</h3>
           <div class="item-meta">QR Code Security Tool</div>
@@ -440,19 +742,6 @@
         </div>
 
         <div class="item-card">
-          <h3>VulnLab: Boot2Root Linux Box</h3>
-          <div class="item-meta">Custom vulnerable VM • PrivEsc &amp; Web</div>
-          <p class="item-desc">
-            A vulnerable Linux machine I created to practice local file inclusion, weak credentials,
-            and privilege escalation using misconfigured services.
-          </p>
-          <div class="item-links">
-            <a href="#" target="_blank">View on GitHub ↗</a>
-          </div>
-          <div class="pill"><strong>Stack</strong> • Linux, Apache, Bash</div>
-        </div>
-
-        <div class="item-card">
           <h3>Log Hunter</h3>
           <div class="item-meta">Forensics / IR helper script</div>
           <p class="item-desc">
@@ -474,6 +763,48 @@
             <a href="#" target="_blank">View on GitHub ↗</a>
           </div>
           <div class="pill"><strong>Stack</strong> • Bash, Nmap, httpx</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Timeline -->
+    <section id="timeline" class="card" data-aos="fade-up">
+      <div class="section-title">
+        <span>Journey</span>
+        <span class="section-badge">Timeline</span>
+      </div>
+      <p class="sub" style="margin-top:6px">How I got here and where I’m going next.</p>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2023</div>
+          <div class="timeline-title">Started exploring Linux &amp; cybersecurity basics</div>
+          <div class="timeline-text">Began learning Linux, networks, and core security concepts through online courses and labs.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2023</div>
+          <div class="timeline-title">First national CTF</div>
+          <div class="timeline-text">Joined the National Cyber Security Center of Jordan CTF and ranked in the top 100.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2024</div>
+          <div class="timeline-title">More CTFs &amp; university challenges</div>
+          <div class="timeline-text">Played Cyber Warrior, Orbit CTF, and other competitions, focusing on forensics and web security.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2024–2025</div>
+          <div class="timeline-title">Building my own tools &amp; labs</div>
+          <div class="timeline-text">Started creating custom vulnerable boxes and tools like qrshilde and Linux encryption utilities.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">Next</div>
+          <div class="timeline-title">More reverse engineering &amp; deep-dive writeups</div>
+          <div class="timeline-text">Planning to publish detailed RE writeups and work on more advanced exploitation techniques.</div>
         </div>
       </div>
     </section>
@@ -684,6 +1015,32 @@
     }
 
     setInterval(drawMatrix, 40);
+  </script>
+
+  <!-- Theme toggle -->
+  <script>
+    (function(){
+      const body = document.body;
+      const btn = document.getElementById('themeToggle');
+      const icon = document.getElementById('themeIcon');
+      const label = document.getElementById('themeLabel');
+
+      // load saved theme
+      const saved = localStorage.getItem('theme');
+      if(saved === 'light'){
+        body.classList.add('light');
+        icon.textContent = '☀️';
+        label.textContent = 'Light';
+      }
+
+      btn.addEventListener('click', () => {
+        body.classList.toggle('light');
+        const isLight = body.classList.contains('light');
+        icon.textContent = isLight ? '☀️' : '🌙';
+        label.textContent = isLight ? 'Light' : 'Dark';
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      });
+    })();
   </script>
 
   <!-- AOS + Typed -->
