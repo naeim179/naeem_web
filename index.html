@@ -687,40 +687,77 @@
     </section>
 
     <!-- Projects -->
-    <section id="projects" class="card" data-aos="fade-up">
-      <div class="section-title">
-        <span>Projects</span>
-        <span class="section-badge">Labs &amp; Boxes</span>
-      </div>
-      <p class="sub" style="margin-top:6px">Some of the labs and environments I built to practice attack &amp; defense.</p>
+  <section id="projects" class="card" data-aos="fade-up">
+  <div class="section-title">
+    <span>Projects</span>
+    <span class="section-badge">Labs & Tools</span>
+  </div>
 
-      <div class="projects-grid">
-        <div class="item-card">
-          <h3>VulnLab: Boot2Root Linux Box</h3>
-          <div class="item-meta">Custom vulnerable VM • PrivEsc &amp; Web</div>
-          <p class="item-desc">
-            A vulnerable Linux machine I created to practice local file inclusion, weak credentials,
-            and privilege escalation using misconfigured services.
-          </p>
-          <div class="item-links">
-            <a href="#" target="_blank">View on GitHub ↗</a>
-          </div>
-          <div class="pill"><strong>Stack</strong> • Linux, Apache, Bash</div>
-        </div>
+  <p class="sub" style="margin-top:6px">
+    These are the labs and tools I build to improve my offensive, defensive, and automation skills.
+  </p>
 
-        <div class="item-card">
-          <h3>Incident Playground</h3>
-          <div class="item-meta">Log &amp; PCAP simulation lab</div>
-          <p class="item-desc">
-            A small lab with web logs, PCAPs, and fake incidents used to practice detection, triage, and reporting.
-          </p>
-          <div class="item-links">
-            <a href="#" target="_blank">View on GitHub ↗</a>
-          </div>
-          <div class="pill"><strong>Focus</strong> • IR, Forensics</div>
-        </div>
+  <div class="projects-grid">
+
+    <!-- 🟩 qrshilde — FIRST PROJECT -->
+    <div class="item-card">
+      <h3>qrshilde — QR Code Security Tool</h3>
+      <div class="item-meta">Security Utility</div>
+      <p class="item-desc">
+        A tool that generates, decodes, and inspects QR codes from a security perspective.
+        Useful for analyzing encoded payloads, detecting unsafe redirects, and testing cryptographic features.
+      </p>
+      <div class="item-links">
+        <a href="#" target="_blank">View on GitHub ↗</a>
       </div>
-    </section>
+      <div class="pill"><strong>Stack</strong> • Python, QR Codes, Cryptography</div>
+    </div>
+
+    <!-- 🧪 VulnLab -->
+    <div class="item-card">
+      <h3>VulnLab: Boot2Root Linux Box</h3>
+      <div class="item-meta">Custom vulnerable VM • PrivEsc & Web</div>
+      <p class="item-desc">
+        A custom vulnerable Linux machine built to practice real-world exploitation paths.
+        Includes weak configurations, LFI, enumeration, and privilege escalation challenges.
+        Designed like a real Boot2Root CTF machine.
+      </p>
+      <div class="item-links">
+        <a href="#" target="_blank">View on GitHub ↗</a>
+      </div>
+      <div class="pill"><strong>Stack</strong> • Linux, Apache, Bash</div>
+    </div>
+
+    <!-- 📁 Incident Playground -->
+    <div class="item-card">
+      <h3>Incident Playground — Log & PCAP Lab</h3>
+      <div class="item-meta">Forensics & SOC Simulation</div>
+      <p class="item-desc">
+        A controlled environment for practicing log analysis and PCAP investigation.
+        Replay attacks, trace indicators, extract artifacts, and simulate IR scenarios.
+      </p>
+      <div class="item-links">
+        <a href="#" target="_blank">View on GitHub ↗</a>
+      </div>
+      <div class="pill"><strong>Focus</strong> • Incident Response, Forensics</div>
+    </div>
+
+    <!-- 🔐 Linux Encryption Tool -->
+    <div class="item-card">
+      <h3>Linux Encryption Tool</h3>
+      <div class="item-meta">Secure Files Quickly</div>
+      <p class="item-desc">
+        A simple but effective encryption/decryption script for Linux.
+        Uses OpenSSL to protect files with multiple cipher modes through a clean, fast CLI.
+      </p>
+      <div class="item-links">
+        <a href="#" target="_blank">View on GitHub ↗</a>
+      </div>
+      <div class="pill"><strong>Stack</strong> • Bash, OpenSSL, Linux</div>
+    </div>
+
+  </div>
+</section>
 
     <!-- Tools -->
     <section id="tools" class="card" data-aos="fade-up">
