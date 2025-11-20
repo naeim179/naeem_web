@@ -12,431 +12,530 @@
 
   <style>
     :root {
-      --bg:#020617;
-      --bg-soft:#0b1120;
-      --card-bg:rgba(15,23,42,0.9);
-      --card-border:rgba(148,163,184,0.3);
-      --text:#e6eef6;
-      --muted:#9aa4b2;
-      --accent:#6ee7b7;
-      --accent-soft:rgba(110,231,183,0.08);
-      --glow: 0 10px 30px rgba(110,231,183,0.18);
-      --nav-bg:rgba(15,23,42,0.85);
+      --bg: #020617;
+      --bg-soft: #0b1120;
+      --text: #e6eef6;
+      --muted: #9aa4b2;
+      --accent: #22c55e;
+      --accent-soft: rgba(34, 197, 94, 0.1);
+      --nav-bg: rgba(15, 23, 42, 0.85);
+      --card-bg: rgba(15, 23, 42, 0.92);
+      --card-border: rgba(148, 163, 184, 0.25);
+      --glow: 0 0 25px rgba(34, 197, 94, 0.25);
     }
 
-    /* Light theme */
-    body.light {
-      --bg:#f3f4f6;
-      --bg-soft:#e5e7eb;
-      --card-bg:rgba(255,255,255,0.92);
-      --card-border:rgba(148,163,184,0.5);
-      --text:#020617;
-      --muted:#4b5563;
-      --accent:#10b981;
-      --accent-soft:rgba(16,185,129,0.08);
-      --nav-bg:rgba(243,244,246,0.9);
-      --glow:0 10px 25px rgba(15,23,42,0.1);
+    /* Light theme overrides */
+    .light-theme {
+      --bg: #f3f4f6;
+      --bg-soft: #e5e7eb;
+      --text: #020617;
+      --muted: #4b5563;
+      --accent: #10b981;
+      --accent-soft: rgba(16, 185, 129, 0.15);
+      --nav-bg: rgba(243, 244, 246, 0.92);
+      --card-bg: rgba(255, 255, 255, 0.98);
+      --card-border: rgba(148, 163, 184, 0.4);
+      --glow: 0 0 18px rgba(16, 185, 129, 0.3);
     }
 
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{
-      height:100%;
-      background:var(--bg);
-      color:var(--text);
-      overflow-x:hidden;
-      position:relative;
-      scroll-behavior:smooth;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    /* خلفية هكر ناعمة فوق الماتريكس */
-    body::before{
-      content:"";
-      position:fixed;
-      inset:-60px;
-      z-index:-2;
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      position: relative;
+      scroll-behavior: smooth;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    /* هالة خلفية ناعمة فوق الماتريكس */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -80px;
+      z-index: -2;
       background:
-        radial-gradient(circle at 10% 20%, rgba(110,231,183,0.22), transparent 55%),
-        radial-gradient(circle at 80% 80%, rgba(56,189,248,0.2), transparent 55%);
-      opacity:0.7;
-      filter:blur(6px);
-      pointer-events:none;
-      animation:drift 30s ease-in-out infinite alternate;
+        radial-gradient(circle at 0% 0%, rgba(34, 197, 94, 0.06), transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.06), transparent 55%),
+        radial-gradient(circle at 50% 100%, rgba(129, 140, 248, 0.09), transparent 60%);
+      filter: blur(4px);
+      pointer-events: none;
+      animation: drift 30s ease-in-out infinite alternate;
     }
-    body.light::before{
-      opacity:0.4;
-    }
-    @keyframes drift{
-      0%{transform:translate3d(0,0,0) scale(1);}
-      50%{transform:translate3d(-20px,10px,0) scale(1.05);}
-      100%{transform:translate3d(20px,-10px,0) scale(1.08);}
+
+    @keyframes drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-30px, 20px, 0) scale(1.05); }
     }
 
     /* Canvas تبع الماتريكس */
-    #matrixBackground{
-      position:fixed;
-      top:0;left:0;
-      width:100%;height:100%;
-      z-index:-1;
-      background:#000;
-    }
-    body.light #matrixBackground{
-      opacity:0.15; /* خفيفة باللايت مود */
+    #matrixBackground {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      background: #000;
     }
 
     /* Navbar ثابت */
-    .top-nav{
-      position:fixed;
-      top:0;left:0;right:0;
-      z-index:20;
-      background:var(--nav-bg);
-      backdrop-filter:blur(14px);
-      border-bottom:1px solid rgba(148,163,184,0.3);
-      box-shadow:0 10px 30px rgba(15,23,42,0.45);
-    }
-    .nav-inner{
-      max-width:1000px;
-      margin:0 auto;
-      padding:10px 20px;
-      display:flex;
-      align-items:center;
-      gap:14px;
-    }
-    .nav-brand{
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .nav-logo{
-      width:34px;height:34px;
-      border-radius:999px;
-      background:radial-gradient(circle at 30% 20%,#22c55e,#0ea5e9 60%,#4c1d95 100%);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:16px;
-      font-weight:700;
-      color:#e5e7eb;
-      box-shadow:var(--glow);
-    }
-    .nav-title{
-      font-size:14px;
-      font-weight:500;
-    }
-    .nav-links{
-      margin-left:auto;
-      display:flex;
-      gap:12px;
-      align-items:center;
-      font-size:13px;
-    }
-    .nav-links a{
-      color:var(--muted);
-      text-decoration:none;
-      padding:4px 8px;
-      border-radius:999px;
-      border:1px solid transparent;
-    }
-    .nav-links a:hover{
-      color:var(--accent);
-      border-color:rgba(110,231,183,0.3);
-      background:rgba(15,23,42,0.6);
-    }
-    body.light .nav-links a:hover{
-      background:rgba(209,213,219,0.5);
+    .top-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 20;
+      background: var(--nav-bg);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.25);
     }
 
-    .theme-toggle{
-      margin-left:10px;
-      border-radius:999px;
-      border:1px solid rgba(148,163,184,0.6);
-      background:transparent;
-      color:var(--muted);
-      font-size:12px;
-      padding:4px 9px;
-      display:flex;
-      align-items:center;
-      gap:6px;
-      cursor:pointer;
-    }
-    .theme-toggle span.icon{
-      font-size:14px;
+    .nav-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
     }
 
-    .container{max-width:1000px;margin:90px auto 36px;padding:24px;position:relative;z-index:10}
-    header{display:flex;align-items:center;gap:18px}
-    .avatar{
-      width:92px;height:92px;border-radius:50%;
-      background:radial-gradient(circle at 30% 20%,#22c55e,#0ea5e9 60%,#4c1d95 100%);
-      display:flex;align-items:center;justify-content:center;
-      font-weight:700;font-size:26px;box-shadow:var(--glow)
-    }
-    h1{margin:0;font-size:26px;letter-spacing:0.6px}
-    .sub{color:var(--muted);margin-top:6px}
-    .hero{display:flex;align-items:center;justify-content:space-between;padding:18px 0;gap:16px}
-    .left{flex:1}
-    .typed{color:var(--accent);font-weight:600}
-    .card{
-      background:var(--card-bg);
-      border-radius:12px;
-      padding:18px;
-      margin-top:18px;
-      box-shadow:var(--glow);
-      backdrop-filter:blur(10px);
-      border:1px solid var(--card-border);
-    }
-    .about p{color:var(--muted);line-height:1.6}
-    .ctf-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:14px;
-      margin-top:14px
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .ctf-card{perspective:1000px;cursor:pointer;height:220px}
-    .ctf-card-inner{
-      position:relative;width:100%;height:100%;
-      transition:transform 0.6s cubic-bezier(.2,.9,.2,1);
-      transform-style:preserve-3d;
-    }
-    .ctf-card:hover .ctf-card-inner{transform:rotateY(180deg);}
-    .ctf-card-front,.ctf-card-back{
-      position:absolute;width:100%;height:100%;
-      backface-visibility:hidden;border-radius:10px;
-      border:1px solid rgba(255,255,255,0.04);
-      background:linear-gradient(180deg,rgba(15,23,42,0.95),rgba(15,23,42,0.86));
-      padding:18px;display:flex;flex-direction:column;
-      justify-content:center;align-items:center;text-align:center;
-      box-shadow:var(--glow);
-    }
-    body.light .ctf-card-front,
-    body.light .ctf-card-back{
-      background:linear-gradient(180deg,rgba(248,250,252,0.98),rgba(226,232,240,0.95));
-      border-color:rgba(148,163,184,0.4);
+    .nav-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #22c55e, #0ea5e9 60%, #4c1d95 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: #e5e7eb;
+      box-shadow: var(--glow);
     }
 
-    .ctf-card-front{color:var(--accent);font-weight:600;font-size:17px}
-    .ctf-card-back{
-      transform:rotateY(180deg);
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.5;
-      align-items:flex-start;
-      justify-content:flex-start
-    }
-    .ctf-card .meta{font-size:13px;color:var(--muted);margin-bottom:8px}
-    .tag{
-      display:inline-block;font-size:12px;
-      padding:6px 8px;border-radius:999px;
-      background:var(--accent-soft);
-      color:var(--accent);margin:4px 3px
+    .nav-title {
+      font-size: 14px;
+      font-weight: 500;
     }
 
-    .section-title{
-      font-size:20px;
-      margin:0 0 4px;
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
-    .section-badge{
-      font-size:11px;
-      padding:4px 8px;
-      border-radius:999px;
-      background:rgba(15,23,42,0.9);
-      border:1px solid rgba(148,163,184,0.5);
-      color:var(--muted);
-      text-transform:uppercase;
-      letter-spacing:0.04em;
-    }
-    body.light .section-badge{
-      background:rgba(243,244,246,0.9);
+    .nav-links {
+      margin-left: auto;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      font-size: 13px;
     }
 
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(15,23,42,0.9);
-      border:1px solid rgba(148,163,184,0.4);
-      color:var(--muted);
-      margin:3px 4px;
-    }
-    .pill strong{color:#e5e7eb;font-weight:500}
-    body.light .pill{
-      background:rgba(243,244,246,0.95);
-      color:#4b5563;
-    }
-    body.light .pill strong{
-      color:#111827;
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
     }
 
-    .projects-grid,
-    .certs-grid,
-    .writeups-grid,
-    .skills-grid,
-    .tools-grid,
-    .timeline-list{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-      gap:14px;
-      margin-top:12px;
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      border-color: rgba(148, 163, 184, 0.7);
+      color: var(--accent);
+      text-decoration: none;
+      background: rgba(15, 23, 42, 0.4);
     }
 
-    .item-card{
-      padding:14px;
-      border-radius:10px;
-      border:1px solid rgba(148,163,184,0.26);
-      background:linear-gradient(145deg,rgba(15,23,42,0.96),rgba(15,23,42,0.85));
-      box-shadow:0 8px 26px rgba(15,23,42,0.8);
+    .theme-toggle {
+      margin-left: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: transparent;
+      color: var(--muted);
+      font-size: 12px;
+      padding: 4px 9px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      outline: none;
     }
-    body.light .item-card{
-      background:linear-gradient(145deg,rgba(255,255,255,0.98),rgba(243,244,246,0.96));
-      border-color:rgba(148,163,184,0.45);
-      box-shadow:0 8px 22px rgba(148,163,184,0.35);
+
+    .theme-toggle .icon {
+      font-size: 14px;
     }
-    .item-card h3{
-      margin:0 0 4px;
-      font-size:15px;
+
+    .container {
+      max-width: 1000px;
+      margin: 86px auto 40px;
+      padding: 0 16px 40px;
+      position: relative;
     }
-    .item-meta{
-      font-size:12px;
-      color:var(--muted);
-      margin-bottom:6px;
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 18px;
     }
-    .item-desc{
-      font-size:13px;
-      color:var(--muted);
-      line-height:1.5;
-      margin-bottom:8px;
+
+    .avatar {
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #22c55e, #0ea5e9 60%, #4c1d95 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 26px;
+      box-shadow: var(--glow);
     }
-    .item-links a{
-      font-size:12px;
-      margin-right:10px;
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+
+    .sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 18px;
+      box-shadow: var(--glow);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .section-title span:first-child {
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .section-badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .typed {
+      font-weight: 500;
+      color: var(--accent);
+    }
+
+    /* Generic cards / grid */
+    .item-card {
+      padding: 14px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    .light-theme .item-card {
+      background: rgba(255, 255, 255, 0.98);
+    }
+
+    .item-card h3 {
+      margin: 0 0 4px;
+      font-size: 15px;
+    }
+
+    .item-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .item-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      margin-top: 4px;
+    }
+
+    .item-links {
+      margin-bottom: 6px;
+    }
+
+    .item-links a {
+      font-size: 12px;
+      text-decoration: none;
+      color: var(--accent);
+    }
+
+    .item-links a:hover {
+      text-decoration: underline;
     }
 
     /* Skills */
-    .skill-pill{
-      display:inline-flex;
-      align-items:center;
-      justify-content:space-between;
-      width:100%;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid rgba(148,163,184,0.4);
-      font-size:13px;
-      margin-bottom:6px;
-      background:rgba(15,23,42,0.9);
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 8px;
     }
-    .skill-pill span.label{
-      color:var(--text);
+
+    .skill-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 13px;
+      margin-bottom: 6px;
     }
-    .skill-pill span.level{
-      color:var(--muted);
-      font-size:11px;
+
+    .skill-pill .label {
+      color: var(--text);
     }
-    body.light .skill-pill{
-      background:rgba(243,244,246,0.96);
+
+    .skill-pill .level {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    /* CTF flip cards */
+    .ctf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .ctf-card {
+      perspective: 1000px;
+      height: 120px;
+    }
+
+    .ctf-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.4s ease;
+    }
+
+    .ctf-card:hover .ctf-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .ctf-card-front,
+    .ctf-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      box-shadow: var(--glow);
+    }
+
+    .ctf-card-front {
+      background: rgba(15, 23, 42, 0.95);
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .light-theme .ctf-card-front {
+      background: #ffffff;
+    }
+
+    .ctf-card-back {
+      transform: rotateY(180deg);
+      background: rgba(15, 23, 42, 0.98);
+      color: var(--muted);
+      font-size: 13px;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 6px;
+    }
+
+    .ctf-card-back .meta {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      margin: 2px 2px;
+    }
+
+    /* Projects / Tools / Certs / Writeups grids */
+    .projects-grid,
+    .tools-grid,
+    .certs-grid,
+    .writeups-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin-top: 10px;
     }
 
     /* Timeline */
-    .timeline{
-      margin-top:10px;
-      border-left:1px dashed rgba(148,163,184,0.5);
-      padding-left:14px;
-    }
-    .timeline-item{
-      margin-bottom:10px;
-      position:relative;
-    }
-    .timeline-dot{
-      width:10px;height:10px;border-radius:999px;
-      background:var(--accent);
-      position:absolute;
-      left:-19px;
-      top:4px;
-      box-shadow:0 0 10px rgba(110,231,183,0.8);
-    }
-    .timeline-year{
-      font-size:12px;
-      color:var(--muted);
-      text-transform:uppercase;
-      letter-spacing:0.08em;
-    }
-    .timeline-title{
-      font-size:14px;
-      font-weight:500;
-    }
-    .timeline-text{
-      font-size:13px;
-      color:var(--muted);
+    .timeline {
+      margin-top: 10px;
+      padding-left: 14px;
+      border-left: 1px solid rgba(148, 163, 184, 0.5);
     }
 
-    .contact-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-      margin-top:12px;
-    }
-    .contact-method{
-      flex:1 1 190px;
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid rgba(148,163,184,0.4);
-      background:rgba(15,23,42,0.96);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      font-size:13px;
-    }
-    body.light .contact-method{
-      background:rgba(249,250,251,0.98);
-      border-color:rgba(148,163,184,0.6);
-    }
-    .contact-left{
-      display:flex;
-      flex-direction:column;
-      gap:2px;
-    }
-    .contact-label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;}
-    .contact-value{font-weight:500;}
-    .btn-link{
-      font-size:12px;
-      padding:4px 8px;
-      border-radius:999px;
-      border:1px solid rgba(110,231,183,0.4);
-      text-decoration:none;
-      color:var(--accent);
-      background:rgba(16,185,129,0.08);
-    }
-    .btn-link:hover{
-      text-decoration:none;
-      background:rgba(16,185,129,0.16);
+    .timeline-item {
+      margin-bottom: 10px;
+      position: relative;
+      padding-left: 10px;
     }
 
-    footer{
-      color:var(--muted);
-      font-size:13px;
-      margin-top:26px;
-      text-align:center
+    .timeline-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent);
+      position: absolute;
+      left: -19px;
+      top: 4px;
     }
-    a{color:var(--accent);text-decoration:none}
-    a:hover{text-decoration:underline}
 
-    @media(max-width:840px){
-      .nav-links{
-        display:none; /* عشان ما نعقّد ريسبونسف ميني منيو الآن */
+    .timeline-year {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .timeline-title {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    /* Contact */
+    .contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .contact-method {
+      flex: 1 1 230px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      background: rgba(15, 23, 42, 0.85);
+    }
+
+    .light-theme .contact-method {
+      background: #ffffff;
+    }
+
+    .contact-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .contact-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .contact-value {
+      font-size: 13px;
+    }
+
+    .btn-link {
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      text-decoration: none;
+      color: var(--accent);
+    }
+
+    .btn-link:hover {
+      text-decoration: none;
+      background: var(--accent-soft);
+    }
+
+    footer {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 26px;
+      text-align: center;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 840px) {
+      .nav-links {
+        display: none; /* عشان ما نعقّد ميني منيو الآن */
       }
     }
 
-    @media(max-width:640px){
-      .hero{flex-direction:column;align-items:flex-start}
-      .avatar{width:78px;height:78px}
-      header{flex-wrap:wrap}
-      .container{padding:18px;margin:86px auto 28px;}
+    @media (max-width: 640px) {
+      header {
+        flex-wrap: wrap;
+      }
     }
   </style>
 </head>
@@ -474,7 +573,7 @@
       <div class="avatar">ΝΜ</div>
       <div>
         <h1>Ναιμός Μαχητής <small style="color:var(--muted);font-weight:600">— Naeem Althabata</small></h1>
-        <div class="sub">CTF Player &middot; Pentester &middot; Cyber Warrior</div>
+        <div class="sub">CTF Player · Pentester · Cyber Warrior</div>
       </div>
       <div style="margin-left:auto;color:var(--muted);font-size:13px">GitHub Pages • Dark theme</div>
     </header>
@@ -492,9 +591,10 @@
         <div class="card about" style="margin-top:12px">
           <div style="flex:1">
             <h3 style="margin-top:0">About Me</h3>
-            <p>
-              I’m a CTF player who enjoys forensics, web challenges, and Boot2Root missions.
-              I constantly learn and strive to improve my skills in cybersecurity and digital forensics.
+            <p class="item-desc">
+              I’m a cybersecurity enthusiast focused on CTFs, offensive security and Linux-based tooling.
+              I enjoy breaking things, understanding how they work under the hood, then writing clean tools
+              and labs so others can practice and learn.
             </p>
           </div>
         </div>
@@ -507,7 +607,9 @@
         <span>Skills</span>
         <span class="section-badge">Core Stack</span>
       </div>
-      <p class="sub" style="margin-top:6px">What I use in CTFs, labs, and security work.</p>
+      <p class="sub" style="margin-top:6px">
+        A focused set of skills around hacking, Linux, and automation.
+      </p>
 
       <div class="skills-grid">
         <div class="item-card">
@@ -528,7 +630,7 @@
             <div class="skill-pill"><span class="label">Burp Suite</span><span class="level">Web testing</span></div>
             <div class="skill-pill"><span class="label">Nmap</span><span class="level">Network recon</span></div>
             <div class="skill-pill"><span class="label">Wireshark / tshark</span><span class="level">Network forensics</span></div>
-            <div class="skill-pill"><span class="label">Ghidra</span><span class="level">Reverse</span></div>
+            <div class="skill-pill"><span class="label">Ghidra</span><span class="level">Reverse engineering</span></div>
           </div>
         </div>
 
@@ -561,7 +663,6 @@
               <div>
                 <span class="tag">National</span><span class="tag">Beginner</span>
               </div>
-              <p>My first official CTF participation organized by the National Cyber Security Center of Jordan — achieved a ranking within the top 100 competitors across the country.</p>
             </div>
           </div>
         </div>
@@ -574,7 +675,6 @@
               <div>
                 <span class="tag">Forensics</span><span class="tag">Team</span>
               </div>
-              <p>Participated in the first edition of Cyber Warrior held in Jordan — competed in digital forensics and analysis challenges.</p>
             </div>
           </div>
         </div>
@@ -587,7 +687,6 @@
               <div>
                 <span class="tag">Network</span><span class="tag">Web</span>
               </div>
-              <p>Joined the second edition of Cyber Warrior — advanced through multiple stages of analysis, web exploitation, and network defense challenges.</p>
             </div>
           </div>
         </div>
@@ -600,7 +699,6 @@
               <div>
                 <span class="tag">Boot2Root</span><span class="tag">Privilege Escalation</span>
               </div>
-              <p>Completed a Boot2Root challenge hosted by Al al-Bayt University — focused on privilege escalation and system exploitation.</p>
             </div>
           </div>
         </div>
@@ -613,7 +711,6 @@
               <div>
                 <span class="tag">Web</span><span class="tag">Reverse</span>
               </div>
-              <p>Competed in Orbit CTF tackling reverse engineering and web security challenges involving binary decoding and server-side logic flaws.</p>
             </div>
           </div>
         </div>
@@ -626,7 +723,6 @@
               <div>
                 <span class="tag">Web</span><span class="tag">Forensics</span>
               </div>
-              <p>Represented my team in the Cypetra CTF organized by Green Circle — solved web exploitation and forensics problems collaboratively.</p>
             </div>
           </div>
         </div>
@@ -639,7 +735,6 @@
               <div>
                 <span class="tag">Incident Response</span><span class="tag">Forensics</span>
               </div>
-              <p>Participated in Honeynet Collapse CTF — focused on simulated attack analysis, log investigation, and malware trace recovery.</p>
             </div>
           </div>
         </div>
@@ -652,7 +747,6 @@
               <div>
                 <span class="tag">ICS</span><span class="tag">Exploitation</span>
               </div>
-              <p>Engaged in the Industrial Intrusion challenge focusing on Industrial Control Systems exploitation and critical infrastructure defense.</p>
             </div>
           </div>
         </div>
@@ -665,7 +759,6 @@
               <div>
                 <span class="tag">Competition</span><span class="tag">Teams</span>
               </div>
-              <p>Competed in the second edition of Black Hat MENA — a top-tier regional CTF featuring Web, Crypto, and Pwn challenges.</p>
             </div>
           </div>
         </div>
@@ -678,7 +771,9 @@
         <span>Projects</span>
         <span class="section-badge">Labs &amp; Boxes</span>
       </div>
-      <p class="sub" style="margin-top:6px">Some of the labs and environments I built to practice attack &amp; defense.</p>
+      <p class="sub" style="margin-top:6px">
+        Custom labs and boxes to practice real-world attack paths.
+      </p>
 
       <div class="projects-grid">
         <div class="item-card">
@@ -686,7 +781,7 @@
           <div class="item-meta">Custom vulnerable VM • PrivEsc &amp; Web</div>
           <p class="item-desc">
             A vulnerable Linux machine I created to practice local file inclusion, weak credentials,
-            and privilege escalation using misconfigured services.
+            and privilege escalation in a safe, controlled environment.
           </p>
           <div class="item-links">
             <a href="#" target="_blank">View on GitHub ↗</a>
@@ -698,7 +793,8 @@
           <h3>Incident Playground</h3>
           <div class="item-meta">Log &amp; PCAP simulation lab</div>
           <p class="item-desc">
-            A small lab with web logs, PCAPs, and fake incidents used to practice detection, triage, and reporting.
+            A small lab with generated logs and PCAPs designed to simulate incident response scenarios
+            and teach triage, correlation, and root cause analysis.
           </p>
           <div class="item-links">
             <a href="#" target="_blank">View on GitHub ↗</a>
@@ -714,14 +810,17 @@
         <span>Tools</span>
         <span class="section-badge">Built by Me</span>
       </div>
-      <p class="sub" style="margin-top:6px">Small but useful tools I’m building to support my workflow.</p>
+      <p class="sub" style="margin-top:6px">
+        Small utilities and scripts that make hacking and analysis easier.
+      </p>
 
       <div class="tools-grid">
         <div class="item-card">
           <h3>qrshilde</h3>
           <div class="item-meta">QR Code Security Tool</div>
           <p class="item-desc">
-            qrshilde is a tool designed to generate, encrypt, and decode QR codes to help test and secure QR-based workflows.
+            A tool to analyse QR codes, detect suspicious patterns, and help users stay safe from
+            malicious QR-based attacks.
           </p>
           <div class="item-links">
             <a href="#" target="_blank">View on GitHub ↗</a>
@@ -733,7 +832,8 @@
           <h3>Linux Encryption Tool</h3>
           <div class="item-meta">Encrypt/Decrypt Files on Linux</div>
           <p class="item-desc">
-            A command-line tool for Linux that offers simple file encryption and decryption to practice and understand crypto concepts.
+            A simple command-line encryption helper to quickly protect or decrypt files on Linux using
+            strong, well-known primitives.
           </p>
           <div class="item-links">
             <a href="#" target="_blank">View on GitHub ↗</a>
@@ -745,7 +845,8 @@
           <h3>Log Hunter</h3>
           <div class="item-meta">Forensics / IR helper script</div>
           <p class="item-desc">
-            A script that parses web server logs, extracts suspicious IPs and endpoints, and generates a quick incident-response summary.
+            A script that parses large log files, highlights suspicious patterns, and accelerates
+            incident response investigations.
           </p>
           <div class="item-links">
             <a href="#" target="_blank">View on GitHub ↗</a>
@@ -757,7 +858,8 @@
           <h3>Web Recon Pipeline</h3>
           <div class="item-meta">Bug bounty recon automation</div>
           <p class="item-desc">
-            A recon chain that automates subdomain discovery, screenshots, and basic tech fingerprinting for target scopes.
+            Automated recon pipeline that chains together tools like Nmap and httpx to discover,
+            filter, and prioritise interesting targets.
           </p>
           <div class="item-links">
             <a href="#" target="_blank">View on GitHub ↗</a>
@@ -773,38 +875,35 @@
         <span>Journey</span>
         <span class="section-badge">Timeline</span>
       </div>
-      <p class="sub" style="margin-top:6px">How I got here and where I’m going next.</p>
+      <p class="sub" style="margin-top:6px">
+        A quick look at how I got into cybersecurity and where I’m heading.
+      </p>
 
       <div class="timeline">
         <div class="timeline-item">
           <div class="timeline-dot"></div>
           <div class="timeline-year">2023</div>
           <div class="timeline-title">Started exploring Linux &amp; cybersecurity basics</div>
-          <div class="timeline-text">Began learning Linux, networks, and core security concepts through online courses and labs.</div>
         </div>
         <div class="timeline-item">
           <div class="timeline-dot"></div>
           <div class="timeline-year">2023</div>
           <div class="timeline-title">First national CTF</div>
-          <div class="timeline-text">Joined the National Cyber Security Center of Jordan CTF and ranked in the top 100.</div>
         </div>
         <div class="timeline-item">
           <div class="timeline-dot"></div>
           <div class="timeline-year">2024</div>
           <div class="timeline-title">More CTFs &amp; university challenges</div>
-          <div class="timeline-text">Played Cyber Warrior, Orbit CTF, and other competitions, focusing on forensics and web security.</div>
         </div>
         <div class="timeline-item">
           <div class="timeline-dot"></div>
           <div class="timeline-year">2024–2025</div>
           <div class="timeline-title">Building my own tools &amp; labs</div>
-          <div class="timeline-text">Started creating custom vulnerable boxes and tools like qrshilde and Linux encryption utilities.</div>
         </div>
         <div class="timeline-item">
           <div class="timeline-dot"></div>
           <div class="timeline-year">Next</div>
           <div class="timeline-title">More reverse engineering &amp; deep-dive writeups</div>
-          <div class="timeline-text">Planning to publish detailed RE writeups and work on more advanced exploitation techniques.</div>
         </div>
       </div>
     </section>
@@ -815,23 +914,27 @@
         <span>Certificates</span>
         <span class="section-badge">Validation</span>
       </div>
-      <p class="sub" style="margin-top:6px">Formal proof of my progress in cybersecurity &amp; related fields.</p>
+      <p class="sub" style="margin-top:6px">
+        Formal recognition of skills from industry and academic programmes.
+      </p>
 
       <div class="certs-grid">
         <div class="item-card">
           <h3>Certified Ethical Hacker (CEH)</h3>
           <div class="item-meta">EC-Council • 03 Mar 2024</div>
           <p class="item-desc">
-            Validated skills in ethical hacking, attack techniques, and defensive strategies across networks, web apps, and systems.
+            An entry-level certification focused on offensive security, vulnerabilities, and exploitation
+            techniques aligned with real-world attacks.
           </p>
           <div class="pill"><strong>Focus</strong> • Offensive Security, Exploitation</div>
         </div>
 
         <div class="item-card">
-          <h3>CCSK v4.1 Foundation Training</h3>
+          <h3>Cloud Security Fundamentals</h3>
           <div class="item-meta">Cloud Security Alliance • 19 Oct 2023</div>
           <p class="item-desc">
-            Covered core cloud security concepts, including shared responsibility, cloud risk, and controls for modern cloud environments.
+            A certification highlighting core concepts in cloud security, shared responsibility, and
+            common cloud threats.
           </p>
           <div class="pill"><strong>Focus</strong> • Cloud Security, CSA Guidance</div>
         </div>
@@ -840,7 +943,7 @@
           <h3>Cybersecurity Essentials</h3>
           <div class="item-meta">Cisco Networking Academy • 21 May 2023</div>
           <p class="item-desc">
-            Introduction to cybersecurity concepts, threat actors, CIA triad, and technologies used to protect modern networks.
+            Core cybersecurity fundamentals including threats, risks, and basic defence strategies.
           </p>
           <div class="pill"><strong>Platform</strong> • Cisco Networking Academy</div>
         </div>
@@ -849,7 +952,8 @@
           <h3>IoT Fundamentals: Big Data &amp; Analytics</h3>
           <div class="item-meta">Cisco Networking Academy • 01 Jan 2024</div>
           <p class="item-desc">
-            Focused on data analytics for IoT, Python scripting, basic ML, and data visualization for real-world IoT scenarios.
+            Focused on the intersection of IoT, data collection, and analytic techniques to extract
+            value from connected devices.
           </p>
           <div class="pill"><strong>Focus</strong> • IoT, Data Analytics</div>
         </div>
@@ -858,7 +962,8 @@
           <h3>Introduction to IoT</h3>
           <div class="item-meta">Cisco Networking Academy • 29 Mar 2024</div>
           <p class="item-desc">
-            Covered digital transformation, IoT impact on business and governments, and the need for security in a connected world.
+            A high-level overview of IoT systems, components, and how they connect the physical and
+            digital worlds.
           </p>
           <div class="pill"><strong>Focus</strong> • IoT, Digital Transformation</div>
         </div>
@@ -867,7 +972,8 @@
           <h3>Red Hat System Administration II (RH134)</h3>
           <div class="item-meta">Red Hat Training • 13 Jun 2025</div>
           <p class="item-desc">
-            Hands-on Linux system administration, including advanced configuration, user and service management, and troubleshooting on Red Hat Enterprise Linux.
+            Hands-on training in Red Hat Enterprise Linux administration, services, and system
+            troubleshooting.
           </p>
           <div class="pill"><strong>Focus</strong> • Linux, System Administration</div>
         </div>
@@ -876,8 +982,8 @@
           <h3>OrbitCTF Certificate of Appreciation</h3>
           <div class="item-meta">AABU • 27 Oct 2025</div>
           <p class="item-desc">
-            Awarded for exceptional dedication, teamwork, and remarkable problem-solving skills
-            demonstrated during the OrbitCTF competition at AABU.
+            Awarded for exceptional dedication, teamwork, and remarkable problem-solving skills during
+            OrbitCTF university competition.
           </p>
           <div class="item-links">
             <a href="assets/certs/photo_2025-11-15_22-36-36.jpg" target="_blank">View Certificate ↗</a>
@@ -893,14 +999,17 @@
         <span>Writeups</span>
         <span class="section-badge">Knowledge Sharing</span>
       </div>
-      <p class="sub" style="margin-top:6px">Selected writeups from CTFs, Boot2Root machines, and interesting bugs.</p>
+      <p class="sub" style="margin-top:6px">
+        Deep dives into challenges, techniques, and lessons learned.
+      </p>
 
       <div class="writeups-grid">
         <div class="item-card">
           <h3>Reverse Engineering — Coming Soon</h3>
           <div class="item-meta">Planned writeup on RE challenges</div>
           <p class="item-desc">
-            A reverse engineering writeup is coming soon. It will cover how I approach binaries, use debuggers, and trace logic to extract flags and understand vulnerabilities.
+            A series of writeups covering static and dynamic analysis, debugging workflows, and practical
+            reversing of binaries and CTF challenges.
           </p>
           <div class="item-links">
             <a href="#" target="_blank">Read Writeup ↗</a>
@@ -917,16 +1026,16 @@
         <span class="section-badge">Let’s Hack Together</span>
       </div>
       <p class="sub" style="margin-top:6px">
-        Reach out for CTF teams, pentest work, or collab on security projects.
+        Open to CTF teams, security projects, and interesting collaborations.
       </p>
 
       <div class="contact-row">
         <div class="contact-method">
           <div class="contact-left">
             <span class="contact-label">Email</span>
-            <span class="contact-value">naeemmohmd8@gmail.com</span>
+            <span class="contact-value">naeim179@gmail.com</span>
           </div>
-          <a class="btn-link" href="mailto:naeemmohmd8@gmail.com">Send Mail</a>
+          <a class="btn-link" href="mailto:naeim179@gmail.com">Send Email ↗</a>
         </div>
 
         <div class="contact-method">
@@ -973,72 +1082,78 @@
     const canvas = document.getElementById('matrixBackground');
     const ctx = canvas.getContext('2d');
 
+    let columns;
+    let drops;
+    const chars = "01";
+    const fontSize = 18;
+
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-    }
-    resizeCanvas();
-    window.addEventListener('resize', () => {
-      resizeCanvas();
-      resetDrops();
-    });
-
-    const chars = "01";
-    const fontSize = 18;
-    let columns;
-    let drops;
-
-    function resetDrops() {
       columns = Math.floor(canvas.width / fontSize);
-      drops = Array(columns).fill(1);
+      drops = Array(columns).fill(0);
     }
-    resetDrops();
 
     function drawMatrix() {
-      ctx.fillStyle = "rgba(0,0,0,0.25)";
-      ctx.fillRect(0,0,canvas.width,canvas.height);
+      // خلفية شفافة عشان الذيل
+      ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       ctx.fillStyle = "#22c55e";
-      ctx.shadowColor = "#22c55e";
-      ctx.shadowBlur = 10;
       ctx.font = fontSize + "px monospace";
 
-      for (let i = 0; i < drops.length; i++) {
-        const char = chars[Math.floor(Math.random() * chars.length)];
-        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+      for (let i = 0; i < columns; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
 
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        ctx.fillText(text, x, y);
+
+        if (y > canvas.height && Math.random() > 0.96) {
           drops[i] = 0;
         }
+
         drops[i]++;
       }
     }
 
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
     setInterval(drawMatrix, 40);
   </script>
 
   <!-- Theme toggle -->
   <script>
-    (function(){
-      const body = document.body;
-      const btn = document.getElementById('themeToggle');
-      const icon = document.getElementById('themeIcon');
-      const label = document.getElementById('themeLabel');
+    (function () {
+      const toggleBtn = document.getElementById('themeToggle');
+      const iconEl = document.getElementById('themeIcon');
+      const labelEl = document.getElementById('themeLabel');
+
+      function applyTheme(theme) {
+        const root = document.documentElement;
+        if (theme === 'light') {
+          root.classList.add('light-theme');
+          iconEl.textContent = '☀️';
+          labelEl.textContent = 'Light';
+        } else {
+          root.classList.remove('light-theme');
+          iconEl.textContent = '🌙';
+          labelEl.textContent = 'Dark';
+        }
+        localStorage.setItem('theme', theme);
+      }
 
       // load saved theme
       const saved = localStorage.getItem('theme');
-      if(saved === 'light'){
-        body.classList.add('light');
-        icon.textContent = '☀️';
-        label.textContent = 'Light';
+      if (saved === 'light') {
+        applyTheme('light');
+      } else {
+        applyTheme('dark');
       }
 
-      btn.addEventListener('click', () => {
-        body.classList.toggle('light');
-        const isLight = body.classList.contains('light');
-        icon.textContent = isLight ? '☀️' : '🌙';
-        label.textContent = isLight ? 'Light' : 'Dark';
-        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      toggleBtn.addEventListener('click', () => {
+        const current = document.documentElement.classList.contains('light-theme') ? 'light' : 'dark';
+        applyTheme(current === 'light' ? 'dark' : 'light');
       });
     })();
   </script>
@@ -1053,18 +1168,12 @@
       once: true
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('[data-aos]').forEach(el => {
-        el.classList.add('aos-animate');
-      });
-    });
-
-    const typed = new Typed('#typed',{
-      strings:["CTF Player","Pentester","Cyber Warrior"],
-      typeSpeed:60,
-      backSpeed:30,
-      backDelay:1400,
-      loop:true
+    const typed = new Typed('#typed', {
+      strings: ["CTF Player", "Pentester", "Cyber Warrior"],
+      typeSpeed: 60,
+      backSpeed: 30,
+      backDelay: 1400,
+      loop: true
     });
   </script>
 </body>
