@@ -81,7 +81,7 @@
       background:#000;
     }
     body.light #matrixBackground{
-      opacity:0.15; /* خفيفة باللايت مود */
+      opacity:0.15;
     }
 
     /* Navbar ثابت */
@@ -278,8 +278,7 @@
     .certs-grid,
     .writeups-grid,
     .skills-grid,
-    .tools-grid,
-    .timeline-list{
+    .tools-grid{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
       gap:14px;
@@ -318,7 +317,7 @@
       margin-right:10px;
     }
 
-    /* Skills */
+    /* Skills pills */
     .skill-pill{
       display:inline-flex;
       align-items:center;
@@ -426,12 +425,30 @@
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
 
-    @media(max-width:840px){
-      .nav-links{
-        display:none; /* عشان ما نعقّد ريسبونسف ميني منيو الآن */
-      }
+    /* Group heading for certs */
+    .group-title{
+      margin:18px 0 6px;
+      font-size:14px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:0.12em;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      opacity:0.9;
+    }
+    .group-title .icon{
+      font-size:16px;
+      filter:drop-shadow(0 0 6px rgba(148,163,184,0.5));
+    }
+    .group-title span.text{
+      border-top:1px solid rgba(148,163,184,0.4);
+      padding-top:4px;
     }
 
+    @media(max-width:840px){
+      .nav-links{display:none;}
+    }
     @media(max-width:640px){
       .hero{flex-direction:column;align-items:flex-start}
       .avatar{width:78px;height:78px}
@@ -815,69 +832,140 @@
         <span>Certificates</span>
         <span class="section-badge">Validation</span>
       </div>
-      <p class="sub" style="margin-top:6px">Formal proof of my progress in cybersecurity &amp; related fields.</p>
+      <p class="sub" style="margin-top:6px">
+        Real certificates and training I’ve completed in cybersecurity, cloud, IoT, Linux, and CTFs.
+      </p>
 
+      <!-- 1) Offensive & Core Cybersecurity -->
+      <h3 class="group-title">
+        <span class="icon">🔐</span>
+        <span class="text">Offensive &amp; Core Cybersecurity</span>
+      </h3>
       <div class="certs-grid">
         <div class="item-card">
           <h3>Certified Ethical Hacker (CEH)</h3>
-          <div class="item-meta">EC-Council • 03 Mar 2024</div>
+          <div class="item-meta">EC-Council • 2024</div>
           <p class="item-desc">
-            Validated skills in ethical hacking, attack techniques, and defensive strategies across networks, web apps, and systems.
+            Validated skills in ethical hacking, attack techniques, enumeration, exploitation, and reporting
+            across networks, systems, and web applications.
           </p>
           <div class="pill"><strong>Focus</strong> • Offensive Security, Exploitation</div>
         </div>
 
         <div class="item-card">
-          <h3>CCSK v4.1 Foundation Training</h3>
-          <div class="item-meta">Cloud Security Alliance • 19 Oct 2023</div>
-          <p class="item-desc">
-            Covered core cloud security concepts, including shared responsibility, cloud risk, and controls for modern cloud environments.
-          </p>
-          <div class="pill"><strong>Focus</strong> • Cloud Security, CSA Guidance</div>
-        </div>
-
-        <div class="item-card">
           <h3>Cybersecurity Essentials</h3>
-          <div class="item-meta">Cisco Networking Academy • 21 May 2023</div>
+          <div class="item-meta">Cisco Networking Academy • 2023</div>
           <p class="item-desc">
-            Introduction to cybersecurity concepts, threat actors, CIA triad, and technologies used to protect modern networks.
+            Core cybersecurity concepts, CIA triad, types of attacks and malware, and how security
+            professionals protect modern networks and endpoints.
           </p>
           <div class="pill"><strong>Platform</strong> • Cisco Networking Academy</div>
         </div>
 
         <div class="item-card">
-          <h3>IoT Fundamentals: Big Data &amp; Analytics</h3>
-          <div class="item-meta">Cisco Networking Academy • 01 Jan 2024</div>
+          <h3>Cybersecurity Essentials Badge</h3>
+          <div class="item-meta">Cisco Networking Academy • 21 May 2023</div>
           <p class="item-desc">
-            Focused on data analytics for IoT, Python scripting, basic ML, and data visualization for real-world IoT scenarios.
+            Digital badge confirming completion of the Cybersecurity Essentials path and key modules in
+            threat landscape, security controls, and best practices.
           </p>
-          <div class="pill"><strong>Focus</strong> • IoT, Data Analytics</div>
+          <div class="pill"><strong>Focus</strong> • Cybersecurity Foundations</div>
+        </div>
+      </div>
+
+      <!-- 2) Cloud Security -->
+      <h3 class="group-title">
+        <span class="icon">☁️</span>
+        <span class="text">Cloud Security</span>
+      </h3>
+      <div class="certs-grid">
+        <div class="item-card">
+          <h3>CCSK v4.1 Foundation Training</h3>
+          <div class="item-meta">Cloud Security Alliance • 19 Oct 2023</div>
+          <p class="item-desc">
+            Training on cloud security principles, shared responsibility, cloud risk management, and
+            security controls based on CSA guidance.
+          </p>
+          <div class="pill"><strong>Focus</strong> • Cloud Security, CSA Guidance</div>
+        </div>
+
+        <div class="item-card">
+          <h3>Cloud Security</h3>
+          <div class="item-meta">Online Training</div>
+          <p class="item-desc">
+            Introduction to securing cloud environments, identity and access management, data protection,
+            and monitoring for cloud-native applications.
+          </p>
+          <div class="pill"><strong>Focus</strong> • Cloud Security, IAM</div>
+        </div>
+      </div>
+
+      <!-- 3) IoT & Data -->
+      <h3 class="group-title">
+        <span class="icon">📡</span>
+        <span class="text">IoT &amp; Data Analytics</span>
+      </h3>
+      <div class="certs-grid">
+        <div class="item-card">
+          <h3>IoT Fundamentals: Big Data &amp; Analytics</h3>
+          <div class="item-meta">Cisco Networking Academy</div>
+          <p class="item-desc">
+            Focused on data analytics for IoT, Python scripting, basic machine learning, and
+            interpreting sensor data from connected devices.
+          </p>
+          <div class="pill"><strong>Focus</strong> • IoT, Data Analytics, Python</div>
         </div>
 
         <div class="item-card">
           <h3>Introduction to IoT</h3>
           <div class="item-meta">Cisco Networking Academy • 29 Mar 2024</div>
           <p class="item-desc">
-            Covered digital transformation, IoT impact on business and governments, and the need for security in a connected world.
+            Covered digital transformation, IoT architectures, impact on business and governments,
+            and the importance of securing connected systems.
           </p>
           <div class="pill"><strong>Focus</strong> • IoT, Digital Transformation</div>
         </div>
+      </div>
 
+      <!-- 4) Linux & Systems -->
+      <h3 class="group-title">
+        <span class="icon">🐧</span>
+        <span class="text">Linux &amp; System Administration</span>
+      </h3>
+      <div class="certs-grid">
         <div class="item-card">
-          <h3>Red Hat System Administration II (RH134)</h3>
-          <div class="item-meta">Red Hat Training • 13 Jun 2025</div>
+          <h3>Red Hat System Administration I (RH124)</h3>
+          <div class="item-meta">Red Hat Training • 2024</div>
           <p class="item-desc">
-            Hands-on Linux system administration, including advanced configuration, user and service management, and troubleshooting on Red Hat Enterprise Linux.
+            Hands-on introduction to Red Hat Enterprise Linux: installation, basic configuration, user
+            management, storage, and everyday command-line tasks.
           </p>
           <div class="pill"><strong>Focus</strong> • Linux, System Administration</div>
         </div>
 
         <div class="item-card">
-          <h3>OrbitCTF Certificate of Appreciation</h3>
-          <div class="item-meta">AABU • 27 Oct 2025</div>
+          <h3>Red Hat System Administration II (RH134)</h3>
+          <div class="item-meta">Red Hat Training • 2025</div>
           <p class="item-desc">
-            Awarded for exceptional dedication, teamwork, and remarkable problem-solving skills
-            demonstrated during the OrbitCTF competition at AABU.
+            Continued Linux administration: services, automation, system hardening, troubleshooting,
+            and preparation for RHCSA-level skills.
+          </p>
+          <div class="pill"><strong>Focus</strong> • Linux, Advanced Admin</div>
+        </div>
+      </div>
+
+      <!-- 5) CTF & Recognition -->
+      <h3 class="group-title">
+        <span class="icon">🏁</span>
+        <span class="text">CTF &amp; Recognition</span>
+      </h3>
+      <div class="certs-grid">
+        <div class="item-card">
+          <h3>OrbitCTF Certificate of Appreciation</h3>
+          <div class="item-meta">Al al-Bayt University • 27 Oct 2025</div>
+          <p class="item-desc">
+            Awarded for exceptional dedication, teamwork, and strong problem-solving skills during the
+            OrbitCTF competition at AABU.
           </p>
           <div class="item-links">
             <a href="assets/certs/photo_2025-11-15_22-36-36.jpg" target="_blank">View Certificate ↗</a>
@@ -900,11 +988,9 @@
           <h3>Reverse Engineering — Coming Soon</h3>
           <div class="item-meta">Planned writeup on RE challenges</div>
           <p class="item-desc">
-            A reverse engineering writeup is coming soon. It will cover how I approach binaries, use debuggers, and trace logic to extract flags and understand vulnerabilities.
+            A reverse engineering writeup is coming soon. It will cover how I approach binaries, use debuggers,
+            and trace logic to extract flags and understand vulnerabilities.
           </p>
-          <div class="item-links">
-            <a href="#" target="_blank">Read Writeup ↗</a>
-          </div>
           <div class="pill"><strong>Topics</strong> • Reverse Engineering, Debugging, Disassembly</div>
         </div>
       </div>
@@ -934,7 +1020,7 @@
             <span class="contact-label">GitHub</span>
             <span class="contact-value">@naeim179</span>
           </div>
-          <a class="btn-link" href="https://naeim179.github.io/" target="_blank">Profile ↗</a>
+          <a class="btn-link" href="https://github.com/naeim179" target="_blank">Profile ↗</a>
         </div>
 
         <div class="contact-method">
@@ -970,51 +1056,50 @@
 
   <!-- سكربت الخلفية (Matrix 0/1) -->
   <script>
-    const canvas = document.getElementById('matrixBackground');
-    const ctx = canvas.getContext('2d');
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    resizeCanvas();
-    window.addEventListener('resize', () => {
-      resizeCanvas();
-      resetDrops();
-    });
-
-    const chars = "01";
-    const fontSize = 18;
-    let columns;
-    let drops;
-
-    function resetDrops() {
-      columns = Math.floor(canvas.width / fontSize);
-      drops = Array(columns).fill(1);
-    }
-    resetDrops();
-
-    function drawMatrix() {
-      ctx.fillStyle = "rgba(0,0,0,0.25)";
-      ctx.fillRect(0,0,canvas.width,canvas.height);
-
-      ctx.fillStyle = "#22c55e";
-      ctx.shadowColor = "#22c55e";
-      ctx.shadowBlur = 10;
-      ctx.font = fontSize + "px monospace";
-
-      for (let i = 0; i < drops.length; i++) {
-        const char = chars[Math.floor(Math.random() * chars.length)];
-        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
-
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i]++;
+    (function () {
+      const canvas = document.getElementById('matrixBackground');
+      if (!canvas) {
+        console.log('matrixBackground canvas not found');
+        return;
       }
-    }
 
-    setInterval(drawMatrix, 40);
+      const ctx = canvas.getContext('2d');
+      const chars = "01";
+      const fontSize = 18;
+      let columns;
+      let drops;
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        columns = Math.floor(canvas.width / fontSize);
+        drops = Array(columns).fill(1);
+      }
+
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      function drawMatrix() {
+        ctx.fillStyle = "rgba(0,0,0,0.25)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = "#22c55e";
+        ctx.font = fontSize + "px monospace";
+
+        for (let i = 0; i < drops.length; i++) {
+          const char = chars[Math.floor(Math.random() * chars.length)];
+          ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+          if (drops[i] * fontSize > canvas.height && Math.random() > 0.96) {
+            drops[i] = 0;
+          }
+          drops[i]++;
+        }
+      }
+
+      setInterval(drawMatrix, 40);
+      console.log('Matrix background started');
+    })();
   </script>
 
   <!-- Theme toggle -->
@@ -1025,7 +1110,6 @@
       const icon = document.getElementById('themeIcon');
       const label = document.getElementById('themeLabel');
 
-      // load saved theme
       const saved = localStorage.getItem('theme');
       if(saved === 'light'){
         body.classList.add('light');
