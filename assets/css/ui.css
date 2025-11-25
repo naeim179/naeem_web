@@ -20,13 +20,15 @@ body.light .item-card:hover {
   background: linear-gradient(145deg, #ffffff, #e5e7eb);
 }
 
-/* CTF cards - نعطيهم شوية glow على الهوفر */
+/* CTF cards - بدون لمعة */
 .ctf-card-inner {
-  transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+  transition: transform 0.25s ease-out;
+  box-shadow: none !important;   /* ← حذف الglow */
 }
 
 .ctf-card:hover .ctf-card-inner {
-  box-shadow: 0 18px 50px rgba(16, 185, 129, 0.6);
+  transform: rotateY(180deg);
+  box-shadow: none !important;   /* ← حذف الglow */
 }
 
 /* ====== Mobile Navbar (Burger Menu) ====== */
@@ -54,7 +56,6 @@ body.light .item-card:hover {
   transition: transform 0.2s ease-out, opacity 0.2s ease-out, background 0.2s ease-out;
 }
 
-/* لما المينيو تفتح (نضيف كلاس nav-open على body) */
 body.nav-open .nav-toggle span:nth-child(1) {
   transform: translateY(8px) rotate(45deg);
 }
@@ -107,28 +108,29 @@ body.nav-open .nav-toggle span:nth-child(3) {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas;
   transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 }
 
+/* حذف أي لمعات */
 .loader-inner {
   max-width: 480px;
   width: 90%;
   border-radius: 12px;
   padding: 16px 18px;
-  background: radial-gradient(circle at 10% 0, rgba(16, 185, 129, 0.16), transparent 55%),
-              radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.12), transparent 50%),
-              rgba(15, 23, 42, 0.96);
-  border: 1px solid rgba(148, 163, 184, 0.5);
-  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.9);
+  background: rgba(15, 23, 42, 0.96);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  box-shadow: none !important;
 }
 
+/* العنوان */
 .loader-title {
   font-size: 13px;
   color: #a5b4fc;
   margin-bottom: 6px;
 }
 
+/* النص */
 .loader-log {
   font-size: 12px;
   line-height: 1.6;
@@ -136,18 +138,18 @@ body.nav-open .nav-toggle span:nth-child(3) {
   white-space: pre-line;
 }
 
-/* كيرسر يرمش */
+/* كيرسر — بدون وميض */
 .loader-log .cursor {
   display: inline-block;
   width: 8px;
   background: #22c55e;
   margin-left: 2px;
+  opacity: 1 !important; /* ثابت */
+  animation: none !important;  /* إلغاء الوميض */
 }
 
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
-}
+/* تعطيل blink animation */
+@keyframes blink { }
 
 /* لما نخفيه */
 .loader-hide {
