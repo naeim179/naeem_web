@@ -9,13 +9,15 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
   <!-- Terminal CSS -->
   <link rel="stylesheet" href="assets/css/terminal.css">
+  <!-- UI & animations CSS -->
+  <link rel="stylesheet" href="assets/css/ui.css">
   <!-- Typed.js -->
   <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
 
   <style>
     :root {
       --bg:#020617;
-      --bg-soft:#0b1120;
+      --bg-soft:#1c1f27;
       --card-bg:rgba(15,23,42,0.9);
       --card-border:rgba(148,163,184,0.3);
       --text:#e6eef6;
@@ -462,15 +464,30 @@
 
 <body>
   <!-- هدف زر Home -->
-  <div id="top"></div>
+ <div id="top"></div>
+
+  <!-- Loader -->
+  <div id="loader" class="loader">
+    <div class="loader-inner">
+      <div class="loader-title">Initializing Naeem Web Interface...</div>
+      <pre class="loader-log">
+$ booting system...
+$ loading CTF battles...
+$ loading tools & labs...
+$ applying dark theme...
+$ ready.<span class="cursor"></span>
+      </pre>
+    </div>
+  </div>
 
   <!-- Navbar -->
-  <nav class="top-nav">
+   <nav class="top-nav">
     <div class="nav-inner">
       <div class="nav-brand">
         <div class="nav-logo">ΝΜ</div>
         <div class="nav-title">Naeem Althabata</div>
       </div>
+
       <div class="nav-links">
         <a href="#top">Home</a>
         <a href="#ctf">CTF</a>
@@ -482,6 +499,14 @@
         <a href="#writeups">Writeups</a>
         <a href="#contact">Contact</a>
       </div>
+
+      <!-- Burger menu for mobile -->
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
       <button class="theme-toggle" id="themeToggle">
         <span class="icon" id="themeIcon">🌙</span>
         <span id="themeLabel">Dark</span>
@@ -489,6 +514,9 @@
     </div>
   </nav>
 
+ <!-- UI interactions (navbar, loader, etc.) -->
+  <script src="assets/js/ui.js"></script>
+  
   <!-- خلفية الماتريكس -->
   <canvas id="matrixBackground"></canvas>
 
