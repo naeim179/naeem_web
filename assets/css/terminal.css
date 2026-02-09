@@ -38,24 +38,28 @@ body.light .terminal-box {
   border-radius: 999px;
   background: #dc2626; /* red */
 }
-.terminal-dot.yellow {
-  background: #facc15;
-}
-.terminal-dot.green {
-  background: #22c55e;
-}
+.terminal-dot.yellow { background: #facc15; }
+.terminal-dot.green { background: #22c55e; }
 
-/* Text typing animation style */
+/* ==========================
+   Terminal line: type once, then STOP (no blinking)
+   ========================== */
+
 .terminal-line {
   font-size: 14px;
   margin-top: 3px;
   white-space: nowrap;
   overflow: hidden;
+
+  /* cursor during typing only */
   border-right: 2px solid #22c55e;
+
+  /* typing effect */
   width: 0;
-  animation: typing 2.8s steps(60) forwards, blink 0.7s infinite;
+  animation: typing 2.2s steps(60) forwards;
 }
 
+/* Light mode cursor color */
 body.light .terminal-line {
   border-right-color: #065f46;
 }
@@ -63,11 +67,11 @@ body.light .terminal-line {
 /* Typing effect */
 @keyframes typing {
   from { width: 0; }
-  to { width: 100%; }
+  to   { width: 100%; }
 }
 
-/* Cursor blinking */
-@keyframes blink {
-  0%, 50% { border-right-color: transparent; }
-  51%, 100% { border-right-color: #22c55e; }
+/* After typing ends: remove cursor (no blink forever) */
+.terminal-line.done {
+  border-right: none !important;
+  width: 100% !important;
 }

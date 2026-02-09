@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ναιμός Μαχητής — Naeem Althabata</title>
+  <title>Ναιμός Μαχητής — Naim Althabata</title>
 
   <!-- AOS -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
@@ -67,9 +67,7 @@
       pointer-events:none;
       animation:drift 30s ease-in-out infinite alternate;
     }
-    body.light::before{
-      opacity:0.4;
-    }
+    body.light::before{ opacity:0.4; }
     @keyframes drift{
       0%{transform:translate3d(0,0,0) scale(1);}
       50%{transform:translate3d(-20px,10px,0) scale(1.05);}
@@ -84,9 +82,7 @@
       z-index:-0;
       background:#000;
     }
-    body.light #matrixBackground{
-      opacity:0.15;
-    }
+    body.light #matrixBackground{ opacity:0.08; }
 
     /* Navbar ثابت */
     .top-nav{
@@ -150,6 +146,23 @@
       background:rgba(209,213,219,0.5);
     }
 
+    .nav-toggle{
+      display:none;
+      margin-left:auto;
+      width:40px;height:34px;
+      border-radius:10px;
+      border:1px solid rgba(148,163,184,0.4);
+      background:transparent;
+      cursor:pointer;
+      padding:6px;
+    }
+    .nav-toggle span{
+      display:block;
+      height:2px;
+      margin:6px 0;
+      background:var(--muted);
+    }
+
     .theme-toggle{
       margin-left:10px;
       border-radius:999px;
@@ -163,9 +176,7 @@
       gap:6px;
       cursor:pointer;
     }
-    .theme-toggle span.icon{
-      font-size:14px;
-    }
+    .theme-toggle span.icon{ font-size:14px; }
 
     .container{max-width:1000px;margin:90px auto 36px;padding:24px;position:relative;z-index:10}
     header{display:flex;align-items:center;gap:18px}
@@ -177,8 +188,6 @@
     }
     h1{margin:0;font-size:26px;letter-spacing:0.6px}
     .sub{color:var(--muted);margin-top:6px}
-    .hero{display:flex;align-items:center;justify-content:space-between;padding:18px 0;gap:16px}
-    .left{flex:1}
     .typed{color:var(--accent);font-weight:600}
     .card{
       background:var(--card-bg);
@@ -190,6 +199,7 @@
       border:1px solid var(--card-border);
     }
     .about p{color:var(--muted);line-height:1.6}
+
     .ctf-grid{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
@@ -253,9 +263,7 @@
       text-transform:uppercase;
       letter-spacing:0.04em;
     }
-    body.light .section-badge{
-      background:rgba(243,244,246,0.9);
-    }
+    body.light .section-badge{ background:rgba(243,244,246,0.9); }
 
     .pill{
       display:inline-flex;
@@ -274,9 +282,7 @@
       background:rgba(243,244,246,0.95);
       color:#4b5563;
     }
-    body.light .pill strong{
-      color:#111827;
-    }
+    body.light .pill strong{ color:#111827; }
 
     .projects-grid,
     .certs-grid,
@@ -334,16 +340,12 @@
       margin-bottom:6px;
       background:rgba(15,23,42,0.9);
     }
-    .skill-pill span.label{
-      color:var(--text);
-    }
+    .skill-pill span.label{ color:var(--text); }
     .skill-pill span.level{
       color:var(--muted);
       font-size:11px;
     }
-    body.light .skill-pill{
-      background:rgba(243,244,246,0.96);
-    }
+    body.light .skill-pill{ background:rgba(243,244,246,0.96); }
 
     /* Timeline */
     .timeline{
@@ -351,10 +353,7 @@
       border-left:1px dashed rgba(148,163,184,0.5);
       padding-left:14px;
     }
-    .timeline-item{
-      margin-bottom:10px;
-      position:relative;
-    }
+    .timeline-item{ margin-bottom:10px; position:relative; }
     .timeline-dot{
       width:10px;height:10px;border-radius:999px;
       background:var(--accent);
@@ -369,14 +368,8 @@
       text-transform:uppercase;
       letter-spacing:0.08em;
     }
-    .timeline-title{
-      font-size:14px;
-      font-weight:500;
-    }
-    .timeline-text{
-      font-size:13px;
-      color:var(--muted);
-    }
+    .timeline-title{ font-size:14px; font-weight:500; }
+    .timeline-text{ font-size:13px; color:var(--muted); }
 
     .contact-row{
       display:flex;
@@ -452,21 +445,20 @@
 
     @media(max-width:840px){
       .nav-links{display:none;}
+      .nav-toggle{display:block;}
     }
     @media(max-width:640px){
-      .hero{flex-direction:column;align-items:flex-start}
       .avatar{width:78px;height:78px}
-      header{flex-wrap:wrap}
       .container{padding:18px;margin:86px auto 28px;}
+      header{flex-wrap:wrap}
     }
   </style>
 </head>
 
 <body>
-  <!-- هدف زر Home -->
- <div id="top"></div>
+  <div id="top"></div>
 
-  <!-- Loader -->
+  <!-- Loader (optional, styled in your assets) -->
   <div id="loader" class="loader">
     <div class="loader-inner">
       <div class="loader-title">Initializing Naeem Web Interface...</div>
@@ -481,7 +473,7 @@ $ ready.<span class="cursor"></span>
   </div>
 
   <!-- Navbar -->
-   <nav class="top-nav">
+  <nav class="top-nav">
     <div class="nav-inner">
       <div class="nav-brand">
         <div class="nav-logo">ΝΜ</div>
@@ -500,11 +492,8 @@ $ ready.<span class="cursor"></span>
         <a href="#contact">Contact</a>
       </div>
 
-      <!-- Burger menu for mobile -->
       <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </button>
 
       <button class="theme-toggle" id="themeToggle">
@@ -514,10 +503,10 @@ $ ready.<span class="cursor"></span>
     </div>
   </nav>
 
- <!-- UI interactions (navbar, loader, etc.) -->
+  <!-- UI interactions (navbar, loader, etc.) -->
   <script src="assets/js/ui.js"></script>
 
-  <!-- خلفية الماتريكس -->
+  <!-- Matrix canvas -->
   <canvas id="matrixBackground"></canvas>
 
   <div class="container">
@@ -525,12 +514,8 @@ $ ready.<span class="cursor"></span>
       <div class="avatar">ΝΜ</div>
       <div>
         <h1>Ναιμός Μαχητής <small style="color:var(--muted);font-weight:600">— Naeem Althabata</small></h1>
-        <div class="sub">
-  <span id="typed"></span>
-</div>
-
+        <div class="sub"><span id="typed"></span></div>
       </div>
-      <div style="margin-left:auto;color:var(--muted);font-size:13px">GitHub Pages • Dark theme</div>
     </header>
 
     <!-- Terminal intro -->
@@ -546,7 +531,7 @@ $ ready.<span class="cursor"></span>
       </div>
     </div>
 
-    <!-- Hero / About -->
+    <!-- About -->
     <div class="card about" style="margin-top:12px">
       <div style="flex:1">
         <h3 style="margin-top:0">About Me</h3>
@@ -554,205 +539,185 @@ $ ready.<span class="cursor"></span>
           I’m a cybersecurity learner who enjoys CTFs, breaking systems, and building small offensive tools.
           I work mainly on Linux, automate tasks, and chase challenges that make me better every day.<br><br>
 
-          Right now I’m focusing on <strong>reverse engineering</strong> and improving through the 
-          <strong>SOC Level 1 path</strong>. Cybersecurity became my place — where learning feels natural 
+          Right now I’m focusing on <strong>reverse engineering</strong> and improving through the
+          <strong>SOC Level 1 path</strong>. Cybersecurity became my place — where learning feels natural
           and fun, and where I push myself to grow.<br><br>
 
           Always learning. Always leveling up.
         </p>
       </div>
     </div>
+<!-- Skills (UPDATED) -->
 <section id="skills" class="card" data-aos="fade-up">
   <div class="section-title">
-    <span>Skills</span>
-    <span class="section-badge">Core Stack</span>
+    <span>Technical Skills</span>
+    <span class="section-badge">SOC • CTF • RE</span>
   </div>
-  <p class="sub" style="margin-top:6px">What I use in CTFs, labs, and security work.</p>
+  <p class="sub" style="margin-top:6px">Practical skills I use across CTFs, labs, and security projects.</p>
 
   <div class="skills-grid">
 
-    <!-- Cybersecurity -->
+    <!-- SOC / Defensive -->
     <div class="item-card">
-      <h3>Cybersecurity</h3>
-      <div class="item-meta">Foundations &amp; Practice</div>
+      <h3>SOC & Defensive Security</h3>
+      <div class="item-meta">Monitoring • Investigation • IR</div>
       <div class="item-desc">
-        <div class="skill-pill"><span class="label">Web Security</span><span class="level">Basic vulnerabilities (CTFs)</span></div>
-        <div class="skill-pill"><span class="label">Linux Privilege Escalation</span><span class="level">Common cases &amp; misconfigs</span></div>
-        <div class="skill-pill"><span class="label">Forensics</span><span class="level">Intro (PCAP, logs)</span></div>
+        <div class="skill-pill"><span class="label">PCAP & Traffic Analysis</span><span class="level">Wireshark, Tshark</span></div>
+        <div class="skill-pill"><span class="label">Log Investigation</span><span class="level">Syslog, Apache/Nginx Logs</span></div>
+        <div class="skill-pill"><span class="label">Incident Response</span><span class="level">Artifact Discovery, Timeline</span></div>
+        <div class="skill-pill"><span class="label">Threat Basics</span><span class="level">IOCs, TTPs, MITRE ATT&CK</span></div>
       </div>
     </div>
 
-    <!-- Tools -->
+    <!-- Offensive / CTF -->
     <div class="item-card">
-      <h3>Tools</h3>
-      <div class="item-meta">Hands-on usage</div>
+      <h3>Offensive Security & CTF</h3>
+      <div class="item-meta">Recon • Web • PrivEsc</div>
       <div class="item-desc">
-        <div class="skill-pill"><span class="label">Burp Suite</span><span class="level">Basic web testing</span></div>
-        <div class="skill-pill"><span class="label">Wireshark / tshark</span><span class="level">Traffic inspection</span></div>
-        <div class="skill-pill"><span class="label">Ghidra</span><span class="level">Intro to reverse engineering</span></div>
+        <div class="skill-pill"><span class="label">Web Exploitation</span><span class="level">OWASP Top 10, Burp Suite</span></div>
+        <div class="skill-pill"><span class="label">Recon & Enumeration</span><span class="level">Nmap, ffuf, gobuster</span></div>
+        <div class="skill-pill"><span class="label">Linux PrivEsc</span><span class="level">SUID, Cron, Misconfigs</span></div>
+        <div class="skill-pill"><span class="label">Basic Tooling</span><span class="level">Metasploit (Basics), Netcat</span></div>
       </div>
     </div>
 
-    <!-- Languages -->
+    <!-- Reverse Engineering -->
     <div class="item-card">
-      <h3>Languages</h3>
-      <div class="item-meta">Practical scripting</div>
+      <h3>Reverse Engineering</h3>
+      <div class="item-meta">Static • Basic Dynamic</div>
       <div class="item-desc">
-        <div class="skill-pill"><span class="label">Python</span><span class="level">Simple scripts &amp; automation</span></div>
-        <div class="skill-pill"><span class="label">Bash</span><span class="level">Basic scripting</span></div>
-        <div class="skill-pill"><span class="label">Linux CLI</span><span class="level">Daily usage</span></div>
-        <div class="skill-pill"><span class="label">Git</span><span class="level">Basic version control</span></div>
-        <div class="skill-pill"><span class="label">Assembly</span><span class="level">Fundamentals</span></div>
+        <div class="skill-pill"><span class="label">Static Analysis</span><span class="level">Ghidra, Strings, Hex</span></div>
+        <div class="skill-pill"><span class="label">Binary Fundamentals</span><span class="level">ELF Basics, Assembly Reading</span></div>
+        <div class="skill-pill"><span class="label">Debugging (Basics)</span><span class="level">GDB, Breakpoints</span></div>
+        <div class="skill-pill"><span class="label">CTF Reverse</span><span class="level">Crackmes, Simple Obfuscation</span></div>
       </div>
     </div>
+
+  
 
   </div>
 </section>
 
-<!-- CTF Battles -->
-<section id="ctf" class="card" data-aos="fade-up">
-  <div class="section-title">
-    <span>My CTF Battles</span>
-    <span class="section-badge">Experience</span>
-  </div>
-  <p class="sub" style="margin-top:6px">Hover each card to reveal details 👇</p>
+    <!-- CTF Battles -->
+    <section id="ctf" class="card" data-aos="fade-up">
+      <div class="section-title">
+        <span>My CTF Battles</span>
+        <span class="section-badge">Experience</span>
+      </div>
+      <p class="sub" style="margin-top:6px">Hover each card to reveal details 👇</p>
 
-  <div class="ctf-grid">
-
-    <div class="ctf-card" data-aos="fade-right">
-      <div class="ctf-card-inner">
-        <div class="ctf-card-front">National Cyber Security Center of Jordan</div>
-        <div class="ctf-card-back">
-          <div class="meta">First CTF • Ranked Top 100 in Jordan</div>
-          <div>
-            <span class="tag">National</span><span class="tag">Beginner</span>
+      <div class="ctf-grid">
+        <div class="ctf-card" data-aos="fade-right">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">National Cyber Security Center of Jordan</div>
+            <div class="ctf-card-back">
+              <div class="meta">First CTF • Ranked Top 100 in Jordan</div>
+              <div><span class="tag">National</span><span class="tag">Beginner</span></div>
+              <p>My first official CTF participation organized by the National Cyber Security Center of Jordan — achieved a ranking within the top 100 competitors across the country.</p>
+            </div>
           </div>
-          <p>My first official CTF participation organized by the National Cyber Security Center of Jordan — achieved a ranking within the top 100 competitors across the country.</p>
+        </div>
+
+        <div class="ctf-card" data-aos="fade-left">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Cyber Warrior v1</div>
+            <div class="ctf-card-back">
+              <div class="meta">Cyber War / Jordan</div>
+              <div><span class="tag">Forensics</span><span class="tag">Team</span></div>
+              <p>Participated in the first edition of Cyber Warrior held in Jordan — competed in digital forensics and analysis challenges.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctf-card" data-aos="fade-right">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Cyber Warrior v2</div>
+            <div class="ctf-card-back">
+              <div class="meta">Regional Competition</div>
+              <div><span class="tag">Network</span><span class="tag">Web</span></div>
+              <p>Joined the second edition of Cyber Warrior — progressed through multiple stages of analysis, web exploitation, and network defense challenges.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctf-card" data-aos="fade-left">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Boot2Root — AABU</div>
+            <div class="ctf-card-back">
+              <div class="meta">University Challenge</div>
+              <div><span class="tag">Boot2Root</span><span class="tag">Privilege Escalation</span></div>
+              <p>Completed a Boot2Root challenge hosted by Al al-Bayt University — focused on privilege escalation and system exploitation.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctf-card" data-aos="fade-right">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Orbit CTF</div>
+            <div class="ctf-card-back">
+              <div class="meta">University / Reverse &amp; Web</div>
+              <div><span class="tag">Web</span><span class="tag">Reverse</span></div>
+              <p>Competed in Orbit CTF tackling reverse engineering and web security challenges involving binary decoding and server-side logic flaws.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctf-card" data-aos="fade-left">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Cypetra CTF — Green Circle</div>
+            <div class="ctf-card-back">
+              <div class="meta">Team Competition</div>
+              <div><span class="tag">Web</span><span class="tag">Forensics</span></div>
+              <p>Represented my team in the Cypetra CTF organized by Green Circle — solved web exploitation and forensics problems collaboratively.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctf-card" data-aos="fade-left">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Hackfinity Battle</div>
+            <div class="ctf-card-back">
+              <div class="meta">CTF Battle</div>
+              <div><span class="tag">Web</span><span class="tag">Crypto</span></div>
+              <p>Competed in Hackfinity Battle — worked through time-based challenges requiring fast analysis, exploitation attempts, and team-oriented problem solving.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctf-card" data-aos="fade-right">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Honeynet Collapse CTF</div>
+            <div class="ctf-card-back">
+              <div class="meta">Cybersecurity Simulation</div>
+              <div><span class="tag">Incident Response</span><span class="tag">Forensics</span></div>
+              <p>Participated in Honeynet Collapse CTF — focused on simulated attack analysis, log investigation, and malware trace recovery.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctf-card" data-aos="fade-left">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Industrial Intrusion</div>
+            <div class="ctf-card-back">
+              <div class="meta">ICS / Critical Infrastructure</div>
+              <div><span class="tag">ICS</span><span class="tag">Exploitation</span></div>
+              <p>Engaged in the Industrial Intrusion challenge focusing on Industrial Control Systems exploitation and critical infrastructure defense.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctf-card" data-aos="fade-right">
+          <div class="ctf-card-inner">
+            <div class="ctf-card-front">Black Hat MENA — v2</div>
+            <div class="ctf-card-back">
+              <div class="meta">Regional CTF</div>
+              <div><span class="tag">Competition</span><span class="tag">Teams</span></div>
+              <p>Competed in the second edition of Black Hat MENA — a top-tier regional CTF featuring Web, Crypto, and Pwn challenges.</p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div class="ctf-card" data-aos="fade-left">
-      <div class="ctf-card-inner">
-        <div class="ctf-card-front">Cyber Warrior v1</div>
-        <div class="ctf-card-back">
-          <div class="meta">Cyber War / Jordan</div>
-          <div>
-            <span class="tag">Forensics</span><span class="tag">Team</span>
-          </div>
-          <p>Participated in the first edition of Cyber Warrior held in Jordan — competed in digital forensics and analysis challenges.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="ctf-card" data-aos="fade-right">
-      <div class="ctf-card-inner">
-        <div class="ctf-card-front">Cyber Warrior v2</div>
-        <div class="ctf-card-back">
-          <div class="meta">Regional Competition</div>
-          <div>
-            <span class="tag">Network</span><span class="tag">Web</span>
-          </div>
-          <p>Joined the second edition of Cyber Warrior — progressed through multiple stages of analysis, web exploitation, and network defense challenges.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="ctf-card" data-aos="fade-left">
-      <div class="ctf-card-inner">
-        <div class="ctf-card-front">Boot2Root — AABU</div>
-        <div class="ctf-card-back">
-          <div class="meta">University Challenge</div>
-          <div>
-            <span class="tag">Boot2Root</span><span class="tag">Privilege Escalation</span>
-          </div>
-          <p>Completed a Boot2Root challenge hosted by Al al-Bayt University — focused on privilege escalation and system exploitation.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="ctf-card" data-aos="fade-right">
-      <div class="ctf-card-inner">
-        <div class="ctf-card-front">Orbit CTF</div>
-        <div class="ctf-card-back">
-          <div class="meta">University / Reverse &amp; Web</div>
-          <div>
-            <span class="tag">Web</span><span class="tag">Reverse</span>
-          </div>
-          <p>Competed in Orbit CTF tackling reverse engineering and web security challenges involving binary decoding and server-side logic flaws.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="ctf-card" data-aos="fade-left">
-      <div class="ctf-card-inner">
-        <div class="ctf-card-front">Cypetra CTF — Green Circle</div>
-        <div class="ctf-card-back">
-          <div class="meta">Team Competition</div>
-          <div>
-            <span class="tag">Web</span><span class="tag">Forensics</span>
-          </div>
-          <p>Represented my team in the Cypetra CTF organized by Green Circle — solved web exploitation and forensics problems collaboratively.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- NEW: Hackfinity Battle -->
-    <div class="ctf-card" data-aos="fade-left">
-      <div class="ctf-card-inner">
-        <div class="ctf-card-front">Hackfinity Battle</div>
-        <div class="ctf-card-back">
-          <div class="meta">CTF Battle</div>
-          <div>
-            <span class="tag">Web</span><span class="tag">Crypto</span>
-          </div>
-          <p>Competed in Hackfinity Battle — worked through time-based challenges requiring fast analysis, exploitation attempts, and team-oriented problem solving.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="ctf-card" data-aos="fade-right">
-      <div class="ctf-card-inner">
-        <div class="ctf-card-front">Honeynet Collapse CTF</div>
-        <div class="ctf-card-back">
-          <div class="meta">Cybersecurity Simulation</div>
-          <div>
-            <span class="tag">Incident Response</span><span class="tag">Forensics</span>
-          </div>
-          <p>Participated in Honeynet Collapse CTF — focused on simulated attack analysis, log investigation, and malware trace recovery.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="ctf-card" data-aos="fade-left">
-      <div class="ctf-card-inner">
-        <div class="ctf-card-front">Industrial Intrusion</div>
-        <div class="ctf-card-back">
-          <div class="meta">ICS / Critical Infrastructure</div>
-          <div>
-            <span class="tag">ICS</span><span class="tag">Exploitation</span>
-          </div>
-          <p>Engaged in the Industrial Intrusion challenge focusing on Industrial Control Systems exploitation and critical infrastructure defense.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="ctf-card" data-aos="fade-right">
-      <div class="ctf-card-inner">
-        <div class="ctf-card-front">Black Hat MENA — v2</div>
-        <div class="ctf-card-back">
-          <div class="meta">Regional CTF</div>
-          <div>
-            <span class="tag">Competition</span><span class="tag">Teams</span>
-          </div>
-          <p>Competed in the second edition of Black Hat MENA — a top-tier regional CTF featuring Web, Crypto, and Pwn challenges.</p>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
+    </section>
 
     <!-- Projects -->
     <section id="projects" class="card" data-aos="fade-up">
@@ -766,8 +731,6 @@ $ ready.<span class="cursor"></span>
       </p>
 
       <div class="projects-grid">
-
-        <!-- 🟩 qrshilde — FIRST PROJECT -->
         <div class="item-card">
           <h3>qrshilde — QR Code Security Tool</h3>
           <div class="item-meta">Security Utility</div>
@@ -781,7 +744,6 @@ $ ready.<span class="cursor"></span>
           <div class="pill"><strong>Stack</strong> • Python, QR Codes, Cryptography</div>
         </div>
 
-        <!-- 🧪 VulnLab -->
         <div class="item-card">
           <h3>VulnLab: Boot2Root Linux Box</h3>
           <div class="item-meta">Custom vulnerable VM • PrivEsc & Web</div>
@@ -796,7 +758,6 @@ $ ready.<span class="cursor"></span>
           <div class="pill"><strong>Stack</strong> • Linux, Apache, Bash</div>
         </div>
 
-        <!-- 📁 Incident Playground -->
         <div class="item-card">
           <h3>Incident Playground — Log &amp; PCAP Lab</h3>
           <div class="item-meta">Forensics & SOC Simulation</div>
@@ -810,7 +771,6 @@ $ ready.<span class="cursor"></span>
           <div class="pill"><strong>Focus</strong> • Incident Response, Forensics</div>
         </div>
 
-        <!-- 🔐 Linux Encryption Tool -->
         <div class="item-card">
           <h3>Linux Encryption Tool</h3>
           <div class="item-meta">Secure Files Quickly</div>
@@ -823,7 +783,6 @@ $ ready.<span class="cursor"></span>
           </div>
           <div class="pill"><strong>Stack</strong> • Bash, OpenSSL, Linux</div>
         </div>
-
       </div>
     </section>
 
@@ -839,8 +798,6 @@ $ ready.<span class="cursor"></span>
       </p>
 
       <div class="tools-grid">
-
-        <!-- Log Hunter -->
         <div class="item-card">
           <h3>Log Hunter</h3>
           <div class="item-meta">Forensics / IR helper script</div>
@@ -854,7 +811,6 @@ $ ready.<span class="cursor"></span>
           <div class="pill"><strong>Stack</strong> • Python, Regex</div>
         </div>
 
-        <!-- Web Recon Pipeline -->
         <div class="item-card">
           <h3>Web Recon Pipeline</h3>
           <div class="item-meta">Bug bounty recon automation</div>
@@ -867,278 +823,178 @@ $ ready.<span class="cursor"></span>
           </div>
           <div class="pill"><strong>Stack</strong> • Bash, Nmap, httpx</div>
         </div>
-
       </div>
     </section>
+
+
 
     <!-- Timeline -->
-    <section id="timeline" class="card" data-aos="fade-up">
-      <div class="section-title">
-        <span>Journey</span>
-        <span class="section-badge">Timeline</span>
-      </div>
-      <p class="sub" style="margin-top:6px">How I got here and where I’m going next.</p>
-
-      <div class="timeline">
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">2023</div>
-          <div class="timeline-title">Started exploring Linux &amp; cybersecurity basics</div>
-          <div class="timeline-text">Began learning Linux, networks, and core security concepts through online courses and labs.</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">2023</div>
-          <div class="timeline-title">First national CTF</div>
-          <div class="timeline-text">Joined the National Cyber Security Center of Jordan CTF and ranked in the top 100.</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">2024</div>
-          <div class="timeline-title">More CTFs &amp; university challenges</div>
-          <div class="timeline-text">Played Cyber Warrior, Orbit CTF, and other competitions, focusing on forensics and web security.</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">2024–2025</div>
-          <div class="timeline-title">Building my own tools &amp; labs</div>
-          <div class="timeline-text">Started creating custom vulnerable boxes and tools like qrshilde and Linux encryption utilities.</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">Next</div>
-          <div class="timeline-title">More reverse engineering &amp; deep-dive writeups</div>
-          <div class="timeline-text">Planning to publish detailed RE writeups and work on more advanced exploitation techniques.</div>
-        </div>
-      </div>
-    </section>
-<!-- Certificates -->
-<section id="certs" class="card" data-aos="fade-up">
+<section id="timeline" class="card" data-aos="fade-up">
   <div class="section-title">
-    <span>Certificates</span>
-    <span class="section-badge">Verification</span>
+    <span>Journey</span>
+    <span class="section-badge">Timeline</span>
   </div>
 
   <p class="sub" style="margin-top:6px">
-    Training and recognition across cybersecurity, cloud, AI, IoT, Linux administration, and CTF competitions.
+    My growth in cybersecurity through CTFs, labs, and building security tools.
   </p>
 
-  <!-- 1) Offensive & Core Cybersecurity -->
-  <h3 class="group-title">
-    <span class="icon" aria-hidden="true">🔐</span>
-    <span class="text">Offensive &amp; Core Cybersecurity</span>
-  </h3>
+  <div class="timeline">
 
-  <div class="certs-grid">
-
-    <div class="item-card">
-      <h3>Cybersecurity Essentials</h3>
-      <div class="item-meta">Cisco Networking Academy • May 2023</div>
-      <p class="item-desc">
-        Comprehensive foundational training covering cyber attacker tactics,
-        the CIA triad, security technologies, and countermeasures.
-      </p>
-      <div class="item-links">
-        <a href="https://drive.google.com/file/d/1qGobNZlwYstXtClovVGpsjw1uz6ihg-5/view" target="_blank" rel="noopener noreferrer">
-          View Certificate ↗
-        </a>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-year">2023</div>
+      <div class="timeline-title">Entered cybersecurity & Linux</div>
+      <div class="timeline-text">
+        Started learning Linux, networking, and core security fundamentals through hands-on labs and platforms.
       </div>
-      <div class="pill"><strong>Focus</strong> • CIA Triad, Threats</div>
     </div>
 
-    <div class="item-card">
-      <h3>Certified Ethical Hacker (CEH)</h3>
-      <div class="item-meta">The Hope International Company • Jan–Feb 2024 • 40 Hours</div>
-      <p class="item-desc">
-        Ethical hacking training covering reconnaissance, exploitation,
-        vulnerability analysis, and pentesting fundamentals.
-      </p>
-      <div class="item-links">
-        <a href="https://drive.google.com/file/d/1-5exL70pULqPxI9kglQkRh2g9ioRoEoo/view" target="_blank" rel="noopener noreferrer">
-          View Certificate ↗
-        </a>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-year">2023</div>
+      <div class="timeline-title">First national CTF</div>
+      <div class="timeline-text">
+        Participated in the National Cyber Security Center of Jordan CTF and ranked within the top 100 competitors.
       </div>
-      <div class="pill"><strong>Focus</strong> • Ethical Hacking, Pentesting</div>
     </div>
 
-    <div class="item-card">
-      <h3>CCNA Training</h3>
-      <div class="item-meta">The Hope International Company • Aug–Oct 2024 • 60 Hours</div>
-      <p class="item-desc">
-        Networking fundamentals, routing &amp; switching, and hands-on labs.
-      </p>
-      <div class="item-links">
-        <a href="https://drive.google.com/file/d/1JeEZA8bE3CeLpFEurVLUxP-_V_QY7Fs9/view" target="_blank" rel="noopener noreferrer">
-          View Certificate ↗
-        </a>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-year">2024</div>
+      <div class="timeline-title">Active CTF participation</div>
+      <div class="timeline-text">
+        Competed in Cyber Warrior, Orbit CTF, and university challenges, focusing on forensics, web exploitation, and analysis.
       </div>
-      <div class="pill"><strong>Focus</strong> • Networking</div>
     </div>
 
-    <div class="item-card">
-      <h3>Cloud Computing</h3>
-      <div class="item-meta">The Hope International Company • Jul–Aug 2024</div>
-      <p class="item-desc">
-        Cloud fundamentals, service models, and virtualization basics.
-      </p>
-      <div class="item-links">
-        <a href="https://drive.google.com/file/d/1K1OYlObcUWyfUqgB-IMca05fKEcm6bZd/view" target="_blank" rel="noopener noreferrer">
-          View Certificate ↗
-        </a>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-year">2024–2025</div>
+      <div class="timeline-title">Building tools & labs</div>
+      <div class="timeline-text">
+        Started building personal security tools and custom vulnerable labs (qrshilde, Boot2Root-style machines).
       </div>
-      <div class="pill"><strong>Focus</strong> • Cloud Fundamentals</div>
     </div>
 
-    <div class="item-card">
-      <h3>Cyber Warriors Training — CTF Program</h3>
-      <div class="item-meta">National Cyber Security Center of Jordan • 2024 • 40 Hours</div>
-      <p class="item-desc">
-        Intensive CTF-based training focused on offensive security and incident response.
-      </p>
-      <div class="item-links">
-        <a href="https://drive.google.com/file/d/1n8emdJynTSVEKCCGY8YEVg8_ZEwEMQQm/view" target="_blank" rel="noopener noreferrer">
-          View Certificate ↗
-        </a>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-year">2026</div>
+      <div class="timeline-title">Deep reverse engineering focus</div>
+      <div class="timeline-text">
+        Expanding into reverse engineering, binary analysis, and publishing technical writeups.
       </div>
-      <div class="pill"><strong>Focus</strong> • CTF, Offensive Security</div>
     </div>
 
   </div>
-
-  <!-- 2) AI & Data Science -->
-  <h3 class="group-title">
-    <span class="icon" aria-hidden="true">🤖</span>
-    <span class="text">AI &amp; Data Science</span>
-  </h3>
-
-  <div class="certs-grid">
-
-    <div class="item-card">
-      <h3>Artificial Intelligence Fundamentals</h3>
-      <div class="item-meta">Udacity • Dec 2025</div>
-      <p class="item-desc">
-        AI fundamentals including machine learning basics and real-world applications.
-      </p>
-      <div class="item-links">
-        <a href="https://drive.google.com/file/d/1b_hHeLtZubcz1JE68wrWQQhuk-RUfocz/view" target="_blank" rel="noopener noreferrer">
-          View Certificate ↗
-        </a>
-      </div>
-      <div class="pill"><strong>Focus</strong> • AI Fundamentals</div>
-    </div>
-
-  </div>
-
-  <!-- 3) IoT & Data Analytics -->
-  <h3 class="group-title">
-    <span class="icon" aria-hidden="true">📡</span>
-    <span class="text">IoT &amp; Data Analytics</span>
-  </h3>
-
-  <div class="certs-grid">
-
-    <div class="item-card">
-      <h3>IoT Fundamentals: Big Data &amp; Analytics</h3>
-      <div class="item-meta">Cisco Networking Academy • Jan 2024</div>
-      <p class="item-desc">
-        Training in IoT data analytics covering Python scripting for data collection and preparation,
-        basic machine learning algorithms, data visualization, storytelling techniques,
-        and Big Data platform fundamentals.
-      </p>
-      <div class="item-links">
-        <a href="https://drive.google.com/file/d/1ifrViQlgub-E2J_LJUE2l0aawkh62D3h/view" target="_blank" rel="noopener noreferrer">
-          View Certificate ↗
-        </a>
-      </div>
-      <div class="pill"><strong>Focus</strong> • IoT Data, Python, ML Basics, Big Data</div>
-    </div>
-
-  </div>
-
-  <!-- 4) Linux & System Administration -->
-  <h3 class="group-title">
-    <span class="icon" aria-hidden="true">🐧</span>
-    <span class="text">Linux &amp; System Administration</span>
-  </h3>
-
-  <div class="certs-grid">
-
-    <div class="item-card">
-      <h3>Red Hat System Administration I (RH124)</h3>
-      <div class="item-meta">Red Hat Training • Sep 2024</div>
-      <p class="item-desc">
-        Practical training in Red Hat Linux fundamentals, focusing on CLI usage, user and permission management,
-        file systems, and core system administration skills.
-      </p>
-      <div class="item-links">
-        <a href="https://drive.google.com/file/d/134mNRoBFwQjS2VpyUK-OPZ5AOqwlwAbA/view" target="_blank" rel="noopener noreferrer">
-          View Certificate ↗
-        </a>
-      </div>
-      <div class="pill"><strong>Focus</strong> • Linux Fundamentals</div>
-    </div>
-
-    <div class="item-card">
-      <h3>Red Hat System Administration II (RH134)</h3>
-      <div class="item-meta">Red Hat Training • Jun 2025 • 40 Hours</div>
-      <p class="item-desc">
-        Advanced Linux system administration, services, storage, and troubleshooting.
-      </p>
-      <div class="item-links">
-        <a href="https://drive.google.com/file/d/16Q06WgZ3REovcpKk1Ymr6nmhWPb5poSp/view" target="_blank" rel="noopener noreferrer">
-          View Certificate ↗
-        </a>
-      </div>
-      <div class="pill"><strong>Focus</strong> • Advanced Linux</div>
-    </div>
-
-  </div>
-
-  <!-- 5) CTF & Hands-on -->
-  <h3 class="group-title">
-    <span class="icon" aria-hidden="true">🎄</span>
-    <span class="text">CTF &amp; Hands-on Cybersecurity</span>
-  </h3>
-
-  <div class="certs-grid">
-    <div class="item-card">
-      <h3>Advent of Cyber 2025</h3>
-      <div class="item-meta">TryHackMe • Dec 2025 • 24 Challenges</div>
-      <p class="item-desc">
-        Hands-on cybersecurity challenges demonstrating strong practical skills.
-      </p>
-      <div class="item-links">
-        <a href="https://drive.google.com/file/d/1W6IUeF55nDM30nHZNV7L9xUnXd05yLIZ/view" target="_blank" rel="noopener noreferrer">
-          View Certificate ↗
-        </a>
-      </div>
-      <div class="pill"><strong>Focus</strong> • Hands-on Security</div>
-    </div>
-  </div>
-
-  <!-- 6) Workshops -->
-  <h3 class="group-title">
-    <span class="icon" aria-hidden="true">🧠</span>
-    <span class="text">Workshops &amp; Webinars</span>
-  </h3>
-
-  <div class="certs-grid">
-    <div class="item-card">
-      <h3>IoT in Industry 4.0 — Awareness Webinar</h3>
-      <div class="item-meta">Jordan Industry 4.0 &amp; Digitalization Innovation Center • Nov 2023</div>
-      <p class="item-desc">
-        Awareness session on Industry 4.0 and IoT in industrial environments.
-      </p>
-      <div class="item-links">
-        <a href="https://drive.google.com/file/d/1Vy3aKNNpuUltq6GBldUOVPbvR-WoEJ6N/view" target="_blank" rel="noopener noreferrer">
-          View Certificate ↗
-        </a>
-      </div>
-      <div class="pill"><strong>Focus</strong> • Industry 4.0, IoT</div>
-    </div>
-  </div>
-
 </section>
+
+
+    <!-- Certificates (FIXED CLOSINGS) -->
+    <section id="certs" class="card" data-aos="fade-up">
+      <div class="section-title">
+        <span>Certificates</span>
+        <span class="section-badge">Verification</span>
+      </div>
+
+      <p class="sub" style="margin-top:6px">
+        Training and recognition across cybersecurity, cloud, AI, IoT, Linux administration, and CTF competitions.
+      </p>
+
+      <h3 class="group-title">
+        <span class="icon" aria-hidden="true">🔐</span>
+        <span class="text">Offensive &amp; Core Cybersecurity</span>
+      </h3>
+
+      <div class="certs-grid">
+        <div class="item-card">
+          <h3>Certified Ethical Hacker (CEH)</h3>
+          <div class="item-meta">The Hope International Company • Jan–Feb 2024 • 40 Hours</div>
+          <p class="item-desc">Ethical hacking training covering reconnaissance, exploitation, vulnerability analysis, and pentesting fundamentals.</p>
+          <div class="item-links">
+            <a href="https://drive.google.com/file/d/1-5exL70pULqPxI9kglQkRh2g9ioRoEoo/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
+          </div>
+          <div class="pill"><strong>Focus</strong> • Ethical Hacking, Pentesting</div>
+        </div>
+
+        <div class="item-card">
+          <h3>CCNA Training</h3>
+          <div class="item-meta">The Hope International Company • Aug–Oct 2024 • 60 Hours</div>
+          <p class="item-desc">Networking fundamentals, routing &amp; switching, and hands-on labs.</p>
+          <div class="item-links">
+            <a href="https://drive.google.com/file/d/1JeEZA8bE3CeLpFEurVLUxP-_V_QY7Fs9/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
+          </div>
+          <div class="pill"><strong>Focus</strong> • Networking</div>
+        </div>
+
+        <div class="item-card">
+          <h3>Cloud Computing</h3>
+          <div class="item-meta">The Hope International Company • Jul–Aug 2024</div>
+          <p class="item-desc">Cloud fundamentals, service models, and virtualization basics.</p>
+          <div class="item-links">
+            <a href="https://drive.google.com/file/d/1K1OYlObcUWyfUqgB-IMca05fKEcm6bZd/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
+          </div>
+          <div class="pill"><strong>Focus</strong> • Cloud Fundamentals</div>
+        </div>
+
+        <div class="item-card">
+          <h3>Cyber Warriors Training — CTF Program</h3>
+          <div class="item-meta">National Cyber Security Center of Jordan • 2024 • 40 Hours</div>
+          <p class="item-desc">Intensive CTF-based training focused on offensive security and incident response.</p>
+          <div class="item-links">
+            <a href="https://drive.google.com/file/d/1n8emdJynTSVEKCCGY8YEVg8_ZEwEMQQm/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
+          </div>
+          <div class="pill"><strong>Focus</strong> • CTF, Offensive Security</div>
+        </div>
+      </div>
+
+      <h3 class="group-title">
+        <span class="icon" aria-hidden="true">🐧</span>
+        <span class="text">Linux &amp; System Administration</span>
+      </h3>
+
+      <div class="certs-grid">
+        <div class="item-card">
+          <h3>Red Hat System Administration I (RH124)</h3>
+          <div class="item-meta">Red Hat Training • Sep 2024</div>
+          <p class="item-desc">
+            Practical training in Red Hat Linux fundamentals, focusing on CLI usage, user and permission management,
+            file systems, and core system administration skills.
+          </p>
+          <div class="item-links">
+            <a href="https://drive.google.com/file/d/134mNRoBFwQjS2VpyUK-OPZ5AOqwlwAbA/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
+          </div>
+          <div class="pill"><strong>Focus</strong> • Linux Fundamentals</div>
+        </div>
+
+        <div class="item-card">
+          <h3>Red Hat System Administration II (RH134)</h3>
+          <div class="item-meta">Red Hat Training • Jun 2025 • 40 Hours</div>
+          <p class="item-desc">Advanced Linux system administration, services, storage, and troubleshooting.</p>
+          <div class="item-links">
+            <a href="https://drive.google.com/file/d/16Q06WgZ3REovcpKk1Ymr6nmhWPb5poSp/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
+          </div>
+          <div class="pill"><strong>Focus</strong> • Advanced Linux</div>
+        </div>
+      </div>
+
+      <h3 class="group-title">
+        <span class="icon" aria-hidden="true">🎄</span>
+        <span class="text">CTF &amp; Hands-on Cybersecurity</span>
+      </h3>
+
+      <div class="certs-grid">
+        <div class="item-card">
+          <h3>Advent of Cyber 2025</h3>
+          <div class="item-meta">TryHackMe • Dec 2025 • 24 Challenges</div>
+          <p class="item-desc">Hands-on cybersecurity challenges demonstrating strong practical skills.</p>
+          <div class="item-links">
+            <a href="https://drive.google.com/file/d/1W6IUeF55nDM30nHZNV7L9xUnXd05yLIZ/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
+          </div>
+          <div class="pill"><strong>Focus</strong> • Hands-on Security</div>
+        </div>
+      </div>
+    </section>
 
     <!-- Writeups -->
     <section id="writeups" class="card" data-aos="fade-up">
@@ -1167,9 +1023,7 @@ $ ready.<span class="cursor"></span>
         <span>Contact Me</span>
         <span class="section-badge">Let’s Hack Together</span>
       </div>
-      <p class="sub" style="margin-top:6px">
-        Reach out for CTF teams, pentest work, or collab on security projects.
-      </p>
+      <p class="sub" style="margin-top:6px">Reach out for CTF teams, pentest work, or collab on security projects.</p>
 
       <div class="contact-row">
         <div class="contact-method">
@@ -1185,7 +1039,7 @@ $ ready.<span class="cursor"></span>
             <span class="contact-label">GitHub</span>
             <span class="contact-value">@naeim179</span>
           </div>
-          <a class="btn-link" href="https://github.com/naeim179" target="_blank">Profile ↗</a>
+          <a class="btn-link" href="https://github.com/naeim179" target="_blank" rel="noopener noreferrer">Profile ↗</a>
         </div>
 
         <div class="contact-method">
@@ -1193,7 +1047,7 @@ $ ready.<span class="cursor"></span>
             <span class="contact-label">TryHackMe</span>
             <span class="contact-value">NK179</span>
           </div>
-          <a class="btn-link" href="https://tryhackme.com/p/NK179" target="_blank">THM Profile ↗</a>
+          <a class="btn-link" href="https://tryhackme.com/p/NK179" target="_blank" rel="noopener noreferrer">THM Profile ↗</a>
         </div>
 
         <div class="contact-method">
@@ -1201,7 +1055,7 @@ $ ready.<span class="cursor"></span>
             <span class="contact-label">Instagram</span>
             <span class="contact-value">naeem__althabata</span>
           </div>
-          <a class="btn-link" href="https://instagram.com/naeem__althabta" target="_blank">Instagram ↗</a>
+          <a class="btn-link" href="https://instagram.com/naeem__althabta" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
         </div>
 
         <div class="contact-method">
@@ -1209,7 +1063,7 @@ $ ready.<span class="cursor"></span>
             <span class="contact-label">LinkedIn</span>
             <span class="contact-value">naeim-althabata</span>
           </div>
-          <a class="btn-link" href="https://www.linkedin.com/in/naeim-althabata-427331316/" target="_blank">LinkedIn ↗</a>
+          <a class="btn-link" href="https://www.linkedin.com/in/naeim-althabata-427331316/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
         </div>
       </div>
     </section>
@@ -1219,14 +1073,11 @@ $ ready.<span class="cursor"></span>
     </footer>
   </div>
 
-  <!-- سكربت الخلفية (Matrix 0/1) -->
+  <!-- Matrix background (0/1) -->
   <script>
     (function () {
       const canvas = document.getElementById('matrixBackground');
-      if (!canvas) {
-        console.log('matrixBackground canvas not found');
-        return;
-      }
+      if (!canvas) return;
 
       const ctx = canvas.getContext('2d');
       const chars = "01";
@@ -1255,15 +1106,12 @@ $ ready.<span class="cursor"></span>
           const char = chars[Math.floor(Math.random() * chars.length)];
           ctx.fillText(char, i * fontSize, drops[i] * fontSize);
 
-          if (drops[i] * fontSize > canvas.height && Math.random() > 0.96) {
-            drops[i] = 0;
-          }
+          if (drops[i] * fontSize > canvas.height && Math.random() > 0.96) drops[i] = 0;
           drops[i]++;
         }
       }
 
       setInterval(drawMatrix, 120);
-      console.log('Matrix background started');
     })();
   </script>
 
@@ -1295,20 +1143,13 @@ $ ready.<span class="cursor"></span>
   <!-- AOS + Typed -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script>
-    AOS.init({
-      duration: 700,
-      offset: 0,
-      startEvent: 'DOMContentLoaded',
-      once: true
-    });
+    AOS.init({ duration: 700, offset: 0, startEvent: 'DOMContentLoaded', once: true });
 
     document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('[data-aos]').forEach(el => {
-        el.classList.add('aos-animate');
-      });
+      document.querySelectorAll('[data-aos]').forEach(el => el.classList.add('aos-animate'));
     });
 
-    const typed = new Typed('#typed',{
+    new Typed('#typed',{
       strings:["CTF Player","Pentester","Cyber Warrior"],
       typeSpeed:60,
       backSpeed:30,
