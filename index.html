@@ -1,36 +1,29 @@
+```html
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ναιμός Μαχητής — Naim Althabata</title>
+  <title>Naim Althabatah — Cybersecurity Portfolio</title>
 
-  <!-- AOS -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
-  <!-- Terminal CSS -->
-  <link rel="stylesheet" href="assets/css/terminal.css">
-  <!-- UI & animations CSS -->
-  <link rel="stylesheet" href="assets/css/ui.css">
-  <!-- Typed.js -->
   <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
 
   <style>
-    :root {
+    :root{
       --bg:#020617;
-      --bg-soft:#1c1f27;
       --card-bg:rgba(15,23,42,0.9);
       --card-border:rgba(148,163,184,0.3);
       --text:#e6eef6;
       --muted:#9aa4b2;
       --accent:#6ee7b7;
       --accent-soft:rgba(110,231,183,0.08);
-      --glow: 0 10px 30px rgba(110,231,183,0.18);
+      --glow:0 10px 30px rgba(110,231,183,0.18);
       --nav-bg:rgba(15,23,42,0.85);
     }
 
-    body.light {
+    body.light{
       --bg:#f3f4f6;
-      --bg-soft:#e5e7eb;
       --card-bg:rgba(255,255,255,0.92);
       --card-border:rgba(148,163,184,0.5);
       --text:#020617;
@@ -48,14 +41,8 @@
       background:var(--bg);
       color:var(--text);
       overflow-x:hidden;
-      overflow-y:auto;
-      position:relative;
       scroll-behavior:smooth;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-    }
-
-    #loader{
-      pointer-events:none;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,Arial;
     }
 
     body::before{
@@ -64,35 +51,83 @@
       inset:-60px;
       z-index:-1;
       background:
-        radial-gradient(circle at 10% 20%, rgba(110,231,183,0.22), transparent 55%),
-        radial-gradient(circle at 80% 80%, rgba(56,189,248,0.2), transparent 55%);
+        radial-gradient(circle at 10% 20%,rgba(110,231,183,0.22),transparent 55%),
+        radial-gradient(circle at 80% 80%,rgba(56,189,248,0.2),transparent 55%);
       opacity:0.7;
       filter:blur(6px);
-      pointer-events:none;
       animation:drift 30s ease-in-out infinite alternate;
     }
 
-    body.light::before{ opacity:0.4; }
+    body.light::before{opacity:0.4}
 
     @keyframes drift{
-      0%{transform:translate3d(0,0,0) scale(1);}
-      50%{transform:translate3d(-20px,10px,0) scale(1.05);}
-      100%{transform:translate3d(20px,-10px,0) scale(1.08);}
+      0%{transform:translate3d(0,0,0) scale(1)}
+      50%{transform:translate3d(-20px,10px,0) scale(1.05)}
+      100%{transform:translate3d(20px,-10px,0) scale(1.08)}
     }
 
     #matrixBackground{
       position:fixed;
-      top:0;left:0;
-      width:100%;height:100%;
-      z-index:-0;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      z-index:0;
       background:#000;
+      pointer-events:none;
     }
 
-    body.light #matrixBackground{ opacity:0.08; }
+    body.light #matrixBackground{opacity:0.08}
+
+    #loader{
+      position:fixed;
+      inset:0;
+      z-index:999;
+      background:#020617;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      pointer-events:none;
+    }
+
+    .loader-inner{
+      max-width:520px;
+      width:90%;
+      background:rgba(15,23,42,0.95);
+      border:1px solid rgba(110,231,183,0.35);
+      border-radius:14px;
+      padding:22px;
+      box-shadow:var(--glow);
+    }
+
+    .loader-title{
+      color:var(--accent);
+      font-weight:700;
+      margin-bottom:12px;
+    }
+
+    .loader-log{
+      color:var(--muted);
+      line-height:1.7;
+      white-space:pre-wrap;
+    }
+
+    .cursor::after{
+      content:"_";
+      color:var(--accent);
+      animation:blink 1s infinite;
+    }
+
+    @keyframes blink{
+      0%,50%{opacity:1}
+      51%,100%{opacity:0}
+    }
 
     .top-nav{
       position:fixed;
-      top:0;left:0;right:0;
+      top:0;
+      left:0;
+      right:0;
       z-index:20;
       background:var(--nav-bg);
       backdrop-filter:blur(14px);
@@ -116,7 +151,8 @@
     }
 
     .nav-logo{
-      width:34px;height:34px;
+      width:34px;
+      height:34px;
       border-radius:999px;
       background:radial-gradient(circle at 30% 20%,#22c55e,#0ea5e9 60%,#4c1d95 100%);
       display:flex;
@@ -155,28 +191,6 @@
       background:rgba(15,23,42,0.6);
     }
 
-    body.light .nav-links a:hover{
-      background:rgba(209,213,219,0.5);
-    }
-
-    .nav-toggle{
-      display:none;
-      margin-left:auto;
-      width:40px;height:34px;
-      border-radius:10px;
-      border:1px solid rgba(148,163,184,0.4);
-      background:transparent;
-      cursor:pointer;
-      padding:6px;
-    }
-
-    .nav-toggle span{
-      display:block;
-      height:2px;
-      margin:6px 0;
-      background:var(--muted);
-    }
-
     .theme-toggle{
       margin-left:10px;
       border-radius:999px;
@@ -190,8 +204,6 @@
       gap:6px;
       cursor:pointer;
     }
-
-    .theme-toggle span.icon{ font-size:14px; }
 
     .container{
       max-width:1000px;
@@ -208,15 +220,28 @@
     }
 
     .avatar{
-      width:92px;height:92px;border-radius:50%;
+      width:92px;
+      height:92px;
+      border-radius:50%;
       background:radial-gradient(circle at 30% 20%,#22c55e,#0ea5e9 60%,#4c1d95 100%);
-      display:flex;align-items:center;justify-content:center;
-      font-weight:700;font-size:26px;box-shadow:var(--glow)
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:26px;
+      box-shadow:var(--glow);
     }
 
-    h1{margin:0;font-size:26px;letter-spacing:0.6px}
-    .sub{color:var(--muted);margin-top:6px}
-    .typed{color:var(--accent);font-weight:600}
+    h1{
+      font-size:26px;
+      letter-spacing:0.6px;
+    }
+
+    .sub{
+      color:var(--muted);
+      margin-top:6px;
+      line-height:1.5;
+    }
 
     .card{
       background:var(--card-bg);
@@ -228,19 +253,80 @@
       border:1px solid var(--card-border);
     }
 
-    .about p{color:var(--muted);line-height:1.6}
+    .terminal-box{
+      margin-top:18px;
+      border-radius:12px;
+      background:rgba(2,6,23,0.9);
+      border:1px solid rgba(110,231,183,0.25);
+      overflow:hidden;
+      box-shadow:var(--glow);
+    }
 
-    .ctf-grid{
+    .terminal-header{
+      display:flex;
+      gap:6px;
+      padding:10px;
+      background:rgba(15,23,42,0.95);
+      border-bottom:1px solid rgba(148,163,184,0.2);
+    }
+
+    .terminal-dot{
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:#ef4444;
+    }
+
+    .terminal-dot.yellow{background:#eab308}
+    .terminal-dot.green{background:#22c55e}
+
+    .terminal-line{
+      padding:14px;
+      font-family:monospace;
+      color:var(--accent);
+    }
+
+    .about p{
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    .section-title{
+      font-size:20px;
+      margin-bottom:4px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .section-badge{
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      background:rgba(15,23,42,0.9);
+      border:1px solid rgba(148,163,184,0.5);
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:0.04em;
+    }
+
+    .ctf-grid,
+    .projects-grid,
+    .certs-grid,
+    .writeups-grid,
+    .skills-grid,
+    .tools-grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
       gap:14px;
-      margin-top:14px
+      margin-top:14px;
     }
 
     .ctf-card{
       perspective:1000px;
       cursor:pointer;
-      height:220px
+      height:220px;
     }
 
     .ctf-card-inner{
@@ -255,7 +341,8 @@
       transform:rotateY(180deg);
     }
 
-    .ctf-card-front,.ctf-card-back{
+    .ctf-card-front,
+    .ctf-card-back{
       position:absolute;
       width:100%;
       height:100%;
@@ -273,7 +360,8 @@
     }
 
     body.light .ctf-card-front,
-    body.light .ctf-card-back{
+    body.light .ctf-card-back,
+    body.light .item-card{
       background:linear-gradient(180deg,rgba(248,250,252,0.98),rgba(226,232,240,0.95));
       border-color:rgba(148,163,184,0.4);
     }
@@ -281,7 +369,7 @@
     .ctf-card-front{
       color:var(--accent);
       font-weight:600;
-      font-size:17px
+      font-size:17px;
     }
 
     .ctf-card-back{
@@ -290,77 +378,40 @@
       font-size:14px;
       line-height:1.5;
       align-items:flex-start;
-      justify-content:flex-start
+      justify-content:flex-start;
+      text-align:left;
     }
 
-    .ctf-card .meta{
-      font-size:13px;
+    .meta,
+    .item-meta{
+      font-size:12px;
       color:var(--muted);
-      margin-bottom:8px
+      margin-bottom:6px;
     }
 
-    .tag{
-      display:inline-block;
+    .tag,
+    .pill,
+    .btn-link{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
       font-size:12px;
       padding:6px 8px;
       border-radius:999px;
       background:var(--accent-soft);
       color:var(--accent);
-      margin:4px 3px
+      border:1px solid rgba(110,231,183,0.25);
+      margin:4px 3px;
+      text-decoration:none;
     }
 
-    .section-title{
-      font-size:20px;
-      margin:0 0 4px;
-      display:flex;
-      align-items:center;
-      gap:8px;
+    .pill strong{
+      color:#e5e7eb;
+      font-weight:500;
     }
 
-    .section-badge{
-      font-size:11px;
-      padding:4px 8px;
-      border-radius:999px;
-      background:rgba(15,23,42,0.9);
-      border:1px solid rgba(148,163,184,0.5);
-      color:var(--muted);
-      text-transform:uppercase;
-      letter-spacing:0.04em;
-    }
-
-    body.light .section-badge{ background:rgba(243,244,246,0.9); }
-
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(15,23,42,0.9);
-      border:1px solid rgba(148,163,184,0.4);
-      color:var(--muted);
-      margin:3px 4px;
-    }
-
-    .pill strong{color:#e5e7eb;font-weight:500}
-
-    body.light .pill{
-      background:rgba(243,244,246,0.95);
-      color:#4b5563;
-    }
-
-    body.light .pill strong{ color:#111827; }
-
-    .projects-grid,
-    .certs-grid,
-    .writeups-grid,
-    .skills-grid,
-    .tools-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-      gap:14px;
-      margin-top:12px;
+    body.light .pill strong{
+      color:#111827;
     }
 
     .item-card{
@@ -371,21 +422,9 @@
       box-shadow:0 8px 26px rgba(15,23,42,0.8);
     }
 
-    body.light .item-card{
-      background:linear-gradient(145deg,rgba(255,255,255,0.98),rgba(243,244,246,0.96));
-      border-color:rgba(148,163,184,0.45);
-      box-shadow:0 8px 22px rgba(148,163,184,0.35);
-    }
-
     .item-card h3{
-      margin:0 0 4px;
       font-size:15px;
-    }
-
-    .item-meta{
-      font-size:12px;
-      color:var(--muted);
-      margin-bottom:6px;
+      margin-bottom:4px;
     }
 
     .item-desc{
@@ -395,13 +434,8 @@
       margin-bottom:8px;
     }
 
-    .item-links a{
-      font-size:12px;
-      margin-right:10px;
-    }
-
     .skill-pill{
-      display:inline-flex;
+      display:flex;
       align-items:center;
       justify-content:space-between;
       width:100%;
@@ -411,52 +445,32 @@
       font-size:13px;
       margin-bottom:6px;
       background:rgba(15,23,42,0.9);
+      gap:10px;
     }
 
-    .skill-pill span.label{ color:var(--text); }
+    body.light .skill-pill{
+      background:rgba(243,244,246,0.96);
+    }
 
-    .skill-pill span.level{
+    .skill-pill .label{
+      color:var(--text);
+    }
+
+    .skill-pill .level{
       color:var(--muted);
       font-size:11px;
+      text-align:right;
     }
 
-    body.light .skill-pill{ background:rgba(243,244,246,0.96); }
-
-    .timeline{
-      margin-top:10px;
-      border-left:1px dashed rgba(148,163,184,0.5);
-      padding-left:14px;
-    }
-
-    .timeline-item{
-      margin-bottom:10px;
-      position:relative;
-    }
-
-    .timeline-dot{
-      width:10px;height:10px;border-radius:999px;
-      background:var(--accent);
-      position:absolute;
-      left:-19px;
-      top:4px;
-      box-shadow:0 0 10px rgba(110,231,183,0.8);
-    }
-
-    .timeline-year{
-      font-size:12px;
+    .group-title{
+      margin:18px 0 6px;
+      font-size:14px;
       color:var(--muted);
       text-transform:uppercase;
-      letter-spacing:0.08em;
-    }
-
-    .timeline-title{
-      font-size:14px;
-      font-weight:500;
-    }
-
-    .timeline-text{
-      font-size:13px;
-      color:var(--muted);
+      letter-spacing:0.12em;
+      display:flex;
+      align-items:center;
+      gap:8px;
     }
 
     .contact-row{
@@ -467,7 +481,7 @@
     }
 
     .contact-method{
-      flex:1 1 190px;
+      flex:1 1 220px;
       padding:10px 14px;
       border-radius:999px;
       border:1px solid rgba(148,163,184,0.4);
@@ -475,12 +489,12 @@
       display:flex;
       align-items:center;
       justify-content:space-between;
+      gap:10px;
       font-size:13px;
     }
 
     body.light .contact-method{
       background:rgba(249,250,251,0.98);
-      border-color:rgba(148,163,184,0.6);
     }
 
     .contact-left{
@@ -496,64 +510,56 @@
       letter-spacing:0.08em;
     }
 
-    .contact-value{font-weight:500;}
-
-    .btn-link{
-      font-size:12px;
-      padding:4px 8px;
-      border-radius:999px;
-      border:1px solid rgba(110,231,183,0.4);
-      text-decoration:none;
-      color:var(--accent);
-      background:rgba(16,185,129,0.08);
+    .contact-value{
+      font-weight:500;
     }
 
-    .btn-link:hover{
+    a{
+      color:var(--accent);
       text-decoration:none;
-      background:rgba(16,185,129,0.16);
+    }
+
+    a:hover{
+      text-decoration:underline;
     }
 
     footer{
       color:var(--muted);
       font-size:13px;
       margin-top:26px;
-      text-align:center
-    }
-
-    a{color:var(--accent);text-decoration:none}
-    a:hover{text-decoration:underline}
-
-    .group-title{
-      margin:18px 0 6px;
-      font-size:14px;
-      color:var(--muted);
-      text-transform:uppercase;
-      letter-spacing:0.12em;
-      display:flex;
-      align-items:center;
-      gap:8px;
-      opacity:0.9;
-    }
-
-    .group-title .icon{
-      font-size:16px;
-      filter:drop-shadow(0 0 6px rgba(148,163,184,0.5));
-    }
-
-    .group-title span.text{
-      border-top:1px solid rgba(148,163,184,0.4);
-      padding-top:4px;
+      text-align:center;
     }
 
     @media(max-width:840px){
-      .nav-links{display:none;}
-      .nav-toggle{display:block;}
+      .nav-links{
+        display:none;
+      }
     }
 
     @media(max-width:640px){
-      .avatar{width:78px;height:78px}
-      .container{padding:18px;margin:86px auto 28px;}
-      header{flex-wrap:wrap}
+      .avatar{
+        width:78px;
+        height:78px;
+      }
+
+      .container{
+        padding:18px;
+        margin:86px auto 28px;
+      }
+
+      header{
+        flex-wrap:wrap;
+      }
+
+      h1{
+        font-size:22px;
+      }
+
+      .contact-method{
+        border-radius:14px;
+        align-items:flex-start;
+        flex-direction:column;
+      }
     }
   </style>
 </head>
@@ -561,9 +567,9 @@
 <body>
   <div id="top"></div>
 
-  <div id="loader" class="loader">
+  <div id="loader">
     <div class="loader-inner">
-      <div class="loader-title">Initializing Naeem Web Interface...</div>
+      <div class="loader-title">Initializing Naim Cybersecurity Interface...</div>
       <pre class="loader-log">
 $ booting system...
 $ loading CTF battles...
@@ -578,41 +584,34 @@ $ ready.<span class="cursor"></span>
     <div class="nav-inner">
       <div class="nav-brand">
         <div class="nav-logo">ΝΜ</div>
-        <div class="nav-title">Naeem Althabata</div>
+        <div class="nav-title">Naim Althabatah</div>
       </div>
 
       <div class="nav-links">
         <a href="#top">Home</a>
-        <a href="#ctf">CTF</a>
         <a href="#skills">Skills</a>
+        <a href="#ctf">CTF</a>
         <a href="#projects">Projects</a>
         <a href="#tools">Tools</a>
-        <a href="#timeline">Timeline</a>
         <a href="#certs">Certs</a>
         <a href="#writeups">Writeups</a>
         <a href="#contact">Contact</a>
       </div>
 
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-        <span></span><span></span><span></span>
-      </button>
-
       <button class="theme-toggle" id="themeToggle">
-        <span class="icon" id="themeIcon">🌙</span>
+        <span id="themeIcon">🌙</span>
         <span id="themeLabel">Dark</span>
       </button>
     </div>
   </nav>
 
-  <script src="assets/js/ui.js"></script>
-
   <canvas id="matrixBackground"></canvas>
 
-  <div class="container">
+  <main class="container">
     <header data-aos="fade-down">
       <div class="avatar">ΝΜ</div>
       <div>
-        <h1>Ναιμός Μαχητής <small style="color:var(--muted);font-weight:600">— Naeem Althabata</small></h1>
+        <h1>Naim Althabatah <small style="color:var(--muted);font-weight:600">— Cybersecurity Portfolio</small></h1>
         <div class="sub"><span id="typed"></span></div>
       </div>
     </header>
@@ -623,343 +622,130 @@ $ ready.<span class="cursor"></span>
         <div class="terminal-dot yellow"></div>
         <div class="terminal-dot green"></div>
       </div>
-
-      <div class="terminal-line">
-        $ whoami → Naeem_Althabata
-      </div>
+      <div class="terminal-line">$ whoami → Naim_Althabatah</div>
     </div>
 
-    <div class="card about" style="margin-top:12px">
-      <div style="flex:1">
-        <h3 style="margin-top:0">About Me</h3>
-        <p>
-          I’m a cybersecurity learner who enjoys CTFs, breaking systems, and building small offensive tools.
-          I work mainly on Linux, automate tasks, and chase challenges that make me better every day.<br><br>
+    <section class="card about" data-aos="fade-up">
+      <h3>About Me</h3>
+      <p>
+        I’m a final-year Cybersecurity student and entry-level cybersecurity candidate focused on
+        <strong>SOC operations</strong>, <strong>web security</strong>, <strong>CTFs</strong>, and hands-on security labs.<br><br>
 
-          Right now I’m focusing on <strong>reverse engineering</strong> and improving through the
-          <strong>SOC Level 1 path</strong>. Cybersecurity became my place — where learning feels natural
-          and fun, and where I push myself to grow.<br><br>
+        I practice through TryHackMe, CTF competitions, Boot2Root labs, web exploitation, Linux,
+        log analysis, and reverse engineering basics. I also build practical projects involving
+        attack simulation, defense, SIEM monitoring, and security automation.<br><br>
 
-          Always learning. Always leveling up.
-        </p>
-      </div>
-    </div>
+        Currently improving my skills in Wazuh SIEM, incident investigation, detection logic,
+        vulnerability analysis, and practical web security testing.
+      </p>
+    </section>
 
     <section id="skills" class="card" data-aos="fade-up">
       <div class="section-title">
         <span>Technical Skills</span>
-        <span class="section-badge">SOC • CTF • RE</span>
+        <span class="section-badge">SOC • Web • CTF • RE</span>
       </div>
-      <p class="sub" style="margin-top:6px">Practical skills I use across CTFs, labs, and security projects.</p>
+      <p class="sub">Practical skills I use across CTFs, labs, and security projects.</p>
 
       <div class="skills-grid">
         <div class="item-card">
           <h3>SOC & Defensive Security</h3>
-          <div class="item-meta">Monitoring • Investigation • IR</div>
-          <div class="item-desc">
-            <div class="skill-pill"><span class="label">PCAP & Traffic Analysis</span><span class="level">Wireshark, Tshark</span></div>
-            <div class="skill-pill"><span class="label">Log Investigation</span><span class="level">Syslog, Apache/Nginx Logs</span></div>
-            <div class="skill-pill"><span class="label">Incident Response</span><span class="level">Artifact Discovery, Timeline</span></div>
-            <div class="skill-pill"><span class="label">Threat Basics</span><span class="level">IOCs, TTPs, MITRE ATT&CK</span></div>
-          </div>
+          <div class="item-meta">Monitoring • Investigation • Incident Response</div>
+          <div class="skill-pill"><span class="label">SIEM Monitoring</span><span class="level">Wazuh</span></div>
+          <div class="skill-pill"><span class="label">Log Investigation</span><span class="level">Apache, Linux Logs</span></div>
+          <div class="skill-pill"><span class="label">Traffic Analysis</span><span class="level">Wireshark, Tshark</span></div>
+          <div class="skill-pill"><span class="label">Detection Logic</span><span class="level">IOCs, Timelines</span></div>
         </div>
 
         <div class="item-card">
-          <h3>Offensive Security & CTF</h3>
-          <div class="item-meta">Recon • Web • PrivEsc</div>
-          <div class="item-desc">
-            <div class="skill-pill"><span class="label">Web Exploitation</span><span class="level">OWASP Top 10, Burp Suite</span></div>
-            <div class="skill-pill"><span class="label">Recon & Enumeration</span><span class="level">Nmap, ffuf, gobuster</span></div>
-            <div class="skill-pill"><span class="label">Linux PrivEsc</span><span class="level">SUID, Cron, Misconfigs</span></div>
-            <div class="skill-pill"><span class="label">Basic Tooling</span><span class="level">Metasploit (Basics), Netcat</span></div>
-          </div>
+          <h3>Web Security & Offensive Practice</h3>
+          <div class="item-meta">Recon • Web • Vulnerability Testing</div>
+          <div class="skill-pill"><span class="label">Web Exploitation</span><span class="level">OWASP Top 10</span></div>
+          <div class="skill-pill"><span class="label">Recon & Enumeration</span><span class="level">Nmap, ffuf, Gobuster</span></div>
+          <div class="skill-pill"><span class="label">Testing Tools</span><span class="level">Burp Suite, sqlmap, Hydra</span></div>
+          <div class="skill-pill"><span class="label">Linux PrivEsc</span><span class="level">Basics</span></div>
         </div>
 
         <div class="item-card">
-          <h3>Reverse Engineering</h3>
-          <div class="item-meta">Static • Basic Dynamic</div>
-          <div class="item-desc">
-            <div class="skill-pill"><span class="label">Static Analysis</span><span class="level">Ghidra, Strings, Hex</span></div>
-            <div class="skill-pill"><span class="label">Binary Fundamentals</span><span class="level">ELF Basics, Assembly Reading</span></div>
-            <div class="skill-pill"><span class="label">Debugging (Basics)</span><span class="level">GDB, Breakpoints</span></div>
-            <div class="skill-pill"><span class="label">CTF Reverse</span><span class="level">Crackmes, Simple Obfuscation</span></div>
-          </div>
+          <h3>Reverse Engineering Basics</h3>
+          <div class="item-meta">Static Analysis • Debugging Basics</div>
+          <div class="skill-pill"><span class="label">Static Analysis</span><span class="level">Ghidra, Strings, Hex</span></div>
+          <div class="skill-pill"><span class="label">Binary Fundamentals</span><span class="level">ELF, Assembly Reading</span></div>
+          <div class="skill-pill"><span class="label">Debugging</span><span class="level">GDB Basics</span></div>
+          <div class="skill-pill"><span class="label">Scripting</span><span class="level">Python, Bash, PHP Basics</span></div>
         </div>
       </div>
     </section>
 
-   <section id="ctf" class="card" data-aos="fade-up">
-  <div class="section-title">
-    <span>My CTF Battles</span>
-    <span class="section-badge">Experience</span>
-  </div>
-  <p class="sub" style="margin-top:6px">Hover each card to reveal details 👇</p>
-
-  <div class="ctf-grid">
-
-<div class="ctf-card" data-aos="fade-right">
-  <div class="ctf-card-inner">
-    <div class="ctf-card-front">National Cyber Security Center of Jordan</div>
-    <div class="ctf-card-back">
-      <div class="meta">First CTF • Ranked Top 100 in Jordan</div>
-      <div><span class="tag">National</span><span class="tag">Beginner</span></div>
-      <p>My first official CTF participation organized by the National Cyber Security Center of Jordan — achieved a ranking within the top 100 competitors across the country.</p>
-    </div>
-  </div>
-</div>
-
-<div class="ctf-card" data-aos="fade-left">
-  <div class="ctf-card-inner">
-    <div class="ctf-card-front">Cyber Warrior v1</div>
-    <div class="ctf-card-back">
-      <div class="meta">Cyber War / Jordan</div>
-      <div><span class="tag">Forensics</span><span class="tag">Team</span></div>
-      <p>Participated in the first edition of Cyber Warrior held in Jordan — competed in digital forensics and analysis challenges.</p>
-    </div>
-  </div>
-</div>
-
-<div class="ctf-card" data-aos="fade-right">
-  <div class="ctf-card-inner">
-    <div class="ctf-card-front">Cyber Warrior v2</div>
-    <div class="ctf-card-back">
-      <div class="meta">Regional Competition</div>
-      <div><span class="tag">Network</span><span class="tag">Web</span></div>
-      <p>Joined the second edition of Cyber Warrior — progressed through multiple stages of analysis, web exploitation, and network defense challenges.</p>
-    </div>
-  </div>
-</div>
-
-<div class="ctf-card" data-aos="fade-left">
-  <div class="ctf-card-inner">
-    <div class="ctf-card-front">Boot2Root — AABU</div>
-    <div class="ctf-card-back">
-      <div class="meta">University Challenge</div>
-      <div><span class="tag">Boot2Root</span><span class="tag">Privilege Escalation</span></div>
-      <p>Completed a Boot2Root challenge hosted by Al al-Bayt University — focused on privilege escalation and system exploitation.</p>
-    </div>
-  </div>
-</div>
-
-<div class="ctf-card" data-aos="fade-right">
-  <div class="ctf-card-inner">
-    <div class="ctf-card-front">Orbit CTF</div>
-    <div class="ctf-card-back">
-      <div class="meta">University / Reverse & Web</div>
-      <div><span class="tag">Web</span><span class="tag">Reverse</span></div>
-      <p>Competed in Orbit CTF tackling reverse engineering and web security challenges involving binary decoding and server-side logic flaws.</p>
-    </div>
-  </div>
-</div>
-
-<div class="ctf-card" data-aos="fade-left">
-  <div class="ctf-card-inner">
-    <div class="ctf-card-front">Cypetra CTF — Green Circle</div>
-    <div class="ctf-card-back">
-      <div class="meta">Team Competition</div>
-      <div><span class="tag">Web</span><span class="tag">Forensics</span></div>
-      <p>Represented my team in the Cypetra CTF organized by Green Circle — solved web exploitation and forensics problems collaboratively.</p>
-    </div>
-  </div>
-</div>
-
-<div class="ctf-card" data-aos="fade-left">
-  <div class="ctf-card-inner">
-    <div class="ctf-card-front">Hackfinity Battle</div>
-    <div class="ctf-card-back">
-      <div class="meta">CTF Battle</div>
-      <div><span class="tag">Web</span><span class="tag">Crypto</span></div>
-      <p>Competed in Hackfinity Battle — worked through time-based challenges requiring fast analysis and team-oriented problem solving.</p>
-    </div>
-  </div>
-</div>
-
-<div class="ctf-card" data-aos="fade-right">
-  <div class="ctf-card-inner">
-    <div class="ctf-card-front">Honeynet Collapse CTF</div>
-    <div class="ctf-card-back">
-      <div class="meta">Cybersecurity Simulation</div>
-      <div><span class="tag">Incident Response</span><span class="tag">Forensics</span></div>
-      <p>Participated in Honeynet Collapse CTF — focused on simulated attack analysis, log investigation, and malware trace recovery.</p>
-    </div>
-  </div>
-</div>
-
-<div class="ctf-card" data-aos="fade-left">
-  <div class="ctf-card-inner">
-    <div class="ctf-card-front">Industrial Intrusion</div>
-    <div class="ctf-card-back">
-      <div class="meta">ICS / Critical Infrastructure</div>
-      <div><span class="tag">ICS</span><span class="tag">Exploitation</span></div>
-      <p>Engaged in the Industrial Intrusion challenge focusing on Industrial Control Systems exploitation and infrastructure defense.</p>
-    </div>
-  </div>
-</div>
-
-<div class="ctf-card" data-aos="fade-right">
-  <div class="ctf-card-inner">
-    <div class="ctf-card-front">Black Hat MENA — v2</div>
-    <div class="ctf-card-back">
-      <div class="meta">Regional CTF</div>
-      <div><span class="tag">Competition</span><span class="tag">Teams</span></div>
-      <p>Competed in the second edition of Black Hat MENA — a top-tier regional CTF featuring Web, Crypto, and Pwn challenges.</p>
-    </div>
-  </div>
-</div>
-
-<!-- 🔥 الجديد (مرتّب حسب القوة) -->
-<div class="ctf-card" data-aos="fade-right">
-  <div class="ctf-card-inner">
-    <div class="ctf-card-front">ZeroCTF</div>
-    <div class="ctf-card-back">
-      <div class="meta">CTF Competition • Rank: 13 / 41</div>
-      <div>
-        <span class="tag">CTF</span>
-        <span class="tag">Competition</span>
-        <span class="tag">Advanced</span>
+    <section id="ctf" class="card" data-aos="fade-up">
+      <div class="section-title">
+        <span>My CTF Battles</span>
+        <span class="section-badge">Experience</span>
       </div>
-      <p>
-        Competed in ZeroCTF and ranked <strong>13th out of 41 teams</strong>,
-        tackling diverse challenges and improving problem-solving under pressure.
-      </p>
-    </div>
-  </div>
-</div>
+      <p class="sub">Selected CTF competitions and hands-on cybersecurity challenges.</p>
 
-<div class="ctf-card" data-aos="fade-left">
-  <div class="ctf-card-inner">
-    <div class="ctf-card-front">Catch the Hilal</div>
-    <div class="ctf-card-back">
-      <div class="meta">CTF Competition • Rank: 20 / 47</div>
-      <div>
-        <span class="tag">CTF</span>
-        <span class="tag">Competition</span>
-        <span class="tag">Mixed</span>
+      <div class="ctf-grid">
+        <div class="ctf-card"><div class="ctf-card-inner"><div class="ctf-card-front">National Cyber Security Center of Jordan v2</div><div class="ctf-card-back"><div class="meta">National CTF • Ranked Top 10 in Jordan</div><div><span class="tag">National</span><span class="tag">Top 10</span><span class="tag">Jordan</span></div><p>Competed in the National Cyber Security Center of Jordan v2 CTF and ranked within the <strong>Top 10 competitors in Jordan</strong>.</p></div></div></div>
+
+        <div class="ctf-card"><div class="ctf-card-inner"><div class="ctf-card-front">BRK CYS CTF 2026</div><div class="ctf-card-back"><div class="meta">CTF Competition • 2026</div><div><span class="tag">CTF</span><span class="tag">Web</span><span class="tag">Mixed</span></div><p>Participated in BRK CYS CTF 2026, solving practical cybersecurity challenges across multiple categories.</p></div></div></div>
+
+        <div class="ctf-card"><div class="ctf-card-inner"><div class="ctf-card-front">AI Odyssey TryHackMe CTF</div><div class="ctf-card-back"><div class="meta">TryHackMe • AI Security CTF</div><div><span class="tag">TryHackMe</span><span class="tag">AI</span><span class="tag">Hands-on</span></div><p>Participated in AI Odyssey on TryHackMe, focusing on AI-related cybersecurity challenges and investigation tasks.</p></div></div></div>
+
+        <div class="ctf-card"><div class="ctf-card-inner"><div class="ctf-card-front">SecLeaf CTF</div><div class="ctf-card-back"><div class="meta">CTF Competition</div><div><span class="tag">Web</span><span class="tag">Forensics</span><span class="tag">CTF</span></div><p>Practiced solving challenges involving analysis, web security, and CTF-style investigation.</p></div></div></div>
+
+        <div class="ctf-card"><div class="ctf-card-inner"><div class="ctf-card-front">KITCTF</div><div class="ctf-card-back"><div class="meta">International CTF • Web / Crypto / Reverse</div><div><span class="tag">Web</span><span class="tag">Crypto</span><span class="tag">Reverse</span></div><p>Worked on web exploitation, cryptography, and reverse engineering challenges.</p></div></div></div>
+
+        <div class="ctf-card"><div class="ctf-card-inner"><div class="ctf-card-front">ZeroCTF</div><div class="ctf-card-back"><div class="meta">Rank: 13 / 41 Teams</div><div><span class="tag">CTF</span><span class="tag">Team</span></div><p>Ranked <strong>13th out of 41 teams</strong>, tackling diverse challenges under pressure.</p></div></div></div>
+
+        <div class="ctf-card"><div class="ctf-card-inner"><div class="ctf-card-front">Catch the Hilal CTF</div><div class="ctf-card-back"><div class="meta">Rank: 20 / 47 Teams</div><div><span class="tag">CTF</span><span class="tag">Mixed</span></div><p>Achieved <strong>20th place out of 47 teams</strong>, solving challenges across multiple categories.</p></div></div></div>
+
+        <div class="ctf-card"><div class="ctf-card-inner"><div class="ctf-card-front">JordanSec CTF</div><div class="ctf-card-back"><div class="meta">Rank: 39 / 72 Teams</div><div><span class="tag">Reverse</span><span class="tag">Crypto</span><span class="tag">Team</span></div><p>Solved Reverse Engineering and Cryptography challenges and contributed to a team ranking of <strong>39th out of 72 teams</strong>.</p></div></div></div>
+
+        <div class="ctf-card"><div class="ctf-card-inner"><div class="ctf-card-front">Black Hat MENA CTF v2</div><div class="ctf-card-back"><div class="meta">Regional CTF</div><div><span class="tag">Web</span><span class="tag">Crypto</span><span class="tag">Pwn</span></div><p>Participated in a regional team-based competition covering Web, Crypto, Pwn, and advanced cybersecurity challenges.</p></div></div></div>
+
+        <div class="ctf-card"><div class="ctf-card-inner"><div class="ctf-card-front">Cyber Warrior v1 & v2</div><div class="ctf-card-back"><div class="meta">National Cyber Security Center of Jordan</div><div><span class="tag">Forensics</span><span class="tag">Web</span><span class="tag">Network Defense</span></div><p>Focused on forensics, analysis, web exploitation, and network defense challenges.</p></div></div></div>
+
+        <div class="ctf-card"><div class="ctf-card-inner"><div class="ctf-card-front">National Cyber Security Center of Jordan</div><div class="ctf-card-back"><div class="meta">First National CTF • Top 100 in Jordan</div><div><span class="tag">National</span><span class="tag">Beginner</span></div><p>My first official CTF participation, ranked within the Top 100 competitors across Jordan.</p></div></div></div>
       </div>
-      <p>
-        Participated in Catch the Hilal CTF and achieved <strong>20th place out of 47 teams</strong>,
-        solving challenges across multiple categories.
-      </p>
-    </div>
-  </div>
-</div>
-
-<div class="ctf-card" data-aos="fade-right">
-  <div class="ctf-card-inner">
-    <div class="ctf-card-front">CYSTECH Capture The Flag (CTF)</div>
-    <div class="ctf-card-back">
-      <div class="meta">Feb 2026 • Team: C-Spyder • CYSTECH1 Company</div>
-      <div><span class="tag">CTF</span><span class="tag">Team</span><span class="tag">Mixed</span></div>
-      <p>Participated with my team in the CYSTECH CTF competition and received a certificate of outstanding participation.</p>
-    </div>
-  </div>
-</div>
-
-<div class="ctf-card" data-aos="fade-left">
-  <div class="ctf-card-inner">
-    <div class="ctf-card-front">IT Gate CTF</div>
-    <div class="ctf-card-back">
-      <div class="meta">Feb 15, 2026 • Team: Bug Hunters • Rank: 24th</div>
-      <div><span class="tag">CTF</span><span class="tag">Team</span><span class="tag">Competition</span></div>
-      <p>Participated in IT Gate CTF and achieved 24th place (850 points, 7 challenges).</p>
-    </div>
-  </div>
-</div>
-
-<div class="ctf-card" data-aos="fade-right">
-  <div class="ctf-card-inner">
-    <div class="ctf-card-front">Love at First Breach 2026 — Advanced Track</div>
-    <div class="ctf-card-back">
-      <div class="meta">TryHackMe • 2026 • Advanced Track</div>
-      <div><span class="tag">Hands-on</span><span class="tag">Advanced</span><span class="tag">Labs</span></div>
-      <p>Completed the Love at First Breach 2026 event on TryHackMe (Advanced Track), focusing on practical challenge-based learning.</p>
-    </div>
-  </div>
-</div>
-
-<div class="ctf-card" data-aos="fade-left">
-  <div class="ctf-card-inner">
-    <div class="ctf-card-front">JordanSec CTF</div>
-    <div class="ctf-card-back">
-      <div class="meta">JordanSec Platform • 2026</div>
-      <div>
-        <span class="tag">Reverse</span>
-        <span class="tag">Crypto</span>
-        <span class="tag">Team</span>
-      </div>
-      <p>
-        Participated in the JordanSec CTF and solved Reverse Engineering and Cryptography challenges.
-        Contributed to my team's performance, finishing <strong>39th out of 72 teams</strong>.
-      </p>
-    </div>
-  </div>
-</div>
-
-  </div>
-</section>
-
+    </section>
 
     <section id="projects" class="card" data-aos="fade-up">
       <div class="section-title">
         <span>Projects</span>
         <span class="section-badge">Labs & Tools</span>
       </div>
-
-      <p class="sub" style="margin-top:6px">
-        These are the labs and tools I build to improve my offensive, defensive, and automation skills.
-      </p>
+      <p class="sub">Labs and tools I build to improve offensive, defensive, and automation skills.</p>
 
       <div class="projects-grid">
         <div class="item-card">
-          <h3>qrshilde — QR Code Security Tool</h3>
-          <div class="item-meta">Security Utility</div>
-          <p class="item-desc">
-            A tool that generates, decodes, and inspects QR codes from a security perspective.
-            Useful for analyzing encoded payloads, detecting unsafe redirects, and testing cryptographic features.
-          </p>
-          <div class="item-links">
-            <a href="#" target="_blank">View on GitHub ↗</a>
-          </div>
-          <div class="pill"><strong>Stack</strong> • Python, QR Codes, Cryptography</div>
+          <h3>QRShield — QR Code Security Analyzer</h3>
+          <div class="item-meta">Security Utility • Active Project</div>
+          <p class="item-desc">AI-powered QR code security analyzer designed to detect malicious QR payloads, analyze QR content, calculate threat scores, and generate user-friendly safety reports.</p>
+          <div class="item-links"><a class="btn-link" href="https://github.com/naeim179/qrshilde" target="_blank" rel="noopener noreferrer">View on GitHub ↗</a></div>
+          <div class="pill"><strong>Stack</strong> • Python, FastAPI, QR Codes, Security Analysis</div>
         </div>
 
         <div class="item-card">
           <h3>VulnLab: Boot2Root Linux Box</h3>
-          <div class="item-meta">Custom vulnerable VM • PrivEsc & Web</div>
-          <p class="item-desc">
-            A custom vulnerable Linux machine built to practice real-world exploitation paths.
-            Includes weak configurations, LFI, enumeration, and privilege escalation challenges.
-            Designed like a real Boot2Root CTF machine.
-          </p>
-          <div class="item-links">
-            <a href="#" target="_blank">View on GitHub ↗</a>
-          </div>
+          <div class="item-meta">Custom vulnerable VM • Under Work</div>
+          <p class="item-desc">A custom vulnerable Linux machine built to practice real-world exploitation paths including enumeration, web flaws, and privilege escalation.</p>
+          <div class="item-links"><span class="btn-link">Coming Soon</span></div>
           <div class="pill"><strong>Stack</strong> • Linux, Apache, Bash</div>
         </div>
 
         <div class="item-card">
-          <h3>Incident Playground — Log &amp; PCAP Lab</h3>
-          <div class="item-meta">Forensics & SOC Simulation</div>
-          <p class="item-desc">
-            A controlled environment for practicing log analysis and PCAP investigation.
-            Replay attacks, trace indicators, extract artifacts, and simulate IR scenarios.
-          </p>
-          <div class="item-links">
-            <a href="#" target="_blank">View on GitHub ↗</a>
-          </div>
+          <h3>Incident Playground — Log & PCAP Lab</h3>
+          <div class="item-meta">Forensics & SOC Simulation • Under Work</div>
+          <p class="item-desc">A controlled environment for practicing log analysis, PCAP investigation, attack timelines, and incident-response scenarios.</p>
+          <div class="item-links"><span class="btn-link">Under Work</span></div>
           <div class="pill"><strong>Focus</strong> • Incident Response, Forensics</div>
         </div>
 
         <div class="item-card">
           <h3>Linux Encryption Tool</h3>
-          <div class="item-meta">Secure Files Quickly</div>
-          <p class="item-desc">
-            A simple but effective encryption/decryption script for Linux.
-            Uses OpenSSL to protect files with multiple cipher modes through a clean, fast CLI.
-          </p>
-          <div class="item-links">
-            <a href="#" target="_blank">View on GitHub ↗</a>
-          </div>
+          <div class="item-meta">Secure Files Quickly • Planned</div>
+          <p class="item-desc">A simple encryption/decryption script for Linux using OpenSSL to protect files with multiple cipher modes through a clean CLI.</p>
+          <div class="item-links"><span class="btn-link">Coming Soon</span></div>
           <div class="pill"><strong>Stack</strong> • Bash, OpenSSL, Linux</div>
         </div>
       </div>
@@ -968,96 +754,25 @@ $ ready.<span class="cursor"></span>
     <section id="tools" class="card" data-aos="fade-up">
       <div class="section-title">
         <span>Tools</span>
-        <span class="section-badge">Built By Me</span>
+        <span class="section-badge">Under Work</span>
       </div>
-
-      <p class="sub" style="margin-top:6px">
-        Small but useful tools I’m building to support my workflow.
-      </p>
+      <p class="sub">Small tools I’m building to support my cybersecurity workflow.</p>
 
       <div class="tools-grid">
         <div class="item-card">
           <h3>Log Hunter</h3>
           <div class="item-meta">Forensics / IR helper script</div>
-          <p class="item-desc">
-            Parses web server logs, extracts suspicious IPs and endpoints,
-            and generates a quick incident-response summary.
-          </p>
-          <div class="item-links">
-            <a href="#" target="_blank">View on GitHub ↗</a>
-          </div>
+          <p class="item-desc">Parses web server logs, extracts suspicious IPs and endpoints, and generates a quick incident-response summary.</p>
+          <div class="item-links"><span class="btn-link">Under Work</span></div>
           <div class="pill"><strong>Stack</strong> • Python, Regex</div>
         </div>
 
         <div class="item-card">
           <h3>Web Recon Pipeline</h3>
-          <div class="item-meta">Bug bounty recon automation</div>
-          <p class="item-desc">
-            Automates subdomain discovery, screenshots, port scanning,
-            and basic tech fingerprinting for target scopes.
-          </p>
-          <div class="item-links">
-            <a href="#" target="_blank">View on GitHub ↗</a>
-          </div>
+          <div class="item-meta">Recon automation</div>
+          <p class="item-desc">Automates basic discovery, screenshots, port scanning, and simple technology fingerprinting for target scopes.</p>
+          <div class="item-links"><span class="btn-link">Under Work</span></div>
           <div class="pill"><strong>Stack</strong> • Bash, Nmap, httpx</div>
-        </div>
-      </div>
-    </section>
-
-    <section id="timeline" class="card" data-aos="fade-up">
-      <div class="section-title">
-        <span>Journey</span>
-        <span class="section-badge">Timeline</span>
-      </div>
-
-      <p class="sub" style="margin-top:6px">
-        My growth in cybersecurity through CTFs, labs, and building security tools.
-      </p>
-
-      <div class="timeline">
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">2023</div>
-          <div class="timeline-title">Entered cybersecurity & Linux</div>
-          <div class="timeline-text">
-            Started learning Linux, networking, and core security fundamentals through hands-on labs and platforms.
-          </div>
-        </div>
-
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">2023</div>
-          <div class="timeline-title">First national CTF</div>
-          <div class="timeline-text">
-            Participated in the National Cyber Security Center of Jordan CTF and ranked within the top 100 competitors.
-          </div>
-        </div>
-
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">2024</div>
-          <div class="timeline-title">Active CTF participation</div>
-          <div class="timeline-text">
-            Competed in Cyber Warrior, Orbit CTF, and university challenges, focusing on forensics, web exploitation, and analysis.
-          </div>
-        </div>
-
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">2024–2025</div>
-          <div class="timeline-title">Building tools & labs</div>
-          <div class="timeline-text">
-            Started building personal security tools and custom vulnerable labs (qrshilde, Boot2Root-style machines).
-          </div>
-        </div>
-
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">2026</div>
-          <div class="timeline-title">Deep reverse engineering focus</div>
-          <div class="timeline-text">
-            Expanding into reverse engineering, binary analysis, and publishing technical writeups.
-          </div>
         </div>
       </div>
     </section>
@@ -1067,145 +782,86 @@ $ ready.<span class="cursor"></span>
         <span>Certificates</span>
         <span class="section-badge">Verification</span>
       </div>
+      <p class="sub">Training and recognition across cybersecurity, Linux administration, networking, and CTF practice.</p>
 
-      <p class="sub" style="margin-top:6px">
-        Training and recognition across cybersecurity, cloud, AI, IoT, Linux administration, and CTF competitions.
-      </p>
-
-      <h3 class="group-title">
-        <span class="icon" aria-hidden="true">🔐</span>
-        <span class="text">Offensive &amp; Core Cybersecurity</span>
-      </h3>
-
+      <h3 class="group-title">🔐 Offensive & Core Cybersecurity</h3>
       <div class="certs-grid">
         <div class="item-card">
-          <h3>Certified Ethical Hacker (CEH)</h3>
+          <h3>Certified Ethical Hacker (CEH) Training</h3>
           <div class="item-meta">The Hope International Company • Jan–Feb 2024 • 40 Hours</div>
-          <p class="item-desc">Ethical hacking training covering reconnaissance, exploitation, vulnerability analysis, and pentesting fundamentals.</p>
-          <div class="item-links">
-            <a href="https://drive.google.com/file/d/1-5exL70pULqPxI9kglQkRh2g9ioRoEoo/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
-          </div>
-          <div class="pill"><strong>Focus</strong> • Ethical Hacking, Pentesting</div>
+          <p class="item-desc">Training covering reconnaissance, exploitation, vulnerability analysis, and pentesting fundamentals.</p>
+          <a class="btn-link" href="https://drive.google.com/file/d/1-5exL70pULqPxI9kglQkRh2g9ioRoEoo/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
         </div>
 
         <div class="item-card">
-          <h3>CCNA Training</h3>
-          <div class="item-meta">The Hope International Company • Aug–Oct 2024 • 60 Hours</div>
-          <p class="item-desc">Networking fundamentals, routing &amp; switching, and hands-on labs.</p>
-          <div class="item-links">
-            <a href="https://drive.google.com/file/d/1JeEZA8bE3CeLpFEurVLUxP-_V_QY7Fs9/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
-          </div>
-          <div class="pill"><strong>Focus</strong> • Networking</div>
-        </div>
-
-        <div class="item-card">
-          <h3>Cloud Computing</h3>
-          <div class="item-meta">The Hope International Company • Jul–Aug 2024</div>
-          <p class="item-desc">Cloud fundamentals, service models, and virtualization basics.</p>
-          <div class="item-links">
-            <a href="https://drive.google.com/file/d/1K1OYlObcUWyfUqgB-IMca05fKEcm6bZd/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
-          </div>
-          <div class="pill"><strong>Focus</strong> • Cloud Fundamentals</div>
+          <h3>Certified Associate Penetration Tester (CAPT)</h3>
+          <div class="item-meta">Hackviser • Issued Jan 22, 2026</div>
+          <p class="item-desc">Certification covering penetration testing methodology, tools, techniques, and practical assessment.</p>
+          <a class="btn-link" href="https://hackviser.com/verify?id=HV-CAPT-2GIXVBEF" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
         </div>
 
         <div class="item-card">
           <h3>Cyber Warriors Training — CTF Program</h3>
           <div class="item-meta">National Cyber Security Center of Jordan • 2024 • 40 Hours</div>
-          <p class="item-desc">Intensive CTF-based training focused on offensive security and incident response.</p>
-          <div class="item-links">
-            <a href="https://drive.google.com/file/d/1n8emdJynTSVEKCCGY8YEVg8_ZEwEMQQm/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
-          </div>
-          <div class="pill"><strong>Focus</strong> • CTF, Offensive Security</div>
+          <p class="item-desc">CTF-based training focused on offensive security, analysis, forensics, and incident response.</p>
+          <a class="btn-link" href="https://drive.google.com/file/d/1n8emdJynTSVEKCCGY8YEVg8_ZEwEMQQm/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
         </div>
       </div>
 
-      <div class="item-card" style="margin-top:14px">
-        <h3>Certified Associate Penetration Tester (CAPT)</h3>
-        <div class="item-meta">Hackviser • Issued Jan 22, 2026</div>
-        <p class="item-desc">
-          Certification demonstrating proficiency in penetration testing methodologies, tools, and techniques through hands-on assessment.
-        </p>
-        <div class="item-links">
-          <a href="https://hackviser.com/verify?id=HV-CAPT-2GIXVBEF" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
-        </div>
-        <div class="pill"><strong>Focus</strong> • Penetration Testing, Methodologies</div>
-      </div>
-
-      <h3 class="group-title">
-        <span class="icon" aria-hidden="true">🐧</span>
-        <span class="text">Linux &amp; System Administration</span>
-      </h3>
-
+      <h3 class="group-title">🐧 Linux & Networking</h3>
       <div class="certs-grid">
         <div class="item-card">
           <h3>Red Hat System Administration I (RH124)</h3>
           <div class="item-meta">Red Hat Training • Sep 2024</div>
-          <p class="item-desc">
-            Practical training in Red Hat Linux fundamentals, focusing on CLI usage, user and permission management,
-            file systems, and core system administration skills.
-          </p>
-          <div class="item-links">
-            <a href="https://drive.google.com/file/d/134mNRoBFwQjS2VpyUK-OPZ5AOqwlwAbA/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
-          </div>
-          <div class="pill"><strong>Focus</strong> • Linux Fundamentals</div>
+          <p class="item-desc">Linux fundamentals, CLI usage, users, permissions, file systems, and core administration skills.</p>
+          <a class="btn-link" href="https://drive.google.com/file/d/134mNRoBFwQjS2VpyUK-OPZ5AOqwlwAbA/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
         </div>
 
         <div class="item-card">
           <h3>Red Hat System Administration II (RH134)</h3>
           <div class="item-meta">Red Hat Training • Jun 2025 • 40 Hours</div>
-          <p class="item-desc">Advanced Linux system administration, services, storage, and troubleshooting.</p>
-          <div class="item-links">
-            <a href="https://drive.google.com/file/d/16Q06WgZ3REovcpKk1Ymr6nmhWPb5poSp/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
-          </div>
-          <div class="pill"><strong>Focus</strong> • Advanced Linux</div>
+          <p class="item-desc">Advanced Linux system administration, services, storage, networking, and troubleshooting.</p>
+          <a class="btn-link" href="https://drive.google.com/file/d/16Q06WgZ3REovcpKk1Ymr6nmhWPb5poSp/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
+        </div>
+
+        <div class="item-card">
+          <h3>CCNA Training</h3>
+          <div class="item-meta">The Hope International Company • Aug–Oct 2024 • 60 Hours</div>
+          <p class="item-desc">Networking fundamentals, routing, switching, IP addressing, and hands-on labs.</p>
+          <a class="btn-link" href="https://drive.google.com/file/d/1JeEZA8bE3CeLpFEurVLUxP-_V_QY7Fs9/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
         </div>
       </div>
 
-      <h3 class="group-title">
-        <span class="icon" aria-hidden="true">🎄</span>
-        <span class="text">CTF &amp; Hands-on Cybersecurity</span>
-      </h3>
-
+      <h3 class="group-title">🎄 TryHackMe & Hands-on Learning</h3>
       <div class="certs-grid">
         <div class="item-card">
           <h3>Advent of Cyber 2025</h3>
           <div class="item-meta">TryHackMe • Dec 2025 • 24 Challenges</div>
-          <p class="item-desc">Hands-on cybersecurity challenges demonstrating strong practical skills.</p>
-          <div class="item-links">
-            <a href="https://drive.google.com/file/d/1W6IUeF55nDM30nHZNV7L9xUnXd05yLIZ/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
-          </div>
-          <div class="pill"><strong>Focus</strong> • Hands-on Security</div>
+          <p class="item-desc">Hands-on cybersecurity challenges demonstrating practical security skills.</p>
+          <a class="btn-link" href="https://drive.google.com/file/d/1W6IUeF55nDM30nHZNV7L9xUnXd05yLIZ/view" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
+        </div>
+
+        <div class="item-card">
+          <h3>Pre Security — Learning Path</h3>
+          <div class="item-meta">TryHackMe • Feb 22, 2026 • 19h 10m</div>
+          <p class="item-desc">Foundational cybersecurity path covering networking, Linux basics, web security basics, and security concepts.</p>
+          <a class="btn-link" href="https://tryhackme.com/certificate/THM-SAXQLL1W5L" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
         </div>
       </div>
     </section>
-
-    <div class="item-card">
-      <h3>Pre Security (New) — Learning Path</h3>
-      <div class="item-meta">TryHackMe • Feb 22, 2026 • 19h 10m</div>
-      <p class="item-desc">
-        Completed the Pre Security learning path covering foundational security concepts and hands-on practice.
-      </p>
-      <div class="item-links">
-        <a href="https://tryhackme.com/certificate/THM-SAXQLL1W5L" target="_blank" rel="noopener noreferrer">View Certificate ↗</a>
-      </div>
-      <div class="pill"><strong>Focus</strong> • Security Fundamentals, Hands-on Labs</div>
-    </div>
 
     <section id="writeups" class="card" data-aos="fade-up">
       <div class="section-title">
         <span>Writeups</span>
         <span class="section-badge">Knowledge Sharing</span>
       </div>
-      <p class="sub" style="margin-top:6px">Selected writeups from CTFs, Boot2Root machines, and interesting bugs.</p>
+      <p class="sub">Selected writeups from CTFs, Boot2Root machines, and interesting bugs.</p>
 
       <div class="writeups-grid">
         <div class="item-card">
           <h3>Reverse Engineering — Coming Soon</h3>
           <div class="item-meta">Planned writeup on RE challenges</div>
-          <p class="item-desc">
-            A reverse engineering writeup is coming soon. It will cover how I approach binaries, use debuggers,
-            and trace logic to extract flags and understand vulnerabilities.
-          </p>
+          <p class="item-desc">A reverse engineering writeup is coming soon. It will cover how I approach binaries, use debuggers, and trace logic to extract flags.</p>
           <div class="pill"><strong>Topics</strong> • Reverse Engineering, Debugging, Disassembly</div>
         </div>
       </div>
@@ -1214,17 +870,17 @@ $ ready.<span class="cursor"></span>
     <section id="contact" class="card" data-aos="fade-up">
       <div class="section-title">
         <span>Contact Me</span>
-        <span class="section-badge">Let’s Hack Together</span>
+        <span class="section-badge">Let’s Connect</span>
       </div>
-      <p class="sub" style="margin-top:6px">Reach out for CTF teams, pentest work, or collab on security projects.</p>
+      <p class="sub">Reach out for CTF teams, cybersecurity collaboration, or internship opportunities.</p>
 
       <div class="contact-row">
         <div class="contact-method">
           <div class="contact-left">
             <span class="contact-label">Email</span>
-            <span class="contact-value">naeemmohmd8@gmail.com</span>
+            <span class="contact-value">naim.althabata@gmail.com</span>
           </div>
-          <a class="btn-link" href="mailto:naeemmohmd8@gmail.com">Send Mail</a>
+          <a class="btn-link" href="mailto:naim.althabata@gmail.com">Send Mail</a>
         </div>
 
         <div class="contact-method">
@@ -1245,14 +901,6 @@ $ ready.<span class="cursor"></span>
 
         <div class="contact-method">
           <div class="contact-left">
-            <span class="contact-label">Instagram</span>
-            <span class="contact-value">naeem__althabata</span>
-          </div>
-          <a class="btn-link" href="https://instagram.com/naeem__althabta" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
-        </div>
-
-        <div class="contact-method">
-          <div class="contact-left">
             <span class="contact-label">LinkedIn</span>
             <span class="contact-value">naeim-althabata</span>
           </div>
@@ -1262,14 +910,14 @@ $ ready.<span class="cursor"></span>
     </section>
 
     <footer>
-      Built with ❤️ — <code>naeim1</code>
+      Built with ❤️ — <code>naeim179</code>
     </footer>
-  </div>
+  </main>
 
   <script>
-    (function () {
+    (function(){
       const canvas = document.getElementById('matrixBackground');
-      if (!canvas) return;
+      if(!canvas) return;
 
       const ctx = canvas.getContext('2d');
       const chars = "01";
@@ -1277,7 +925,7 @@ $ ready.<span class="cursor"></span>
       let columns;
       let drops;
 
-      function resizeCanvas() {
+      function resizeCanvas(){
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         columns = Math.floor(canvas.width / fontSize);
@@ -1287,27 +935,26 @@ $ ready.<span class="cursor"></span>
       resizeCanvas();
       window.addEventListener('resize', resizeCanvas);
 
-      function drawMatrix() {
+      function drawMatrix(){
         ctx.fillStyle = "rgba(0,0,0,0.25)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+        ctx.fillRect(0,0,canvas.width,canvas.height);
         ctx.fillStyle = "#22c55e";
         ctx.font = fontSize + "px monospace";
 
-        for (let i = 0; i < drops.length; i++) {
+        for(let i=0;i<drops.length;i++){
           const char = chars[Math.floor(Math.random() * chars.length)];
           ctx.fillText(char, i * fontSize, drops[i] * fontSize);
 
-          if (drops[i] * fontSize > canvas.height && Math.random() > 0.96) drops[i] = 0;
+          if(drops[i] * fontSize > canvas.height && Math.random() > 0.96){
+            drops[i] = 0;
+          }
           drops[i]++;
         }
       }
 
-      setInterval(drawMatrix, 120);
+      setInterval(drawMatrix,120);
     })();
-  </script>
 
-  <script>
     (function(){
       const body = document.body;
       const btn = document.getElementById('themeToggle');
@@ -1321,7 +968,7 @@ $ ready.<span class="cursor"></span>
         label.textContent = 'Light';
       }
 
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click',()=>{
         body.classList.toggle('light');
         const isLight = body.classList.contains('light');
         icon.textContent = isLight ? '☀️' : '🌙';
@@ -1329,41 +976,36 @@ $ ready.<span class="cursor"></span>
         localStorage.setItem('theme', isLight ? 'light' : 'dark');
       });
     })();
+
+    window.addEventListener("load",function(){
+      const loader = document.getElementById("loader");
+      if(loader){
+        setTimeout(()=>{
+          loader.style.opacity = "0";
+          loader.style.transition = "opacity 0.7s ease";
+          setTimeout(()=>{ loader.style.display = "none"; },700);
+        },1800);
+      }
+    });
   </script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script>
-    AOS.init({ duration: 700, offset: 0, startEvent: 'DOMContentLoaded', once: true });
-
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('[data-aos]').forEach(el => el.classList.add('aos-animate'));
-    });
+    AOS.init({duration:700,offset:0,startEvent:'DOMContentLoaded',once:true});
 
     new Typed('#typed',{
-      strings:["CTF Player","Pentester","Cyber Warrior"],
+      strings:[
+        "Cybersecurity Student",
+        "SOC Analyst Trainee",
+        "Web Security & CTF Practitioner",
+        "TryHackMe Learner"
+      ],
       typeSpeed:60,
       backSpeed:30,
       backDelay:1400,
       loop:true
     });
   </script>
-
- <script>
-window.addEventListener("load", function () {
-  const loader = document.getElementById("loader");
-
-  if (loader) {
-    setTimeout(() => {
-      loader.style.opacity = "0";
-      loader.style.transition = "opacity 0.7s ease";
-
-      setTimeout(() => {
-        loader.style.display = "none";
-      }, 700);
-    }, 2500); // مدة بقاء اللودر: 2.5 ثانية
-  }
-});
-</script>
-
 </body>
 </html>
+```
