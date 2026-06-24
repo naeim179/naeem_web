@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flight — boroCTF Writeup — Naim MyLibrary</title>
+  <meta name="description" content="Decoded a Wingdings-style ciphertext using the “dark, darker, yet darker” hint to recover the flag." />
+  <link rel="stylesheet" href="../writeup-template.css" />
+</head>
+<body style="--accent:#c7ff68;--accent-2:#73fbff;">
+  <main class="case-shell">
+    <nav class="case-nav" aria-label="Writeup navigation">
+      <a class="case-brand" href="../index.html">
+        <span class="case-mark">NM</span>
+        <span>Naim MyLibrary</span>
+      </a>
+      <div class="case-links">
+        <a href="../../index.html">Portfolio</a>
+        <a href="../index.html">Library</a>
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#flag">Flag</a>
+      </div>
+    </nav>
+
+    <header class="case-hero">
+      <section class="case-brief">
+        <p class="eyebrow">boroCTF Crypto casefile</p>
+        <h1>Flight</h1>
+        <p class="lead">Decoded a Wingdings-style ciphertext using the “dark, darker, yet darker” hint to recover the flag.</p>
+        <div class="meta-row">
+          <span class="chip">CTF: boroCTF</span>
+          <span class="chip">Category: Crypto</span>
+          <span class="chip">Difficulty: Easy</span>
+          <span class="chip">No points listed</span>
+          <span class="chip">Solves not listed</span>
+          <span class="chip">Tags: Wingdings · Symbol Cipher · Gaster Hint</span>
+        </div>
+      </section>
+
+      <aside class="case-panel" aria-label="Writeup status panel">
+        <div class="case-panel-inner">
+          <p class="eyebrow">mission telemetry</p>
+          <div class="status-line"><span>Status</span><strong>Solved</strong></div>
+          <div class="status-line"><span>Method</span><strong>Recon → Analyze → Exploit</strong></div>
+          <div class="status-line"><span>Evidence</span><strong>Commands + reasoning</strong></div>
+          <div class="status-line"><span>Published</span><strong>2026-06-24</strong></div>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="note" style="margin-top:18px;">This writeup is formatted for Naim's portfolio with the original solution flow preserved from the uploaded notes.</p>
+        </div>
+      </aside>
+    </header>
+
+    <div class="case-layout">
+      <aside class="case-toc">
+        <p>Case index</p>
+        <a href="#overview">00 / Overview</a>
+        <a href="#skills">01 / Skills</a>
+        <a href="#timeline">02 / Timeline</a>
+        <a href="#walkthrough">03 / Walkthrough</a>
+        <a href="#evidence">04 / Evidence</a>
+        <a href="#flag">05 / Flag</a>
+        <a href="#lessons">06 / Lessons</a>
+      </aside>
+
+      <article class="case-body">
+        <section class="case-section" id="overview" data-step="00">
+          <p class="eyebrow">operator brief</p>
+          <h2>Overview</h2>
+          <p>Decoded a Wingdings-style ciphertext using the “dark, darker, yet darker” hint to recover the flag.</p>
+          <div class="evidence-grid">
+            <div class="evidence-card"><strong>Challenge</strong><p>Flight from boroCTF.</p></div>
+            <div class="evidence-card"><strong>Category</strong><p>Crypto Writeups · Easy difficulty.</p></div>
+          </div>
+          
+        </section>
+
+        <section class="case-section" id="skills" data-step="01">
+          <p class="eyebrow">skills demonstrated</p>
+          <h2>Skills Demonstrated</h2>
+          <div class="skill-grid"><span>Encoding Analysis</span><span>Font-based Cipher</span><span>Pattern Recognition</span><span>Flag Recovery</span></div>
+        </section>
+
+        <section class="case-section" id="timeline" data-step="02">
+          <p class="eyebrow">attack path</p>
+          <h2>Timeline</h2>
+          <div class="timeline"><div><strong>00</strong><p>Read the ciphertext and hint.</p></div><div><strong>01</strong><p>Connected the hint to Gaster/Wingdings.</p></div><div><strong>02</strong><p>Mapped each symbol to its character.</p></div><div><strong>03</strong><p>Rebuilt the final flag string.</p></div></div>
+        </section>
+
+        <section class="case-section" id="walkthrough" data-step="03">
+          <p class="eyebrow">solution notes</p>
+          <h2>Walkthrough</h2>
+          <h3>Challenge</h3>
+<p>We are given the following ciphertext:</p>
+<p>♌︎□︎❒︎□︎👍︎❄︎☞︎❀︎⬥︎✋︎■︎♑︎📂︎■︎🕯︎♉︎✏︎⧫︎❝︎</p>
+<p>Along with the hint:</p>
+<p>dark, darker, yet darker.</p>
+<h3>Step 1: Analyze the Hint</h3>
+<p>The phrase &quot;dark, darker, yet darker&quot; is a famous quote associated with W. D. Gaster from the game Undertale.</p>
+<p>Gaster is commonly represented using Wingdings symbols, so the hint strongly suggests that the ciphertext is written in the Wingdings font.</p>
+<h3>Step 2: Identify the Encoding</h3>
+<p>Viewing the symbols as Wingdings characters and converting each symbol back to the corresponding keyboard character gives:</p>
+<h3>Step 3: Recover the Flag</h3>
+<p>Combining the decoded characters:</p>
+<p>boroCTF{wIng1n&#x27;_!t}</p>
+<p>boroCTF{wIng1n&#x27;_!t}</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>[Table 1]</pre></div>
+<p>Wingdings | Character</p>
+<p>♌︎ | b</p>
+<p>□︎ | o</p>
+<p>❒︎ | r</p>
+<p>□︎ | o</p>
+<p>👍︎ | C</p>
+<p>❄︎ | T</p>
+<p>☞︎ | F</p>
+<p>❀︎ | {</p>
+<p>⬥︎ | w</p>
+<p>✋︎ | I</p>
+<p>■︎ | n</p>
+<p>♑︎ | g</p>
+<p>📂︎ | 1</p>
+<p>■︎ | n</p>
+<p>🕯︎ | &#x27;</p>
+<p>♉︎ | _</p>
+<p>✏︎ | !</p>
+<p>⧫︎ | t</p>
+<p>❝︎ | }</p>
+        </section>
+
+        <section class="case-section" id="evidence" data-step="04">
+          <p class="eyebrow">proof locker</p>
+          <h2>Evidence</h2>
+          <div class="evidence-grid"><div class="evidence-card"><strong>Clue 01</strong><p>The hint points to W. D. Gaster.</p></div><div class="evidence-card"><strong>Clue 02</strong><p>The symbols map back to normal keyboard characters through Wingdings.</p></div><div class="evidence-card"><strong>Clue 03</strong><p>The decoded sequence directly forms the boroCTF flag.</p></div></div>
+          
+        </section>
+
+        <section class="flag-vault" id="flag">
+          <p class="eyebrow">final artifact</p>
+          <h2>Flag</h2>
+          <code>boroCTF{wIng1n&#x27;_!t}</code>
+        </section>
+
+        <section class="case-section" id="lessons" data-step="06">
+          <p class="eyebrow">after action report</p>
+          <h2>Lessons Learned</h2>
+          <ul><li>Hints can point to the encoding family, not only to the plaintext.</li><li>Font-based ciphers should be tested when symbols look decorative.</li><li>Keep a mapping table so the decode is reproducible.</li></ul>
+          <div class="footer-actions">
+            <a class="btn" href="../index.html">← Back to MyLibrary</a>
+            <a class="btn ghost" href="../../index.html">Back to Portfolio</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

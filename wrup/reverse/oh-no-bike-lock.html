@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OH NO!!! — boroCTF Writeup — Naim MyLibrary</title>
+  <meta name="description" content="Reversed a bike-lock binary that dynamically generated the flag from cumulative digit offsets into a lookup string." />
+  <link rel="stylesheet" href="../writeup-template.css" />
+</head>
+<body style="--accent:#b37eff;--accent-2:#ffc254;">
+  <main class="case-shell">
+    <nav class="case-nav" aria-label="Writeup navigation">
+      <a class="case-brand" href="../index.html">
+        <span class="case-mark">NM</span>
+        <span>Naim MyLibrary</span>
+      </a>
+      <div class="case-links">
+        <a href="../../index.html">Portfolio</a>
+        <a href="../index.html">Library</a>
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#flag">Flag</a>
+      </div>
+    </nav>
+
+    <header class="case-hero">
+      <section class="case-brief">
+        <p class="eyebrow">boroCTF Reverse casefile</p>
+        <h1>OH NO!!!</h1>
+        <p class="lead">Reversed a bike-lock binary that dynamically generated the flag from cumulative digit offsets into a lookup string.</p>
+        <div class="meta-row">
+          <span class="chip">CTF: boroCTF</span>
+          <span class="chip">Category: Reverse</span>
+          <span class="chip">Difficulty: Medium</span>
+          <span class="chip">No points listed</span>
+          <span class="chip">Solves not listed</span>
+          <span class="chip">Tags: Ghidra · Lookup Table · Cumulative Indexing</span>
+        </div>
+      </section>
+
+      <aside class="case-panel" aria-label="Writeup status panel">
+        <div class="case-panel-inner">
+          <p class="eyebrow">mission telemetry</p>
+          <div class="status-line"><span>Status</span><strong>Solved</strong></div>
+          <div class="status-line"><span>Method</span><strong>Recon → Analyze → Exploit</strong></div>
+          <div class="status-line"><span>Evidence</span><strong>Commands + reasoning</strong></div>
+          <div class="status-line"><span>Published</span><strong>2026-06-20</strong></div>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="note" style="margin-top:18px;">This writeup is formatted for Naim's portfolio with the original solution flow preserved from the uploaded notes.</p>
+        </div>
+      </aside>
+    </header>
+
+    <div class="case-layout">
+      <aside class="case-toc">
+        <p>Case index</p>
+        <a href="#overview">00 / Overview</a>
+        <a href="#skills">01 / Skills</a>
+        <a href="#timeline">02 / Timeline</a>
+        <a href="#walkthrough">03 / Walkthrough</a>
+        <a href="#evidence">04 / Evidence</a>
+        <a href="#flag">05 / Flag</a>
+        <a href="#lessons">06 / Lessons</a>
+      </aside>
+
+      <article class="case-body">
+        <section class="case-section" id="overview" data-step="00">
+          <p class="eyebrow">operator brief</p>
+          <h2>Overview</h2>
+          <p>Reversed a bike-lock binary that dynamically generated the flag from cumulative digit offsets into a lookup string.</p>
+          <div class="evidence-grid">
+            <div class="evidence-card"><strong>Challenge</strong><p>OH NO!!! from boroCTF.</p></div>
+            <div class="evidence-card"><strong>Category</strong><p>Reverse Writeups · Medium difficulty.</p></div>
+          </div>
+          
+        </section>
+
+        <section class="case-section" id="skills" data-step="01">
+          <p class="eyebrow">skills demonstrated</p>
+          <h2>Skills Demonstrated</h2>
+          <div class="skill-grid"><span>Static Analysis</span><span>Algorithm Reversal</span><span>String Analysis</span><span>Ghidra</span></div>
+        </section>
+
+        <section class="case-section" id="timeline" data-step="02">
+          <p class="eyebrow">attack path</p>
+          <h2>Timeline</h2>
+          <div class="timeline"><div><strong>00</strong><p>Identify the ELF and run it.</p></div><div><strong>01</strong><p>Load it into Ghidra and inspect main().</p></div><div><strong>02</strong><p>Trace the digit-selection and cumulative-sum logic.</p></div><div><strong>03</strong><p>Index the lookup table to recover the flag.</p></div></div>
+        </section>
+
+        <section class="case-section" id="walkthrough" data-step="03">
+          <p class="eyebrow">solution notes</p>
+          <h2>Walkthrough</h2>
+          <h3>Challenge Description</h3>
+<p>&quot;OH NO!!! You forgot the PIN for your bike lock. Analyze the lock and figure out how to break it.&quot;</p>
+<p>We are given a Linux executable and need to determine the correct flag by reversing the program&#x27;s logic.</p>
+<h3>Step 1 – Initial Reconnaissance</h3>
+<p>The first step is identifying the file type.</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>file bike_lock
+Output:
+ELF 64-bit LSB executable</pre></div>
+<p>This tells us that the challenge is a compiled Linux binary and should be analyzed using reverse engineering tools such as:</p>
+<p>Ghidra</p>
+<p>IDA Pro</p>
+<p>Binary Ninja</p>
+<p>Radare2</p>
+<p>Running the program reveals that it asks for a PIN.</p>
+<p>Enter PIN:</p>
+<p>This suggests the challenge is centered around recovering or reconstructing the PIN validation logic.</p>
+<h3>Step 2 – Static Analysis</h3>
+<p>Loading the binary into Ghidra and locating main() reveals something unusual.</p>
+<p>Most beginner reverse-engineering challenges perform a direct comparison such as:</p>
+<p>if(strcmp(input, &quot;secret_pin&quot;) == 0)</p>
+<p>or</p>
+<p>if(input == expected)</p>
+<p>However, this binary does neither.</p>
+<p>Instead, it:</p>
+<p>Builds an internal numeric string.</p>
+<p>Performs several transformations.</p>
+<p>Uses the transformed values as indexes into another string.</p>
+<p>This indicates that the flag is generated dynamically.</p>
+<h3>Step 3 – Hidden Data</h3>
+<p>Inside the binary there are two important hardcoded strings.</p>
+<p>The first is a long lookup table:</p>
+<p>AweQbLpMnorTyUioZxcvbnmCQwertyuioTqwFer{TyUiopasRd@fghjknLzXcvbnmdQwerty0u0IopasdMFghjklzxc_VbnmqwerYCvbnZMqw4e2RtyuiopasuFghjklzx%SdfyGhjklzmNbmqwerty}</p>
+<p>At first glance it appears random.</p>
+<p>The second hidden string consists entirely of digits and is used internally to construct the effective PIN.</p>
+<h3>Step 4 – Understanding the Algorithm</h3>
+<p>After decompiling the relevant function, the following behavior becomes clear.</p>
+<p>The program does not use the user input directly.</p>
+<p>Instead it:</p>
+<h3>1. Constructs a numeric sequence</h3>
+<p>Several embedded strings are combined to form a larger digit sequence.</p>
+<p>Conceptually:</p>
+<p>pin_string = part1 + part2 + part3;</p>
+<h3>2. Takes Every Fourth Character</h3>
+<p>The program iterates through the numeric sequence using a stride of four.</p>
+<p>Pseudo-code:</p>
+<p>for(i = 0; i &lt; len(pin_string); i += 4)</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>{</pre></div>
+<p>selected += pin_string[i];</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>}</pre></div>
+<p>Example:</p>
+<p>1234567890123456</p>
+<p>^   ^   ^   ^</p>
+<p>1   5   9   3</p>
+<p>Only these positions are retained.</p>
+<h3>3. Convert Characters to Digits</h3>
+<p>Each selected character is converted into its numeric value.</p>
+<p>digit = ch - &#x27;0&#x27;;</p>
+<p>Result:</p>
+<p>1 5 9 3 ...</p>
+<h3>4. Compute Cumulative Offsets</h3>
+<p>The digits are not used directly.</p>
+<p>Instead the program continuously adds them together.</p>
+<p>Pseudo-code:</p>
+<p>sum += digit;</p>
+<p>index = sum;</p>
+<p>Example:</p>
+<p>Digits:</p>
+<p>1 5 9 3</p>
+<p>Cumulative:</p>
+<p>1</p>
+<p>6</p>
+<p>15</p>
+<p>18</p>
+<p>These cumulative totals become indexes into the lookup table.</p>
+<h3>Step 5 – Extracting Characters</h3>
+<p>The lookup string acts as a giant character array.</p>
+<p>Example:</p>
+<p>flag += lookup[index];</p>
+<p>Each cumulative index retrieves one character.</p>
+<p>Performing the process repeatedly yields:</p>
+<p>b</p>
+<p>o</p>
+<p>r</p>
+<p>o</p>
+<p>C</p>
+<p>T</p>
+<p>F</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>{
+...
+}</pre></div>
+<p>Eventually the complete flag emerges.</p>
+<h3>Step 6 – Reconstructing the Flag</h3>
+<p>Following all cumulative offsets and indexing operations produces:</p>
+<p>boroCTF{R@nd00M_YZ42u%ym}</p>
+<p>This is the exact string generated by the program.</p>
+<h3>Why This Works</h3>
+<p>The challenge tries to hide the flag by:</p>
+<p>Storing a seemingly random lookup table.</p>
+<p>Using arithmetic rather than direct comparisons.</p>
+<p>Generating indexes dynamically.</p>
+<p>Avoiding the flag appearing in plaintext anywhere in memory.</p>
+<p>However, once the indexing algorithm is understood, recovering the flag becomes straightforward.</p>
+<p>The entire protection mechanism ultimately boils down to:</p>
+<p>digit sequence</p>
+<p>↓</p>
+<p>every 4th digit</p>
+<p>↓</p>
+<p>cumulative sums</p>
+<p>↓</p>
+<p>lookup-table indexes</p>
+<p>↓</p>
+<p>flag characters</p>
+<p>boroCTF{R@nd00M_YZ42u%ym}</p>
+<h3>Lessons Learned</h3>
+<p>This challenge demonstrates a common reverse-engineering technique:</p>
+<p>Hide the flag inside a lookup table.</p>
+<p>Use arithmetic transformations to generate indexes.</p>
+<p>Reconstruct the flag at runtime rather than storing it directly.</p>
+<p>When reversing binaries, always look for:</p>
+<p>Large suspicious strings in .data</p>
+<p>Character indexing operations</p>
+<p>Arithmetic involving offsets</p>
+<p>Loops that build output character-by-character</p>
+<p>These patterns often indicate an encoded or generated flag.</p>
+        </section>
+
+        <section class="case-section" id="evidence" data-step="04">
+          <p class="eyebrow">proof locker</p>
+          <h2>Evidence</h2>
+          <div class="evidence-grid"><div class="evidence-card"><strong>Clue 01</strong><p>The flag is not stored directly in plaintext.</p></div><div class="evidence-card"><strong>Clue 02</strong><p>A long lookup table and digit-only strings drive the reconstruction.</p></div><div class="evidence-card"><strong>Clue 03</strong><p>Every fourth digit becomes cumulative indexes into the lookup table.</p></div></div>
+          
+        </section>
+
+        <section class="flag-vault" id="flag">
+          <p class="eyebrow">final artifact</p>
+          <h2>Flag</h2>
+          <code>boroCTF{R@nd00M_YZ42u%ym}</code>
+        </section>
+
+        <section class="case-section" id="lessons" data-step="06">
+          <p class="eyebrow">after action report</p>
+          <h2>Lessons Learned</h2>
+          <ul><li>Generated flags often hide behind arithmetic and lookup tables.</li><li>Large suspicious strings in .data deserve attention.</li><li>Rewriting the algorithm in pseudocode makes extraction straightforward.</li></ul>
+          <div class="footer-actions">
+            <a class="btn" href="../index.html">← Back to MyLibrary</a>
+            <a class="btn ghost" href="../../index.html">Back to Portfolio</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>easy-dsa — kitCTF / GPNCTF Writeup — Naim MyLibrary</title>
+  <meta name="description" content="Exploited undersized SHA-256-derived ECDSA nonces on P-521 as a Hidden Number Problem and recovered the signing key with LLL/CVP." />
+  <link rel="stylesheet" href="../writeup-template.css" />
+</head>
+<body style="--accent:#7cffc4;--accent-2:#b37eff;">
+  <main class="case-shell">
+    <nav class="case-nav" aria-label="Writeup navigation">
+      <a class="case-brand" href="../index.html">
+        <span class="case-mark">NM</span>
+        <span>Naim MyLibrary</span>
+      </a>
+      <div class="case-links">
+        <a href="../../index.html">Portfolio</a>
+        <a href="../index.html">Library</a>
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#flag">Flag</a>
+      </div>
+    </nav>
+
+    <header class="case-hero">
+      <section class="case-brief">
+        <p class="eyebrow">kitCTF / GPNCTF Crypto casefile</p>
+        <h1>easy-dsa</h1>
+        <p class="lead">Exploited undersized SHA-256-derived ECDSA nonces on P-521 as a Hidden Number Problem and recovered the signing key with LLL/CVP.</p>
+        <div class="meta-row">
+          <span class="chip">CTF: kitCTF / GPNCTF</span>
+          <span class="chip">Category: Crypto</span>
+          <span class="chip">Difficulty: Hard</span>
+          <span class="chip">No points listed</span>
+          <span class="chip">Tags: Crypto · ECDSA · P-521 · HNP · LLL</span>
+        </div>
+      </section>
+
+      <aside class="case-panel" aria-label="Writeup status panel">
+        <div class="case-panel-inner">
+          <p class="eyebrow">mission telemetry</p>
+          <div class="status-line"><span>Status</span><strong>Solved</strong></div>
+          <div class="status-line"><span>Method</span><strong>Recon → Analyze → Exploit</strong></div>
+          <div class="status-line"><span>Evidence</span><strong>Commands + reasoning</strong></div>
+          <div class="status-line"><span>Published</span><strong>2026-06-24</strong></div>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="note" style="margin-top:18px;">This writeup was formatted into the new kitCTF/GPNCTF section while preserving the original solution notes.</p>
+        </div>
+      </aside>
+    </header>
+
+    <div class="case-layout">
+      <aside class="case-toc">
+        <p>Case index</p>
+        <a href="#overview">00 / Overview</a>
+        <a href="#skills">01 / Skills</a>
+        <a href="#timeline">02 / Timeline</a>
+        <a href="#walkthrough">03 / Walkthrough</a>
+        <a href="#evidence">04 / Evidence</a>
+        <a href="#flag">05 / Flag</a>
+        <a href="#lessons">06 / Lessons</a>
+      </aside>
+
+      <article class="case-body">
+        <section class="case-section" id="overview" data-step="00">
+          <p class="eyebrow">operator brief</p>
+          <h2>Overview</h2>
+          <p>Exploited undersized SHA-256-derived ECDSA nonces on P-521 as a Hidden Number Problem and recovered the signing key with LLL/CVP.</p>
+          <div class="evidence-grid">
+            <div class="evidence-card"><strong>Challenge</strong><p>easy-dsa from kitCTF / GPNCTF.</p></div>
+            <div class="evidence-card"><strong>Category</strong><p>Crypto · Hard difficulty.</p></div>
+          </div>
+        </section>
+
+        <section class="case-section" id="skills" data-step="01">
+          <p class="eyebrow">skills demonstrated</p>
+          <h2>Skills Demonstrated</h2>
+          <div class="skill-grid"><span>ECDSA Math</span><span>Nonce Bias Analysis</span><span>Lattice Reduction</span><span>CVP</span><span>Signature Forgery</span></div>
+        </section>
+
+        <section class="case-section" id="timeline" data-step="02">
+          <p class="eyebrow">attack path</p>
+          <h2>Timeline</h2>
+          <div class="timeline"><div><strong>00</strong><p>Collect multiple chosen-message signatures.</p></div><div><strong>01</strong><p>Derive equations that eliminate the private key.</p></div><div><strong>02</strong><p>Build and reduce the lattice using LLL/CVP.</p></div><div><strong>03</strong><p>Recover the private key and forge a valid signature.</p></div></div>
+        </section>
+
+        <section class="case-section" id="walkthrough" data-step="03">
+          <p class="eyebrow">solution notes</p>
+          <h2>Walkthrough</h2>
+          <h3>easy-dsa Writeup</h3>
+<h3>Challenge Summary</h3>
+<p>The service implements an ECDSA-like signing system on curve P-521. We can ask the server to sign chosen messages, but we must forge a valid signature for a recipe that was not signed by the server.</p>
+<p>The final flag was:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>GPNCTF{MaY8E wE shOuld h4ve hIrED a PrOF3sSI0nAl?}</pre></div>
+<h3>Vulnerability</h3>
+<p>P-521 has an order of about 521 bits, so ECDSA nonces should also be about 521 bits.</p>
+<p>However, the challenge generated the nonce using SHA-256:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>k = sha256(...).digest()</pre></div>
+<p>So every nonce satisfies:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>k &lt; 2^256</pre></div>
+<p>That means the nonce is much smaller than the curve order.</p>
+<p>For ECDSA:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>s = k^-1 * (z + r*d) mod n</pre></div>
+<p>Rearranging:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>s*k = z + r*d mod n</pre></div>
+<p>where:</p>
+<ul><li><code>d</code> is the private key</li><li><code>k</code> is the nonce</li><li><code>z</code> is the hash of the message</li><li><code>(r, s)</code> is the signature</li><li><code>n</code> is the curve order</li></ul>
+<p>For two signatures:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>s0*k0 = z0 + r0*d mod n
+si*ki = zi + ri*d mod n</pre></div>
+<p>Eliminate <code>d</code>:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>ri*s0*k0 - r0*si*ki = ri*z0 - r0*zi mod n</pre></div>
+<p>Because all <code>k</code> values are small, this becomes a Hidden Number Problem. We can solve it with LLL/CVP.</p>
+<h3>Exploit Strategy</h3>
+<ol><li>Connect to the remote service.</li><li>Request the public key.</li><li>Ask for several signatures on chosen messages.</li><li>Build a lattice from the equations above.</li><li>Recover one small nonce <code>k0</code>.</li><li>Compute the private key:</li></ol>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>d = (s0*k0 - z0) * r0^-1 mod n</pre></div>
+<ol><li>Verify that <code>d*G</code> equals the server public key.</li><li>Forge a signature for a new recipe.</li><li>Submit it to get the flag.</li></ol>
+<h3>Solver</h3>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>import socket, ssl, re
+from hashlib import sha256
+from fpylll import IntegerMatrix, LLL, CVP
+from Crypto.PublicKey import ECC
+
+HOST = &quot;grilled-salmon-with-juiced-rosemary-4wow.gpn24.ctf.kitctf.de&quot;
+PORT = 443
+
+curve = ECC._curves[&quot;p521&quot;] if &quot;p521&quot; in ECC._curves else ECC._curves[&quot;P-521&quot;]
+n = int(curve.order)
+G = curve.G
+
+def H(m):
+    return int.from_bytes(sha256(m).digest(), &quot;big&quot;)
+
+def recv_until(s, marker):
+    data = b&quot;&quot;
+    while marker not in data:
+        data += s.recv(4096)
+    return data
+
+def sendline(s, x):
+    s.sendall(x + b&quot;\n&quot;)
+
+def parse_sig(out):
+    r = int(re.search(rb&quot;s1:\s*(0x[0-9a-f]+)&quot;, out).group(1), 16)
+    ss = int(re.search(rb&quot;s2:\s*(0x[0-9a-f]+)&quot;, out).group(1), 16)
+    return r, ss
+
+ctx = ssl.create_default_context()
+s = ctx.wrap_socket(socket.socket(), server_hostname=HOST)
+s.connect((HOST, PORT))
+
+recv_until(s, b&quot;&gt; &quot;)
+
+sendline(s, b&quot;get pkey&quot;)
+out = recv_until(s, b&quot;&gt; &quot;)
+qx = int(re.search(rb&quot;x:\s*([0-9]+)&quot;, out).group(1))
+qy = int(re.search(rb&quot;y:\s*([0-9]+)&quot;, out).group(1))
+
+msgs = [f&quot;recipe{i}&quot;.encode() for i in range(8)]
+sigs = []
+
+for m in msgs:
+    sendline(s, b&quot;sign &quot; + m.hex().encode())
+    out = recv_until(s, b&quot;&gt; &quot;)
+    sigs.append(parse_sig(out))
+
+mcount = len(msgs)
+dim = mcount + (mcount - 1)
+
+S = 1 &lt;&lt; 120
+rows = []
+
+for j in range(mcount):
+    row = [0] * dim
+    row[j] = 1
+
+    for eq in range(1, mcount):
+        idx = mcount + eq - 1
+
+        r0, s0 = sigs[0]
+        ri, si = sigs[eq]
+
+        if j == 0:
+            row[idx] = ((ri * s0) % n) * S
+        elif j == eq:
+            row[idx] = ((-r0 * si) % n) * S
+
+    rows.append(row)
+
+for eq in range(1, mcount):
+    row = [0] * dim
+    row[mcount + eq - 1] = n * S
+    rows.append(row)
+
+target = [0] * dim
+
+for eq in range(1, mcount):
+    r0, s0 = sigs[0]
+    ri, si = sigs[eq]
+    target[mcount + eq - 1] = ((ri * H(msgs[0]) - r0 * H(msgs[eq])) % n) * S
+
+M = IntegerMatrix.from_matrix(rows)
+LLL.reduction(M)
+v = CVP.closest_vector(M, tuple(target))
+
+k0 = int(v[0])
+r0, s0 = sigs[0]
+z0 = H(msgs[0])
+
+d = None
+for kk in [k0, -k0, k0 % n, (-k0) % n]:
+    cand = ((s0 * kk - z0) * pow(r0, -1, n)) % n
+    P = cand * G
+    if int(P.x) == qx and int(P.y) == qy:
+        d = cand
+        break
+
+if d is None:
+    print(&quot;failed&quot;)
+    exit()
+
+print(&quot;[+] private key:&quot;, hex(d))
+
+msg = b&quot;give me the flag&quot;
+k = 1337
+P = k * G
+fr = int(P.x) % n
+fs = (pow(k, -1, n) * (H(msg) + fr * d)) % n
+
+sendline(s, b&quot;flag please&quot;)
+recv_until(s, b&quot;recipe&quot;)
+sendline(s, msg.hex().encode())
+recv_until(s, b&quot;s1&quot;)
+sendline(s, hex(fr).encode())
+recv_until(s, b&quot;s2&quot;)
+sendline(s, hex(fs).encode())
+
+print(s.recv(4096).decode(errors=&quot;ignore&quot;))</pre></div>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>GPNCTF{MaY8E wE shOuld h4ve hIrED a PrOF3sSI0nAl?}</pre></div>
+<h3>Takeaway</h3>
+<p>The challenge looked like normal ECDSA on a strong curve, but the nonce generation was broken. Using a 256-bit nonce on P-521 leaks enough information for a lattice attack. Once one nonce is recovered, the private key follows immediately, allowing arbitrary signature forgery.</p>
+        </section>
+
+        <section class="case-section" id="evidence" data-step="04">
+          <p class="eyebrow">proof locker</p>
+          <h2>Evidence</h2>
+          <div class="evidence-grid"><div class="evidence-card"><strong>Clue 01</strong><p>P-521 expects roughly 521-bit nonces, but SHA-256 bounds k below 2^256.</p></div><div class="evidence-card"><strong>Clue 02</strong><p>Small nonces turn the signatures into a Hidden Number Problem.</p></div><div class="evidence-card"><strong>Clue 03</strong><p>Recovered d verifies against the public key before forging the final signature.</p></div></div>
+        </section>
+
+        <section class="flag-vault" id="flag">
+          <p class="eyebrow">final artifact</p>
+          <h2>Flag</h2>
+          <code>GPNCTF{MaY8E wE shOuld h4ve hIrED a PrOF3sSI0nAl?}</code>
+        </section>
+
+        <section class="case-section" id="lessons" data-step="06">
+          <p class="eyebrow">after action report</p>
+          <h2>Lessons Learned</h2>
+          <ul><li>Strong curves still fail with weak nonce generation.</li><li>Nonce size must match the group order security requirements.</li><li>Always verify recovered keys against the public key before forging.</li></ul>
+          <div class="footer-actions">
+            <a class="btn" href="../index.html">← Back to MyLibrary</a>
+            <a class="btn ghost" href="../../index.html">Back to Portfolio</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

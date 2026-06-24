@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Johnny Boy — boroCTF Writeup — Naim MyLibrary</title>
+  <meta name="description" content="Read the archive filenames as a hint, cracked encrypted ZIPs with John, then used a chip-themed targeted wordlist for the final password." />
+  <link rel="stylesheet" href="../writeup-template.css" />
+</head>
+<body style="--accent:#c7ff68;--accent-2:#ffc254;">
+  <main class="case-shell">
+    <nav class="case-nav" aria-label="Writeup navigation">
+      <a class="case-brand" href="../index.html">
+        <span class="case-mark">NM</span>
+        <span>Naim MyLibrary</span>
+      </a>
+      <div class="case-links">
+        <a href="../../index.html">Portfolio</a>
+        <a href="../index.html">Library</a>
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#flag">Flag</a>
+      </div>
+    </nav>
+
+    <header class="case-hero">
+      <section class="case-brief">
+        <p class="eyebrow">boroCTF Crypto casefile</p>
+        <h1>Johnny Boy</h1>
+        <p class="lead">Read the archive filenames as a hint, cracked encrypted ZIPs with John, then used a chip-themed targeted wordlist for the final password.</p>
+        <div class="meta-row">
+          <span class="chip">CTF: boroCTF</span>
+          <span class="chip">Category: Crypto</span>
+          <span class="chip">Difficulty: Medium</span>
+          <span class="chip">No points listed</span>
+          <span class="chip">Solves not listed</span>
+          <span class="chip">Tags: John the Ripper · ZIP · Wordlists · AES ZIP</span>
+        </div>
+      </section>
+
+      <aside class="case-panel" aria-label="Writeup status panel">
+        <div class="case-panel-inner">
+          <p class="eyebrow">mission telemetry</p>
+          <div class="status-line"><span>Status</span><strong>Solved</strong></div>
+          <div class="status-line"><span>Method</span><strong>Recon → Analyze → Exploit</strong></div>
+          <div class="status-line"><span>Evidence</span><strong>Commands + reasoning</strong></div>
+          <div class="status-line"><span>Published</span><strong>2026-06-11</strong></div>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="note" style="margin-top:18px;">This writeup is formatted for Naim's portfolio with the original solution flow preserved from the uploaded notes.</p>
+        </div>
+      </aside>
+    </header>
+
+    <div class="case-layout">
+      <aside class="case-toc">
+        <p>Case index</p>
+        <a href="#overview">00 / Overview</a>
+        <a href="#skills">01 / Skills</a>
+        <a href="#timeline">02 / Timeline</a>
+        <a href="#walkthrough">03 / Walkthrough</a>
+        <a href="#evidence">04 / Evidence</a>
+        <a href="#flag">05 / Flag</a>
+        <a href="#lessons">06 / Lessons</a>
+      </aside>
+
+      <article class="case-body">
+        <section class="case-section" id="overview" data-step="00">
+          <p class="eyebrow">operator brief</p>
+          <h2>Overview</h2>
+          <p>Read the archive filenames as a hint, cracked encrypted ZIPs with John, then used a chip-themed targeted wordlist for the final password.</p>
+          <div class="evidence-grid">
+            <div class="evidence-card"><strong>Challenge</strong><p>Johnny Boy from boroCTF.</p></div>
+            <div class="evidence-card"><strong>Category</strong><p>Crypto Writeups · Medium difficulty.</p></div>
+          </div>
+          
+        </section>
+
+        <section class="case-section" id="skills" data-step="01">
+          <p class="eyebrow">skills demonstrated</p>
+          <h2>Skills Demonstrated</h2>
+          <div class="skill-grid"><span>zip2john</span><span>John Rules</span><span>7z Extraction</span><span>Wordlist Filtering</span></div>
+        </section>
+
+        <section class="case-section" id="timeline" data-step="02">
+          <p class="eyebrow">attack path</p>
+          <h2>Timeline</h2>
+          <div class="timeline"><div><strong>00</strong><p>Notice the archive filenames form a sentence.</p></div><div><strong>01</strong><p>Convert each ZIP to John hash format.</p></div><div><strong>02</strong><p>Crack the first three with rockyou.txt.</p></div><div><strong>03</strong><p>Build a chip-focused wordlist and apply John rules.</p></div><div><strong>04</strong><p>Extract RIPPER.log and read the flag.</p></div></div>
+        </section>
+
+        <section class="case-section" id="walkthrough" data-step="03">
+          <p class="eyebrow">solution notes</p>
+          <h2>Walkthrough</h2>
+          <h3>Challenge Summary</h3>
+<p>We were given four encrypted ZIP archives:</p>
+<p>a_USE.zip</p>
+<p>b_JOHN.zip</p>
+<p>c_THE.zip</p>
+<p>d_RIPPER.zip</p>
+<p>The filenames immediately looked suspicious. Reading them in order gives the phrase:</p>
+<p>USE JOHN THE RIPPER</p>
+<p>This strongly hinted that the intended solution was to use John the Ripper to crack the ZIP passwords.</p>
+<h3>Initial Extraction Attempt</h3>
+<p>First, I tried extracting the files normally:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>unzip a_USE.zip
+unzip b_JOHN.zip
+unzip c_THE.zip
+unzip d_RIPPER.zip</pre></div>
+<p>However, unzip failed with errors like:</p>
+<p>need PK compat. v5.1 (can do v4.6)</p>
+<p>This suggested that the ZIP files used a newer ZIP encryption method, likely AES encryption, which the default unzip tool could not handle properly.</p>
+<p>Instead of using unzip, I switched to 7z for extraction after cracking the passwords.</p>
+<h3>Converting ZIPs to John Hashes</h3>
+<p>John the Ripper cannot directly crack ZIP files without first converting them into hash format. For that, I used zip2john.</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>zip2john a_USE.zip &gt; hashes.txt
+zip2john b_JOHN.zip &gt;&gt; hashes.txt
+zip2john c_THE.zip &gt;&gt; hashes.txt
+zip2john d_RIPPER.zip &gt;&gt; hashes.txt</pre></div>
+<p>This created a single hash file containing all four ZIP password hashes.</p>
+<h3>Cracking with RockYou</h3>
+<p>Next, I ran John using the common rockyou.txt wordlist:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>john hashes.txt --wordlist=/usr/share/wordlists/rockyou.txt</pre></div>
+<p>John successfully cracked three passwords:</p>
+<p>chips            (a_USE.zip/USE.log)</p>
+<p>fishandchips     (b_JOHN.zip/JOHN.log)</p>
+<p>sunchips         (c_THE.zip/THE.log)</p>
+<p>So the first three ZIP passwords were:</p>
+<p>a_USE.zip   -&gt; chips</p>
+<p>b_JOHN.zip  -&gt; fishandchips</p>
+<p>c_THE.zip   -&gt; sunchips</p>
+<h3>Extracting the First Three Archives</h3>
+<p>Since unzip had trouble with the archives, I used 7z:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>7z x a_USE.zip -pchips
+7z x b_JOHN.zip -pfishandchips
+7z x c_THE.zip -psunchips</pre></div>
+<p>This extracted three log files:</p>
+<p>USE.log</p>
+<p>JOHN.log</p>
+<p>THE.log</p>
+<p>Reading them showed some story/hint text:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>cat USE.log
+cat JOHN.log
+cat THE.log</pre></div>
+<p>The logs said:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>[2026] INFO PASSWORD INSECURE PLEASE MOVE LOGS
+[2026] MESSAGE SYSADMIN &quot;fine I&#x27;ll move them&quot;
+[2026] INFO PLEASE MAKE BETTER PASSWORDS
+[2026] SYSADMIN MESSAGE &quot;NO&quot;</pre></div>
+<p>This confirmed that the challenge was about weak/reused-style passwords.</p>
+<h3>Cracking the Final ZIP</h3>
+<p>The last archive, d_RIPPER.zip, was not cracked during the first run. Since all cracked passwords were related to chips, I created a smaller targeted wordlist from rockyou.txt:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>grep -i &quot;chip&quot; /usr/share/wordlists/rockyou.txt &gt; chip_words.txt</pre></div>
+<p>Then I generated a hash file for only the final ZIP:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>zip2john d_RIPPER.zip &gt; ripper_hash.txt</pre></div>
+<p>I ran John again, this time using the filtered wordlist with rules:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>john ripper_hash.txt --wordlist=chip_words.txt --rules</pre></div>
+<p>This successfully cracked the final password:</p>
+<p>chip!            (d_RIPPER.zip/RIPPER.log)</p>
+<p>So the final password was:</p>
+<p>chip!</p>
+<h3>Extracting the Final Archive</h3>
+<p>Because the password contains an exclamation mark, I quoted it to prevent shell interpretation issues:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>7z x d_RIPPER.zip -p&#x27;chip!&#x27;</pre></div>
+<p>This extracted:</p>
+<p>RIPPER.log</p>
+<p>Reading the file:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>cat RIPPER.log</pre></div>
+<p>gave:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>[2026] ALL PASSWORDS HAVE BEEN BREACHED
+[2026] SYSADMIN MESSAGE &quot;boroCTF{L@_R11pP3r;}&quot;</pre></div>
+<p>boroCTF{L@_R11pP3r;}</p>
+<h3>Key Takeaways</h3>
+<p>The filenames themselves formed the hint:</p>
+<p>USE JOHN THE RIPPER</p>
+<p>The challenge required converting encrypted ZIP files into John-compatible hashes using zip2john, then cracking them with a wordlist. The first three passwords revealed a pattern involving the word chips, which helped build a targeted attack for the final archive. Using John rules transformed chip into chip!, revealing the last password and the final flag.</p>
+        </section>
+
+        <section class="case-section" id="evidence" data-step="04">
+          <p class="eyebrow">proof locker</p>
+          <h2>Evidence</h2>
+          <div class="evidence-grid"><div class="evidence-card"><strong>Clue 01</strong><p>The filenames spell USE JOHN THE RIPPER.</p></div><div class="evidence-card"><strong>Clue 02</strong><p>zip2john converts the encrypted archives into crackable hashes.</p></div><div class="evidence-card"><strong>Clue 03</strong><p>Three cracked chip-themed passwords suggest a targeted chip wordlist for the final archive.</p></div></div>
+          
+        </section>
+
+        <section class="flag-vault" id="flag">
+          <p class="eyebrow">final artifact</p>
+          <h2>Flag</h2>
+          <code>boroCTF{L@_R11pP3r;}</code>
+        </section>
+
+        <section class="case-section" id="lessons" data-step="06">
+          <p class="eyebrow">after action report</p>
+          <h2>Lessons Learned</h2>
+          <ul><li>Filenames can contain direct operational hints.</li><li>When general cracking stalls, create a targeted candidate set.</li><li>Quote shell-special passwords like chip! during extraction.</li></ul>
+          <div class="footer-actions">
+            <a class="btn" href="../index.html">← Back to MyLibrary</a>
+            <a class="btn ghost" href="../../index.html">Back to Portfolio</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

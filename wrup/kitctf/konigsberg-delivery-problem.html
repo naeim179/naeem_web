@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Königsberg Delivery Problem — kitCTF / GPNCTF Writeup — Naim MyLibrary</title>
+  <meta name="description" content="Converted a giant CFG/state-machine validator into a graph traversal problem and generated the required 250-value semicolon payload." />
+  <link rel="stylesheet" href="../writeup-template.css" />
+</head>
+<body style="--accent:#7cffc4;--accent-2:#b37eff;">
+  <main class="case-shell">
+    <nav class="case-nav" aria-label="Writeup navigation">
+      <a class="case-brand" href="../index.html">
+        <span class="case-mark">NM</span>
+        <span>Naim MyLibrary</span>
+      </a>
+      <div class="case-links">
+        <a href="../../index.html">Portfolio</a>
+        <a href="../index.html">Library</a>
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#flag">Flag</a>
+      </div>
+    </nav>
+
+    <header class="case-hero">
+      <section class="case-brief">
+        <p class="eyebrow">kitCTF / GPNCTF Reverse casefile</p>
+        <h1>Königsberg Delivery Problem</h1>
+        <p class="lead">Converted a giant CFG/state-machine validator into a graph traversal problem and generated the required 250-value semicolon payload.</p>
+        <div class="meta-row">
+          <span class="chip">CTF: kitCTF / GPNCTF</span>
+          <span class="chip">Category: Reverse</span>
+          <span class="chip">Difficulty: Medium</span>
+          <span class="chip">100 points</span>
+          <span class="chip">Tags: Reverse · Ghidra · CFG · Graph Theory · State Machine</span>
+        </div>
+      </section>
+
+      <aside class="case-panel" aria-label="Writeup status panel">
+        <div class="case-panel-inner">
+          <p class="eyebrow">mission telemetry</p>
+          <div class="status-line"><span>Status</span><strong>Solved</strong></div>
+          <div class="status-line"><span>Method</span><strong>Recon → Analyze → Exploit</strong></div>
+          <div class="status-line"><span>Evidence</span><strong>Commands + reasoning</strong></div>
+          <div class="status-line"><span>Published</span><strong>2026-06-24</strong></div>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="note" style="margin-top:18px;">This writeup was formatted into the new kitCTF/GPNCTF section while preserving the original solution notes.</p>
+        </div>
+      </aside>
+    </header>
+
+    <div class="case-layout">
+      <aside class="case-toc">
+        <p>Case index</p>
+        <a href="#overview">00 / Overview</a>
+        <a href="#skills">01 / Skills</a>
+        <a href="#timeline">02 / Timeline</a>
+        <a href="#walkthrough">03 / Walkthrough</a>
+        <a href="#evidence">04 / Evidence</a>
+        <a href="#flag">05 / Flag</a>
+        <a href="#lessons">06 / Lessons</a>
+      </aside>
+
+      <article class="case-body">
+        <section class="case-section" id="overview" data-step="00">
+          <p class="eyebrow">operator brief</p>
+          <h2>Overview</h2>
+          <p>Converted a giant CFG/state-machine validator into a graph traversal problem and generated the required 250-value semicolon payload.</p>
+          <div class="evidence-grid">
+            <div class="evidence-card"><strong>Challenge</strong><p>Königsberg Delivery Problem from kitCTF / GPNCTF.</p></div>
+            <div class="evidence-card"><strong>Category</strong><p>Reverse · Medium difficulty.</p></div>
+          </div>
+        </section>
+
+        <section class="case-section" id="skills" data-step="01">
+          <p class="eyebrow">skills demonstrated</p>
+          <h2>Skills Demonstrated</h2>
+          <div class="skill-grid"><span>Control-Flow Graph Analysis</span><span>State Machine Reversal</span><span>Graph Traversal</span><span>Payload Generation</span></div>
+        </section>
+
+        <section class="case-section" id="timeline" data-step="02">
+          <p class="eyebrow">attack path</p>
+          <h2>Timeline</h2>
+          <div class="timeline"><div><strong>00</strong><p>Notice the Euler/Königsberg hint in the challenge title.</p></div><div><strong>01</strong><p>Find the massive cfg() state machine in Ghidra.</p></div><div><strong>02</strong><p>Extract transitions and solve the graph path.</p></div><div><strong>03</strong><p>Send the 250 semicolon-separated node IDs to the remote service.</p></div></div>
+        </section>
+
+        <section class="case-section" id="walkthrough" data-step="03">
+          <p class="eyebrow">solution notes</p>
+          <h2>Walkthrough</h2>
+          <h3>Königsberg Delivery Problem — GPNCTF Writeup</h3>
+<h3>Challenge Information</h3>
+<p><strong>Category:</strong> Reversing <strong>Points:</strong> 100 <strong>Challenge Name:</strong> Königsberg Delivery Problem</p>
+<h4>Description</h4>
+<p>&gt; Euler is delivering pizza in Königsberg, but his route planning skills are questionable. Can you help him?</p>
+<p>The title immediately hints at the famous <strong>Seven Bridges of Königsberg</strong> problem, which led Euler to the creation of graph theory and Eulerian paths.</p>
+<hr />
+<h3>Initial Analysis</h3>
+<p>Running <code>file</code> on the binary:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>file cartographer</pre></div>
+<p>Output:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>ELF 64-bit LSB executable
+not stripped</pre></div>
+<p>The binary was not stripped, making reversing significantly easier.</p>
+<p>Opening the binary in Ghidra revealed only a few interesting functions:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>main
+cfg
+check_instance</pre></div>
+<p>The most suspicious function was <code>cfg()</code>, which was extremely large and contained hundreds of jump-table branches.</p>
+<hr />
+<h3>Analyzing main()</h3>
+<p>The decompiled <code>main()</code> looked unusual:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>scanf(fmt_0,   &amp;local_102);
+scanf(fmt_1,   &amp;local_101);
+scanf(fmt_2,   &amp;local_100);
+...
+scanf(fmt_249, &amp;local_9);
+
+cfg(&amp;local_102);</pre></div>
+<p>The program performs <strong>250 separate scanf calls</strong> and then passes the resulting buffer to <code>cfg()</code>.</p>
+<p>This tells us:</p>
+<ol><li>The input length is fixed.</li><li>The challenge expects exactly 250 values.</li><li>The entire validation logic is hidden inside <code>cfg()</code>.</li></ol>
+<hr />
+<h3>Understanding cfg()</h3>
+<p>The <code>cfg()</code> function is enormous.</p>
+<p>Instead of performing ordinary checks, it behaves like a giant state machine:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>switch(state) {
+    case 0:
+        ...
+    case 1:
+        ...
+    case 2:
+        ...
+}</pre></div>
+<p>Every input byte causes a transition from one node to another.</p>
+<p>The function name itself is a clue:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>cfg = Control Flow Graph</pre></div>
+<p>The challenge is literally asking us to traverse a graph.</p>
+<hr />
+<h3>The Graph Interpretation</h3>
+<p>After reconstructing the state transitions, the structure becomes a graph:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>node0 -&gt; node2
+node2 -&gt; node3
+node3 -&gt; node4
+...</pre></div>
+<p>The challenge title now makes sense.</p>
+<p>Euler&#x27;s Königsberg problem is a graph traversal problem.</p>
+<p>The validator expects a specific walk through the graph.</p>
+<hr />
+<h3>Recovering the Correct Path</h3>
+<p>By extracting all transitions and solving the graph, we obtain a sequence of node IDs that traverses the graph correctly and eventually reaches the success state.</p>
+<p>The recovered path contains <strong>250 values</strong>.</p>
+<hr />
+<h3>Generating the Payload</h3>
+<p>A simple Python script can generate the required input:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>vals = [
+0,0,0,2,3,0,3,4,3,3,5,6,3,6,5,6,
+# ... 250 values total ...
+78,90,102,98,89,115,111,98,112,127
+]
+
+print(&quot;;&quot;.join(map(str, vals)) + &quot;;&quot;)</pre></div>
+<p>The binary expects values separated by semicolons.</p>
+<p>Example:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>0;0;0;2;3;0;...</pre></div>
+<hr />
+<h3>Local Verification</h3>
+<p>Running locally:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>./cartographer &lt; payload.txt</pre></div>
+<p>produces:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>Congratulations!</pre></div>
+<p>or directly prints the flag when the local flag file exists.</p>
+<hr />
+<h3>Remote Exploitation</h3>
+<p>Connecting to the remote service:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>ncat --ssl deep-fried-paella-beside-toasted-rosemary-vdis.gpn24.ctf.kitctf.de 443</pre></div>
+<p>and sending the generated payload returns:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>GPNCTF{say_Euler_ThE_OwL_Owl5_1N_KöNIgs8erg_10_tImES_FAs7!}</pre></div>
+<hr />
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>GPNCTF{say_Euler_ThE_OwL_Owl5_1N_KöNIgs8erg_10_tImES_FAs7!}</pre></div>
+<hr />
+<h3>Takeaways</h3>
+<p>This challenge disguises a graph traversal problem as a massive control-flow graph.</p>
+<p>Key observations:</p>
+<ol><li><code>cfg()</code> literally stands for <strong>Control Flow Graph</strong>.</li><li>The challenge title references Euler and Königsberg.</li><li>The validator is implemented as a huge state machine.</li><li>Solving the graph yields the exact sequence of 250 node transitions required to reach the success state.</li></ol>
+<p>The challenge is a clever combination of reversing and graph theory, where recognizing the Euler/Königsberg hint is the key to understanding the intended solution path.</p>
+        </section>
+
+        <section class="case-section" id="evidence" data-step="04">
+          <p class="eyebrow">proof locker</p>
+          <h2>Evidence</h2>
+          <div class="evidence-grid"><div class="evidence-card"><strong>Clue 01</strong><p>The binary performs 250 scanf calls before cfg().</p></div><div class="evidence-card"><strong>Clue 02</strong><p>The not-stripped ELF exposes cfg and check_instance symbols.</p></div><div class="evidence-card"><strong>Clue 03</strong><p>The accepted payload reaches the success state and prints the flag.</p></div></div>
+        </section>
+
+        <section class="flag-vault" id="flag">
+          <p class="eyebrow">final artifact</p>
+          <h2>Flag</h2>
+          <code>GPNCTF{say_Euler_ThE_OwL_Owl5_1N_KöNIgs8erg_10_tImES_FAs7!}</code>
+        </section>
+
+        <section class="case-section" id="lessons" data-step="06">
+          <p class="eyebrow">after action report</p>
+          <h2>Lessons Learned</h2>
+          <ul><li>Challenge titles can reveal the mathematical model.</li><li>A large switch/cfg can represent a graph rather than ordinary checks.</li><li>Generating the validator input is cleaner than manually entering values.</li></ul>
+          <div class="footer-actions">
+            <a class="btn" href="../index.html">← Back to MyLibrary</a>
+            <a class="btn ghost" href="../../index.html">Back to Portfolio</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

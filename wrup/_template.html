@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Challenge Title — Naim MyLibrary</title>
+  <meta name="description" content="A clear CTF writeup casefile: challenge overview, recon, exploitation path, evidence, flag, and lessons learned." />
+  <!-- When this file is copied into wrup/web, wrup/pwn, etc. keep this path as ../writeup-template.css -->
+  <link rel="stylesheet" href="../writeup-template.css" />
+</head>
+<body style="--accent:#73fbff;--accent-2:#ff55b1;">
+  <main class="case-shell">
+    <nav class="case-nav" aria-label="Writeup navigation">
+      <a class="case-brand" href="../index.html">
+        <span class="case-mark">NM</span>
+        <span>Naim MyLibrary</span>
+      </a>
+      <div class="case-links">
+        <a href="../../index.html">Portfolio</a>
+        <a href="../index.html">Library</a>
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#lessons">Lessons</a>
+      </div>
+    </nav>
+
+    <header class="case-hero">
+      <section class="case-brief">
+        <p class="eyebrow">Category casefile</p>
+        <h1>Your Challenge Title</h1>
+        <p class="lead">One strong sentence that tells the reader what you solved and what technique mattered.</p>
+        <div class="meta-row">
+          <span class="chip">CTF: Competition / Lab Name</span>
+          <span class="chip">Category: Web / Pwn / Reverse / Crypto / Forensics / Misc</span>
+          <span class="chip">Difficulty: Easy / Medium / Hard</span>
+          <span class="chip">Points: 000</span>
+          <span class="chip">Date: YYYY-MM-DD</span>
+          <span class="chip">Tags: Tool · Technique · Topic</span>
+        </div>
+      </section>
+
+      <aside class="case-panel" aria-label="Writeup status panel">
+        <div class="case-panel-inner">
+          <p class="eyebrow">mission telemetry</p>
+          <div class="status-line"><span>Status</span><strong>Public writeup</strong></div>
+          <div class="status-line"><span>Method</span><strong>Recon → Exploit → Proof</strong></div>
+          <div class="status-line"><span>Evidence</span><strong>Commands + screenshots</strong></div>
+          <div class="status-line"><span>Flag</span><strong>Redact if required</strong></div>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="note" style="margin-top:18px;">Use this as your repeatable CTF structure. It is not mandatory, but it looks professional and makes your thinking easy to follow.</p>
+        </div>
+      </aside>
+    </header>
+
+    <div class="case-layout">
+      <aside class="case-toc">
+        <p>Case index</p>
+        <a href="#overview">00 / Overview</a>
+        <a href="#skills">01 / Skills</a>
+        <a href="#timeline">02 / Timeline</a>
+        <a href="#recon">03 / Recon</a>
+        <a href="#walkthrough">04 / Walkthrough</a>
+        <a href="#evidence">05 / Evidence</a>
+        <a href="#flag">06 / Flag</a>
+        <a href="#lessons">07 / Lessons</a>
+      </aside>
+
+      <article class="case-body">
+        <section class="case-section" id="overview" data-step="00">
+          <p class="eyebrow">operator brief</p>
+          <h2>Overview</h2>
+          <p>Write the challenge goal, what files or target were provided, and the final objective. Keep this section short so readers know what they are about to learn.</p>
+          <div class="evidence-grid">
+            <div class="evidence-card"><strong>Target</strong><p>URL, binary, PCAP, disk image, service address, or attachment name.</p></div>
+            <div class="evidence-card"><strong>Core idea</strong><p>The main weakness or trick: SQLi, weak token, buffer overflow, XOR, stego, etc.</p></div>
+          </div>
+        </section>
+
+        <section class="case-section" id="skills" data-step="01">
+          <p class="eyebrow">portfolio value</p>
+          <h2>Skills demonstrated</h2>
+          <div class="skill-grid">
+            <span>Enumeration</span>
+            <span>Tool usage</span>
+            <span>Exploit reasoning</span>
+            <span>Clean documentation</span>
+          </div>
+          <p class="note">This section is great for recruiters and teammates because it translates the writeup into practical skills.</p>
+        </section>
+
+        <section class="case-section" id="timeline" data-step="02">
+          <p class="eyebrow">solve path</p>
+          <h2>Timeline</h2>
+          <div class="timeline">
+            <div><strong>00:00</strong><p>Read challenge description and checked provided files.</p></div>
+            <div><strong>00:10</strong><p>Found the first suspicious behavior or artifact.</p></div>
+            <div><strong>00:25</strong><p>Built a payload, script, or hypothesis that worked.</p></div>
+            <div><strong>00:35</strong><p>Recovered the flag and wrote down lessons learned.</p></div>
+          </div>
+        </section>
+
+        <section class="case-section" id="recon" data-step="03">
+          <p class="eyebrow">first contact</p>
+          <h2>Recon</h2>
+          <p>Document your first observations. Explain why each command or clue mattered instead of only pasting output.</p>
+          <div class="terminal">
+            <div class="terminal-top"><span></span><span></span><span></span></div>
+            <pre><b>$</b> nmap -sC -sV target
+<b>$</b> ffuf -u http://target/FUZZ -w wordlist.txt
+<b>#</b> Replace these commands with your real recon steps.</pre>
+          </div>
+        </section>
+
+        <section class="case-section" id="walkthrough" data-step="04">
+          <p class="eyebrow">attack chain</p>
+          <h2>Walkthrough</h2>
+          <ol>
+            <li>Explain the vulnerability or main weakness you discovered.</li>
+            <li>Show the exact payload, script, request, or reasoning used to exploit it.</li>
+            <li>Explain how the exploit leads to the next stage or final flag.</li>
+          </ol>
+          <div class="terminal">
+            <div class="terminal-top"><span></span><span></span><span></span></div>
+            <pre><b>$</b> python3 exploit.py
+[+] stage 1 complete
+[+] flag material recovered</pre>
+          </div>
+        </section>
+
+        <section class="case-section" id="evidence" data-step="05">
+          <p class="eyebrow">proof locker</p>
+          <h2>Evidence</h2>
+          <p>Add screenshots inside <code>wrup/assets/</code> and reference them with relative paths. Keep huge logs out of the page.</p>
+          <figure class="screenshot-frame">
+            <div class="screenshot-placeholder">Drop screenshot here</div>
+            <figcaption>Example caption: suspicious response, disassembly clue, packet stream, or final proof.</figcaption>
+          </figure>
+          <div class="evidence-grid">
+            <div class="evidence-card"><strong>Clue 01</strong><p>Suspicious response, function, packet, hidden string, or artifact.</p></div>
+            <div class="evidence-card"><strong>Validation</strong><p>How you confirmed this was the correct path.</p></div>
+          </div>
+        </section>
+
+        <section class="flag-vault" id="flag">
+          <p class="eyebrow">final artifact</p>
+          <h2>Flag</h2>
+          <code>FLAG&#123;replace_with_real_flag_or_redacted_proof&#125;</code>
+          <p class="note">For active competitions, publish only after the CTF ends and follow event rules.</p>
+        </section>
+
+        <section class="case-section" id="lessons" data-step="07">
+          <p class="eyebrow">after action report</p>
+          <h2>Lessons learned</h2>
+          <ul>
+            <li>What was the key mistake or trick?</li>
+            <li>What tool or technique helped most?</li>
+            <li>How would you detect or prevent this in real systems?</li>
+          </ul>
+          <div class="footer-actions">
+            <a class="btn" href="../index.html">← Back to MyLibrary</a>
+            <a class="btn ghost" href="../../index.html">Back to Portfolio</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

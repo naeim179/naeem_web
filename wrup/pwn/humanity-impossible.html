@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Humanity Impossible — boroCTF Writeup — Naim MyLibrary</title>
+  <meta name="description" content="Automated a remote service that requested a changing hex-sized payload on every round." />
+  <link rel="stylesheet" href="../writeup-template.css" />
+</head>
+<body style="--accent:#ff5294;--accent-2:#73fbff;">
+  <main class="case-shell">
+    <nav class="case-nav" aria-label="Writeup navigation">
+      <a class="case-brand" href="../index.html">
+        <span class="case-mark">NM</span>
+        <span>Naim MyLibrary</span>
+      </a>
+      <div class="case-links">
+        <a href="../../index.html">Portfolio</a>
+        <a href="../index.html">Library</a>
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#flag">Flag</a>
+      </div>
+    </nav>
+
+    <header class="case-hero">
+      <section class="case-brief">
+        <p class="eyebrow">boroCTF Pwn casefile</p>
+        <h1>Humanity Impossible</h1>
+        <p class="lead">Automated a remote service that requested a changing hex-sized payload on every round.</p>
+        <div class="meta-row">
+          <span class="chip">CTF: boroCTF</span>
+          <span class="chip">Category: Pwn</span>
+          <span class="chip">Difficulty: Easy</span>
+          <span class="chip">No points listed</span>
+          <span class="chip">Solves not listed</span>
+          <span class="chip">Tags: Pwntools · Automation · Hex Parsing</span>
+        </div>
+      </section>
+
+      <aside class="case-panel" aria-label="Writeup status panel">
+        <div class="case-panel-inner">
+          <p class="eyebrow">mission telemetry</p>
+          <div class="status-line"><span>Status</span><strong>Solved</strong></div>
+          <div class="status-line"><span>Method</span><strong>Recon → Analyze → Exploit</strong></div>
+          <div class="status-line"><span>Evidence</span><strong>Commands + reasoning</strong></div>
+          <div class="status-line"><span>Published</span><strong>2026-06-21</strong></div>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="note" style="margin-top:18px;">This writeup is formatted for Naim's portfolio with the original solution flow preserved from the uploaded notes.</p>
+        </div>
+      </aside>
+    </header>
+
+    <div class="case-layout">
+      <aside class="case-toc">
+        <p>Case index</p>
+        <a href="#overview">00 / Overview</a>
+        <a href="#skills">01 / Skills</a>
+        <a href="#timeline">02 / Timeline</a>
+        <a href="#walkthrough">03 / Walkthrough</a>
+        <a href="#evidence">04 / Evidence</a>
+        <a href="#flag">05 / Flag</a>
+        <a href="#lessons">06 / Lessons</a>
+      </aside>
+
+      <article class="case-body">
+        <section class="case-section" id="overview" data-step="00">
+          <p class="eyebrow">operator brief</p>
+          <h2>Overview</h2>
+          <p>Automated a remote service that requested a changing hex-sized payload on every round.</p>
+          <div class="evidence-grid">
+            <div class="evidence-card"><strong>Challenge</strong><p>Humanity Impossible from boroCTF.</p></div>
+            <div class="evidence-card"><strong>Category</strong><p>Pwn Writeups · Easy difficulty.</p></div>
+          </div>
+          
+        </section>
+
+        <section class="case-section" id="skills" data-step="01">
+          <p class="eyebrow">skills demonstrated</p>
+          <h2>Skills Demonstrated</h2>
+          <div class="skill-grid"><span>Remote Scripting</span><span>Regex</span><span>Hex Conversion</span><span>Pwntools</span></div>
+        </section>
+
+        <section class="case-section" id="timeline" data-step="02">
+          <p class="eyebrow">attack path</p>
+          <h2>Timeline</h2>
+          <div class="timeline"><div><strong>00</strong><p>Connect to the remote service.</p></div><div><strong>01</strong><p>Read the requested hex length.</p></div><div><strong>02</strong><p>Convert it to decimal and send that many bytes.</p></div><div><strong>03</strong><p>Loop until the service returns the flag.</p></div></div>
+        </section>
+
+        <section class="case-section" id="walkthrough" data-step="03">
+          <p class="eyebrow">solution notes</p>
+          <h2>Walkthrough</h2>
+          <p>إذا كنت تقصد &quot;write up&quot; للتحدي الأخير:</p>
+<p>Humanity Impossible</p>
+<p>Pwn / Scripting</p>
+<h3>Description</h3>
+<p>عند الاتصال بالسيرفر:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>nc tnkemaq46125.boroctf.com 56354</pre></div>
+<p>كان يعرض في كل مرة رقمًا عشوائيًا بالهيكس:</p>
+<p>Please enter 0x174 characters!</p>
+<p>وإذا أرسلنا عددًا أقل:</p>
+<p>Too short!</p>
+<p>وإذا أرسلنا عددًا أكبر:</p>
+<p>Too long!</p>
+<p>إذًا المطلوب هو إرسال عدد الأحرف المطلوب بالضبط.</p>
+<h3>Analysis</h3>
+<p>القيمة تتغير في كل مرة:</p>
+<p>0x174</p>
+<p>0x37</p>
+<p>0x41</p>
+<p>...</p>
+<p>لذلك لا يمكن استخدام قيمة ثابتة.</p>
+<p>نحتاج إلى:</p>
+<p>قراءة الرقم من السيرفر.</p>
+<p>تحويله من Hex إلى Decimal.</p>
+<p>إرسال نفس العدد من الأحرف.</p>
+<p>تكرار العملية حتى نحصل على الفلاج.</p>
+<p>Exploit Script</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>from pwn import *
+import re
+io = remote(&quot;tnkemaq46125.boroctf.com&quot;, 56354)
+while True:</pre></div>
+<p>line = io.recvline().decode()</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>print(line.strip())
+m = re.search(r&#x27;0x([0-9a-fA-F]+)&#x27;, line)
+if not m:</pre></div>
+<p>break</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>length = int(m.group(1), 16)
+io.sendline(b&quot;A&quot; * length)
+print(io.recvall().decode())</pre></div>
+<h3>Result</h3>
+<p>بعد اجتياز جميع المراحل بنجاح:</p>
+<p>boroCTF{Hum@n1y_im7o5s!ble}</p>
+<p>boroCTF{Hum@n1y_im7o5s!ble}</p>
+<h3>Takeaway</h3>
+<p>التحدي لم يحتج إلى استغلال ثغرة، بل كان يعتمد على أتمتة التفاعل مع السيرفر وقراءة القيم الديناميكية وتحويلها ثم إرسال المدخلات المناسبة بسرعة ودقة. هذا النوع من التحديات يختبر مهارات الـ scripting واستخدام أدوات مثل Pwntools أكثر من اختبار ثغرات الذاكرة التقليدية.</p>
+        </section>
+
+        <section class="case-section" id="evidence" data-step="04">
+          <p class="eyebrow">proof locker</p>
+          <h2>Evidence</h2>
+          <div class="evidence-grid"><div class="evidence-card"><strong>Clue 01</strong><p>The service prints a new required length such as 0x174 every round.</p></div><div class="evidence-card"><strong>Clue 02</strong><p>Too short / too long responses confirm an exact-length requirement.</p></div><div class="evidence-card"><strong>Clue 03</strong><p>Pwntools reads, parses, converts, and responds faster than manual input.</p></div></div>
+          
+        </section>
+
+        <section class="flag-vault" id="flag">
+          <p class="eyebrow">final artifact</p>
+          <h2>Flag</h2>
+          <code>boroCTF{Hum@n1y_im7o5s!ble}</code>
+        </section>
+
+        <section class="case-section" id="lessons" data-step="06">
+          <p class="eyebrow">after action report</p>
+          <h2>Lessons Learned</h2>
+          <ul><li>Not every pwn-tagged challenge is memory corruption.</li><li>Automating dynamic prompts is a core CTF skill.</li><li>Regex + pwntools can turn manual reaction tasks into deterministic solves.</li></ul>
+          <div class="footer-actions">
+            <a class="btn" href="../index.html">← Back to MyLibrary</a>
+            <a class="btn ghost" href="../../index.html">Back to Portfolio</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

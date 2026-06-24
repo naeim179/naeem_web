@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Auto Cooker — kitCTF / GPNCTF Writeup — Naim MyLibrary</title>
+  <meta name="description" content="Reversed a cooking-themed flag checker by undoing XOR salting, nibble swapping, array reversal, and the final target comparison." />
+  <link rel="stylesheet" href="../writeup-template.css" />
+</head>
+<body style="--accent:#7cffc4;--accent-2:#b37eff;">
+  <main class="case-shell">
+    <nav class="case-nav" aria-label="Writeup navigation">
+      <a class="case-brand" href="../index.html">
+        <span class="case-mark">NM</span>
+        <span>Naim MyLibrary</span>
+      </a>
+      <div class="case-links">
+        <a href="../../index.html">Portfolio</a>
+        <a href="../index.html">Library</a>
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#flag">Flag</a>
+      </div>
+    </nav>
+
+    <header class="case-hero">
+      <section class="case-brief">
+        <p class="eyebrow">kitCTF / GPNCTF Reverse casefile</p>
+        <h1>Auto Cooker</h1>
+        <p class="lead">Reversed a cooking-themed flag checker by undoing XOR salting, nibble swapping, array reversal, and the final target comparison.</p>
+        <div class="meta-row">
+          <span class="chip">CTF: kitCTF / GPNCTF</span>
+          <span class="chip">Category: Reverse</span>
+          <span class="chip">Difficulty: Easy</span>
+          <span class="chip">No points listed</span>
+          <span class="chip">Tags: Reverse · Ghidra · XOR · Nibble Swap · Array Reversal</span>
+        </div>
+      </section>
+
+      <aside class="case-panel" aria-label="Writeup status panel">
+        <div class="case-panel-inner">
+          <p class="eyebrow">mission telemetry</p>
+          <div class="status-line"><span>Status</span><strong>Solved</strong></div>
+          <div class="status-line"><span>Method</span><strong>Recon → Analyze → Exploit</strong></div>
+          <div class="status-line"><span>Evidence</span><strong>Commands + reasoning</strong></div>
+          <div class="status-line"><span>Published</span><strong>2026-06-24</strong></div>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="note" style="margin-top:18px;">This writeup was formatted into the new kitCTF/GPNCTF section while preserving the original solution notes.</p>
+        </div>
+      </aside>
+    </header>
+
+    <div class="case-layout">
+      <aside class="case-toc">
+        <p>Case index</p>
+        <a href="#overview">00 / Overview</a>
+        <a href="#skills">01 / Skills</a>
+        <a href="#timeline">02 / Timeline</a>
+        <a href="#walkthrough">03 / Walkthrough</a>
+        <a href="#evidence">04 / Evidence</a>
+        <a href="#flag">05 / Flag</a>
+        <a href="#lessons">06 / Lessons</a>
+      </aside>
+
+      <article class="case-body">
+        <section class="case-section" id="overview" data-step="00">
+          <p class="eyebrow">operator brief</p>
+          <h2>Overview</h2>
+          <p>Reversed a cooking-themed flag checker by undoing XOR salting, nibble swapping, array reversal, and the final target comparison.</p>
+          <div class="evidence-grid">
+            <div class="evidence-card"><strong>Challenge</strong><p>Auto Cooker from kitCTF / GPNCTF.</p></div>
+            <div class="evidence-card"><strong>Category</strong><p>Reverse · Easy difficulty.</p></div>
+          </div>
+        </section>
+
+        <section class="case-section" id="skills" data-step="01">
+          <p class="eyebrow">skills demonstrated</p>
+          <h2>Skills Demonstrated</h2>
+          <div class="skill-grid"><span>Static Analysis</span><span>Ghidra Decompilation</span><span>XOR Reversal</span><span>Nibble Swapping</span><span>Python Scripting</span></div>
+        </section>
+
+        <section class="case-section" id="timeline" data-step="02">
+          <p class="eyebrow">attack path</p>
+          <h2>Timeline</h2>
+          <div class="timeline"><div><strong>00</strong><p>Load the binary into Ghidra and identify the transformation pipeline.</p></div><div><strong>01</strong><p>Analyze salt(), fry(), trim(), mix(), and taste().</p></div><div><strong>02</strong><p>Reverse the operations in the correct opposite order.</p></div><div><strong>03</strong><p>Run a Python script to recover the original flag.</p></div></div>
+        </section>
+
+        <section class="case-section" id="walkthrough" data-step="03">
+          <p class="eyebrow">solution notes</p>
+          <h2>Walkthrough</h2>
+          <h3>Auto Cooker – GPNCTF Reverse Engineering Writeup</h3>
+<h3>Challenge Overview</h3>
+<p>The challenge provides a binary called <strong>Auto Cooker</strong>. According to the description, we input a &quot;recipe&quot; (flag), and the machine &quot;cooks&quot; it through several transformations before checking whether the result matches an internal target value.</p>
+<p>The goal is to reverse these transformations and recover the original flag.</p>
+<hr />
+<h3>Initial Analysis</h3>
+<p>After loading the binary into <strong>Ghidra</strong>, the main function becomes straightforward.</p>
+<p>The program:</p>
+<ol><li>Reads user input.</li><li>Stores it in a buffer called <code>FOOD</code>.</li><li>Applies a sequence of functions:</li></ol>
+<ul><li><code>salt()</code></li><li><code>fry()</code></li><li><code>trim()</code></li><li><code>mix()</code></li><li><code>taste()</code></li></ul>
+<ol><li><code>taste()</code> compares the final result against a hardcoded byte array called <code>DELICIOUS</code>.</li></ol>
+<p>Simplified flow:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>salt(FOOD);
+fry(FOOD);
+trim(FOOD);
+mix(FOOD);
+
+if (taste(FOOD))
+    puts(&quot;Good meal!&quot;);</pre></div>
+<p>Since the comparison is performed after all transformations, we can recover the flag by reversing the operations applied to <code>DELICIOUS</code>.</p>
+<hr />
+<h3>Step 1 – Analyzing <code>salt()</code></h3>
+<p>The first function iterates through the buffer and XORs each byte with <code>0xAA</code>.</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>for (i = 0; i &lt; 64; i++)
+{
+    FOOD[i] ^= 0xAA;
+}</pre></div>
+<p>This operation is reversible because:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>(x ^ 0xAA) ^ 0xAA = x</pre></div>
+<hr />
+<h3>Step 2 – Analyzing <code>fry()</code></h3>
+<p>The next function swaps the upper and lower nibbles of every byte.</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>FOOD[i] = (FOOD[i] &lt;&lt; 4) | (FOOD[i] &gt;&gt; 4);</pre></div>
+<p>Example:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>0xAB → 0xBA
+0x3F → 0xF3</pre></div>
+<p>Nibble swapping is its own inverse:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>swap(swap(x)) = x</pre></div>
+<p>Therefore, reversing it is simply applying the same operation again.</p>
+<hr />
+<h3>Step 3 – Analyzing <code>trim()</code></h3>
+<p>The <code>trim()</code> function modifies only the last few bytes:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>for (i = 0x3d; i &lt; 0x40; i++)
+{
+    FOOD[i] &amp;= 0x0F;
+}</pre></div>
+<p>This masks off the upper nibble and keeps only the lower 4 bits.</p>
+<p>Since information is lost here, the operation is not perfectly reversible.</p>
+<p>Fortunately, this only affects the final three bytes of the buffer and does not prevent recovery of the actual flag.</p>
+<hr />
+<h3>Step 4 – Analyzing <code>mix()</code></h3>
+<p>This function reverses the order of the 64-byte buffer.</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>for (i = 0; i &lt; 64; i++)
+{
+    TMP[i] = FOOD[63 - i];
+}</pre></div>
+<p>Example:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>ABCDEFGH
+↓
+HGFEDCBA</pre></div>
+<p>Reversing the array again restores the original order.</p>
+<hr />
+<h3>Step 5 – Extracting the Target</h3>
+<p>Inside <code>taste()</code> we find the constant array:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>unsigned char DELICIOUS[64] = {
+    ...
+};</pre></div>
+<p>This is the value the transformed flag must equal.</p>
+<p>To recover the original flag we perform the inverse operations in reverse order:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>DELICIOUS
+↓
+reverse mix
+↓
+reverse fry
+↓
+reverse salt
+↓
+FLAG</pre></div>
+<hr />
+<h3>Solve Script</h3>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>target = [
+    0x0a,0x0a,0x0a,0x0a,0x7d,0xdd,0x5c,0x4e,
+    0x5f,0xf9,0xfc,0x2c,0x9d,0x3e,0xec,0x5f,
+    0xd9,0x9d,0x99,0xee,0x8d,0xbe,0x2e,0x5f,
+    0x8f,0xfd,0x5e,0x5f,0x8d,0x5c,0xce,0x5f,
+    0x3d,0xec,0xbc,0xfc,0x8f,0x5f,0xfc,0x8f,
+    0xbe,0x5f,0xff,0x5e,0x3f,0x5f,0x99,0x1c,
+    0x3c,0xb9,0x5f,0x6e,0xfe,0xfc,0xce,0x5f,
+    0x3e,0x1d,0xce,0xef,0x9e,0x4e,0xaf,0xde
+]
+
+# Reverse mix
+data = target[::-1]
+
+# Reverse fry (same operation)
+data = [((b &lt;&lt; 4) &amp; 0xff) | (b &gt;&gt; 4) for b in data]
+
+# Reverse salt
+data = [b ^ 0xaa for b in data]
+
+print(bytes(data).decode(errors=&quot;ignore&quot;))</pre></div>
+<hr />
+<p>Running the script reveals the flag:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>GPNCTF{I_FeEL_1ik3_YOU_ARe_Ready_For_OuR_HArD3s7_dIshe5_Now}</pre></div>
+<hr />
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>GPNCTF{I_FeEL_1ik3_YOU_ARe_Ready_For_OuR_HArD3s7_dIshe5_Now}</pre></div>
+<p><strong>Difficulty:</strong> Easy Reverse Engineering <strong>Techniques Used:</strong> Static Analysis, XOR Reversal, Nibble Swapping, Array Reversal, Ghidra Decompilation.</p>
+        </section>
+
+        <section class="case-section" id="evidence" data-step="04">
+          <p class="eyebrow">proof locker</p>
+          <h2>Evidence</h2>
+          <div class="evidence-grid"><div class="evidence-card"><strong>Clue 01</strong><p>taste() compares transformed input against DELICIOUS.</p></div><div class="evidence-card"><strong>Clue 02</strong><p>salt() is XOR with 0xAA and fry() is a self-inverse nibble swap.</p></div><div class="evidence-card"><strong>Clue 03</strong><p>mix() is reversed by reversing the 64-byte target array again.</p></div></div>
+        </section>
+
+        <section class="flag-vault" id="flag">
+          <p class="eyebrow">final artifact</p>
+          <h2>Flag</h2>
+          <code>GPNCTF{I_FeEL_1ik3_YOU_ARe_Ready_For_OuR_HArD3s7_dIshe5_Now}</code>
+        </section>
+
+        <section class="case-section" id="lessons" data-step="06">
+          <p class="eyebrow">after action report</p>
+          <h2>Lessons Learned</h2>
+          <ul><li>Invertible transformations should be undone in reverse order.</li><li>XOR and nibble swaps are common reversible obfuscation primitives.</li><li>Even lossy-looking code can be harmless if it only touches padding bytes.</li></ul>
+          <div class="footer-actions">
+            <a class="btn" href="../index.html">← Back to MyLibrary</a>
+            <a class="btn ghost" href="../../index.html">Back to Portfolio</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

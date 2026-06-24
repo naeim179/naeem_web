@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>kitCTF / specCTF — kitCTF / GPNCTF Writeup — Naim MyLibrary</title>
+  <meta name="description" content="Avoided the Spectre red herring by reversing an invertible 64-bit hash and decoding the global ENC array directly." />
+  <link rel="stylesheet" href="../writeup-template.css" />
+</head>
+<body style="--accent:#7cffc4;--accent-2:#b37eff;">
+  <main class="case-shell">
+    <nav class="case-nav" aria-label="Writeup navigation">
+      <a class="case-brand" href="../index.html">
+        <span class="case-mark">NM</span>
+        <span>Naim MyLibrary</span>
+      </a>
+      <div class="case-links">
+        <a href="../../index.html">Portfolio</a>
+        <a href="../index.html">Library</a>
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#flag">Flag</a>
+      </div>
+    </nav>
+
+    <header class="case-hero">
+      <section class="case-brief">
+        <p class="eyebrow">kitCTF / GPNCTF Reverse casefile</p>
+        <h1>kitCTF / specCTF</h1>
+        <p class="lead">Avoided the Spectre red herring by reversing an invertible 64-bit hash and decoding the global ENC array directly.</p>
+        <div class="meta-row">
+          <span class="chip">CTF: kitCTF / GPNCTF</span>
+          <span class="chip">Category: Reverse</span>
+          <span class="chip">Difficulty: Medium</span>
+          <span class="chip">No points listed</span>
+          <span class="chip">Tags: Reverse · Spectre · Hash Inversion · Side Channel · MurmurHash</span>
+        </div>
+      </section>
+
+      <aside class="case-panel" aria-label="Writeup status panel">
+        <div class="case-panel-inner">
+          <p class="eyebrow">mission telemetry</p>
+          <div class="status-line"><span>Status</span><strong>Solved</strong></div>
+          <div class="status-line"><span>Method</span><strong>Recon → Analyze → Exploit</strong></div>
+          <div class="status-line"><span>Evidence</span><strong>Commands + reasoning</strong></div>
+          <div class="status-line"><span>Published</span><strong>2026-06-24</strong></div>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="note" style="margin-top:18px;">This writeup was formatted into the new kitCTF/GPNCTF section while preserving the original solution notes.</p>
+        </div>
+      </aside>
+    </header>
+
+    <div class="case-layout">
+      <aside class="case-toc">
+        <p>Case index</p>
+        <a href="#overview">00 / Overview</a>
+        <a href="#skills">01 / Skills</a>
+        <a href="#timeline">02 / Timeline</a>
+        <a href="#walkthrough">03 / Walkthrough</a>
+        <a href="#evidence">04 / Evidence</a>
+        <a href="#flag">05 / Flag</a>
+        <a href="#lessons">06 / Lessons</a>
+      </aside>
+
+      <article class="case-body">
+        <section class="case-section" id="overview" data-step="00">
+          <p class="eyebrow">operator brief</p>
+          <h2>Overview</h2>
+          <p>Avoided the Spectre red herring by reversing an invertible 64-bit hash and decoding the global ENC array directly.</p>
+          <div class="evidence-grid">
+            <div class="evidence-card"><strong>Challenge</strong><p>kitCTF / specCTF from kitCTF / GPNCTF.</p></div>
+            <div class="evidence-card"><strong>Category</strong><p>Reverse · Medium difficulty.</p></div>
+          </div>
+        </section>
+
+        <section class="case-section" id="skills" data-step="01">
+          <p class="eyebrow">skills demonstrated</p>
+          <h2>Skills Demonstrated</h2>
+          <div class="skill-grid"><span>Binary Reversing</span><span>Hash Inversion</span><span>Modular Arithmetic</span><span>Static Analysis</span><span>Red-Herring Detection</span></div>
+        </section>
+
+        <section class="case-section" id="timeline" data-step="02">
+          <p class="eyebrow">attack path</p>
+          <h2>Timeline</h2>
+          <div class="timeline"><div><strong>00</strong><p>Run the binary and observe the input-length and CPU-pinning behavior.</p></div><div><strong>01</strong><p>Inspect Spectre-themed symbols and cache timing routines.</p></div><div><strong>02</strong><p>Find the global ENC array and hashy() finalizer.</p></div><div><strong>03</strong><p>Invert the hash and decode all 64-bit chunks.</p></div></div>
+        </section>
+
+        <section class="case-section" id="walkthrough" data-step="03">
+          <p class="eyebrow">solution notes</p>
+          <h2>Walkthrough</h2>
+          <h3>kitCTF — specCTF Reverse Engineering Writeup</h3>
+<h3>Challenge Description</h3>
+<p>&gt; We present for our desert a slightly deranged ghost, even though they may be unstable, they are still delicious. Share a meal and a CPU with this ghost and we&#x27;re sure you&#x27;ll be satisfied.</p>
+<p>The description strongly hints at <strong>Spectre speculative execution attacks</strong>:</p>
+<ul><li>&quot;ghost&quot; → Spectre</li><li>&quot;unstable&quot; → speculative execution</li><li>&quot;share a CPU&quot; → cache side-channel attacks require sharing CPU resources</li></ul>
+<p>At first glance, the challenge appears to require recovering secret data through a Spectre-style side channel.</p>
+<hr />
+<h3>Initial Analysis</h3>
+<p>Running the binary:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>./specCTF</pre></div>
+<p>causes a crash because the program expects an argument.</p>
+<p>Supplying an argument:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>./specCTF AAAAAAAA</pre></div>
+<p>or</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>taskset -c 0 ./specCTF AAAAAAAA</pre></div>
+<p>produces:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>NOPE</pre></div>
+<p>The CPU pinning hint from the challenge description becomes visible during reversing.</p>
+<p>The binary is:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>file specCTF</pre></div>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>ELF 64-bit LSB pie executable
+not stripped</pre></div>
+<p>The binary contains useful symbols:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>carrierFunc
+distFalse
+distTrue
+get_from_array
+hashy
+init_attack
+pin_core
+readMemoryByte
+spec_func
+specEnvTime
+specte_byte
+train</pre></div>
+<hr />
+<h3>Understanding main()</h3>
+<p>The decompiled <code>main()</code>:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>while (true) {
+    pin_core();
+    init_attack();
+    train();
+
+    sVar2 = strlen(argv[1]);
+
+    if ((sVar2 &amp; 7) != 0)
+        break;
+
+    local_14 = 0;
+
+    for (i = 0; i &lt; sVar2 &gt;&gt; 3; i++) {
+        local_14 += specte_byte(0x1337, 0x1337);
+    }
+
+    if (local_14 == (sVar2 &gt;&gt; 3))
+        local_c++;
+    else
+        local_c--;
+
+    if (local_c &gt; 2) {
+        puts(&quot;CORRECT&quot;);
+        exit(0);
+    }
+}</pre></div>
+<p>Important observations:</p>
+<ol><li>Input length must be a multiple of 8.</li><li>Success depends entirely on <code>specte_byte()</code>.</li><li>The program repeatedly trains a predictor and measures cache timing.</li><li>This is clearly modeled after a Spectre proof-of-concept.</li></ol>
+<hr />
+<h3>The Red Herring</h3>
+<p>The intended challenge theme is Spectre.</p>
+<p>Functions such as:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>get_from_array()</pre></div>
+<p>contain:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>return arr2[((uint8_t)arr1[idx]) &lt;&lt; 9];</pre></div>
+<p>This is the classic Spectre gadget:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>temp &amp;= probe_array[secret_byte * 512];</pre></div>
+<p>and timing functions measure cache hits.</p>
+<p>However, the important discovery is that the binary also contains a global array named:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>ENC</pre></div>
+<p>and a hashing routine:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>ulong hashy(ulong x)
+{
+    ulong y;
+
+    y = (x ^ (x &gt;&gt; 33))
+        * 0xf451af975d152cad;
+
+    y ^= (y &gt;&gt; 33);
+    y ^= 0xc2ceaade1a351c23;
+
+    return y ^ (y &gt;&gt; 33);
+}</pre></div>
+<hr />
+<h3>Reversing hashy()</h3>
+<p>This function resembles a MurmurHash-style finalizer.</p>
+<p>The key observation:</p>
+<ul><li>XOR with right shifts is invertible.</li><li>Multiplication by an odd 64-bit constant is invertible modulo 2⁶⁴.</li></ul>
+<p>Therefore the entire function is reversible.</p>
+<p>We compute:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>INV_C1 = pow(C1, -1, 1 &lt;&lt; 64)</pre></div>
+<p>and undo operations in reverse order.</p>
+<hr />
+<h3>Inverting the Hash</h3>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>MASK = (1 &lt;&lt; 64) - 1
+
+def unxor_rshift(y, s):
+    x = y
+    for _ in range(6):
+        x = y ^ (x &gt;&gt; s)
+    return x &amp; MASK
+
+C1 = (-0x0bae5068a2ead353) &amp; MASK
+C2 = (-0x3d315521e5cae3dd) &amp; MASK
+
+INV_C1 = pow(C1, -1, 1 &lt;&lt; 64)
+
+def inv_hash(y):
+    y = unxor_rshift(y, 33)
+    y ^= C2
+    y = unxor_rshift(y, 33)
+    y = (y * INV_C1) &amp; MASK
+    y = unxor_rshift(y, 33)
+    return y</pre></div>
+<hr />
+<h3>Recovering ENC</h3>
+<p>The binary stores encrypted chunks inside:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>ENC[]</pre></div>
+<p>Each entry is a 64-bit value.</p>
+<p>Conceptually:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>ENC[i] = hashy(flag_chunk[i]);</pre></div>
+<p>So recovery becomes:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>flag_chunk = inv_hash(ENC[i])</pre></div>
+<p>for every entry.</p>
+<hr />
+<h3>Extracting the Flag</h3>
+<p>After applying the inverse transformation to all entries of <code>ENC</code>, the plaintext becomes:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>GPNCTF{TH1S_MeAl_IS_SpECulAT1v31y_dELic10US!!!!}</pre></div>
+<hr />
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>GPNCTF{TH1S_MeAl_IS_SpECulAT1v31y_dELic10US!!!!}</pre></div>
+<hr />
+<h3>Conclusion</h3>
+<p>Although the challenge is themed around Spectre and speculative execution, the actual solve path is much simpler:</p>
+<ol><li>Reverse the binary.</li><li>Identify the global encrypted array <code>ENC</code>.</li><li>Reverse <code>hashy()</code>.</li><li>Apply the inverse to every stored 64-bit block.</li><li>Recover the flag directly.</li></ol>
+<p>The Spectre implementation acts mostly as thematic misdirection, while the real reversing task is recognizing that the hash function is completely invertible.</p>
+        </section>
+
+        <section class="case-section" id="evidence" data-step="04">
+          <p class="eyebrow">proof locker</p>
+          <h2>Evidence</h2>
+          <div class="evidence-grid"><div class="evidence-card"><strong>Clue 01</strong><p>Symbols such as train(), readMemoryByte(), and specte_byte() suggest Spectre.</p></div><div class="evidence-card"><strong>Clue 02</strong><p>hashy() uses invertible right-shift XORs and odd modular multiplication.</p></div><div class="evidence-card"><strong>Clue 03</strong><p>Decoding ENC reveals the flag without needing a side-channel attack.</p></div></div>
+        </section>
+
+        <section class="flag-vault" id="flag">
+          <p class="eyebrow">final artifact</p>
+          <h2>Flag</h2>
+          <code>GPNCTF{TH1S_MeAl_IS_SpECulAT1v31y_dELic10US!!!!}</code>
+        </section>
+
+        <section class="case-section" id="lessons" data-step="06">
+          <p class="eyebrow">after action report</p>
+          <h2>Lessons Learned</h2>
+          <ul><li>Do not let theme functions distract from simpler static data.</li><li>Odd constants are invertible modulo 2^64.</li><li>Right-shift XOR finalizers can be inverted iteratively.</li></ul>
+          <div class="footer-actions">
+            <a class="btn" href="../index.html">← Back to MyLibrary</a>
+            <a class="btn ghost" href="../../index.html">Back to Portfolio</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

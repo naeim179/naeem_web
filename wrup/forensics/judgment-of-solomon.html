@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Judgment of Solomon — boroCTF Writeup — Naim MyLibrary</title>
+  <meta name="description" content="Removed a fake embedded flag, reconstructed a 66×66 RGB image, repaired a damaged QR code, and decoded the real flag." />
+  <link rel="stylesheet" href="../writeup-template.css" />
+</head>
+<body style="--accent:#ffc254;--accent-2:#ff55b1;">
+  <main class="case-shell">
+    <nav class="case-nav" aria-label="Writeup navigation">
+      <a class="case-brand" href="../index.html">
+        <span class="case-mark">NM</span>
+        <span>Naim MyLibrary</span>
+      </a>
+      <div class="case-links">
+        <a href="../../index.html">Portfolio</a>
+        <a href="../index.html">Library</a>
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#flag">Flag</a>
+      </div>
+    </nav>
+
+    <header class="case-hero">
+      <section class="case-brief">
+        <p class="eyebrow">boroCTF Forensics casefile</p>
+        <h1>Judgment of Solomon</h1>
+        <p class="lead">Removed a fake embedded flag, reconstructed a 66×66 RGB image, repaired a damaged QR code, and decoded the real flag.</p>
+        <div class="meta-row">
+          <span class="chip">CTF: boroCTF</span>
+          <span class="chip">Category: Forensics</span>
+          <span class="chip">Difficulty: Hard</span>
+          <span class="chip">No points listed</span>
+          <span class="chip">Solves not listed</span>
+          <span class="chip">Tags: QR Repair · Hex Dump · Image Reconstruction</span>
+        </div>
+      </section>
+
+      <aside class="case-panel" aria-label="Writeup status panel">
+        <div class="case-panel-inner">
+          <p class="eyebrow">mission telemetry</p>
+          <div class="status-line"><span>Status</span><strong>Solved</strong></div>
+          <div class="status-line"><span>Method</span><strong>Recon → Analyze → Exploit</strong></div>
+          <div class="status-line"><span>Evidence</span><strong>Commands + reasoning</strong></div>
+          <div class="status-line"><span>Published</span><strong>2026-06-13</strong></div>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="note" style="margin-top:18px;">This writeup is formatted for Naim's portfolio with the original solution flow preserved from the uploaded notes.</p>
+        </div>
+      </aside>
+    </header>
+
+    <div class="case-layout">
+      <aside class="case-toc">
+        <p>Case index</p>
+        <a href="#overview">00 / Overview</a>
+        <a href="#skills">01 / Skills</a>
+        <a href="#timeline">02 / Timeline</a>
+        <a href="#walkthrough">03 / Walkthrough</a>
+        <a href="#evidence">04 / Evidence</a>
+        <a href="#flag">05 / Flag</a>
+        <a href="#lessons">06 / Lessons</a>
+      </aside>
+
+      <article class="case-body">
+        <section class="case-section" id="overview" data-step="00">
+          <p class="eyebrow">operator brief</p>
+          <h2>Overview</h2>
+          <p>Removed a fake embedded flag, reconstructed a 66×66 RGB image, repaired a damaged QR code, and decoded the real flag.</p>
+          <div class="evidence-grid">
+            <div class="evidence-card"><strong>Challenge</strong><p>Judgment of Solomon from boroCTF.</p></div>
+            <div class="evidence-card"><strong>Category</strong><p>Forensics Writeups · Hard difficulty.</p></div>
+          </div>
+          
+        </section>
+
+        <section class="case-section" id="skills" data-step="01">
+          <p class="eyebrow">skills demonstrated</p>
+          <h2>Skills Demonstrated</h2>
+          <div class="skill-grid"><span>PIL</span><span>OpenCV</span><span>QR Anatomy</span><span>Data Cleaning</span></div>
+        </section>
+
+        <section class="case-section" id="timeline" data-step="02">
+          <p class="eyebrow">attack path</p>
+          <h2>Timeline</h2>
+          <div class="timeline"><div><strong>00</strong><p>Inspect the ASCII hex dump.</p></div><div><strong>01</strong><p>Remove the fake flag corruption.</p></div><div><strong>02</strong><p>Rebuild the 66×66 RGB image.</p></div><div><strong>03</strong><p>Downsample to 33×33 QR modules and repair structure.</p></div><div><strong>04</strong><p>Decode with OpenCV QRCodeDetector.</p></div></div>
+        </section>
+
+        <section class="case-section" id="walkthrough" data-step="03">
+          <p class="eyebrow">solution notes</p>
+          <h2>Walkthrough</h2>
+          <h3>Challenge</h3>
+<p>Description: The birth of reconstruction.</p>
+<h3>Overview</h3>
+<p>The challenge gives us a file called code. At first glance, it looks like a long text/hex dump rather than a normal image file. The title and description hint that something has to be “reconstructed,” and the “Judgment of Solomon” reference suggests that there may be more than one possible “answer,” but only one is real.</p>
+<p>The final object turns out to be a damaged QR code. After reconstructing and repairing it, the QR decodes to the real flag.</p>
+<h3>Step 1: Inspecting the file</h3>
+<p>Running file on the provided file shows that it is plain text:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>file code
+Output:
+code: ASCII text, with very long lines</pre></div>
+<p>Opening the file shows a huge string made mostly of hex-looking values such as:</p>
+<p>FFFFFFFFFFFFFFFFFFFFFFFF...</p>
+<p>000000000000...</p>
+<p>FF0000...</p>
+<p>This strongly suggests image data, because FFFFFF, 000000, and FF0000 are common RGB color values:</p>
+<p>FFFFFF = white</p>
+<p>000000 = black</p>
+<p>FF0000 = red</p>
+<p>There was also a suspicious embedded flag-looking string inside the data:</p>
+<p>boroCTF{I_C0xL6n&quot;+_d0_it_St11nz_n0w_go}</p>
+<p>This was not the real flag. It was inserted into the hex stream as a distraction/corruption. The challenge title makes sense here: we have to judge the real result from the fake one.</p>
+<h3>Step 2: Cleaning the hex stream</h3>
+<p>After removing the fake boroCTF{...} text from the long line, the remaining length becomes meaningful.</p>
+<p>The cleaned data length is:</p>
+<p>26268 characters</p>
+<p>Since RGB pixels are represented by 6 hex characters each, and each row ends with 0A, the length factors nicely:</p>
+<p>26268 = 66 * (66 * 6 + 2)</p>
+<p>That means:</p>
+<p>66 rows</p>
+<p>66 pixels per row</p>
+<p>6 hex characters per pixel</p>
+<p>2 extra hex characters per row: 0A</p>
+<p>So the file is storing a 66×66 RGB image, with each row ending in 0A.</p>
+<h3>Step 3: Reconstructing the image</h3>
+<p>I parsed each row, ignored the trailing 0A, then converted every 6 hex characters into an RGB pixel.</p>
+<p>Example solve code:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>from PIL import Image
+import re
+with open(&quot;code&quot;, &quot;r&quot;) as f:
+raw = f.read().splitlines()[0]
+# Remove the fake/corrupt flag-looking text
+raw = re.sub(r&quot;boroCTF\{[^}]+\}&quot;, &quot;&quot;, raw)
+W = H = 66
+row_len = W * 6 + 2
+assert len(raw) == H * row_len
+img = Image.new(&quot;RGB&quot;, (W, H))
+for y in range(H):
+row = raw[y * row_len : (y + 1) * row_len]
+assert row.endswith(&quot;0A&quot;)
+row = row[:-2]
+for x in range(W):
+px = row[x * 6 : x * 6 + 6]
+r = int(px[0:2], 16)
+g = int(px[2:4], 16)
+b = int(px[4:6], 16)
+img.putpixel((x, y), (r, g, b))
+img.save(&quot;reconstructed_rgb.png&quot;)</pre></div>
+<p>The output is a broken-looking QR code. It is not directly scannable yet.</p>
+<h3>Step 4: Understanding the image</h3>
+<p>The reconstructed image is 66×66, but QR codes are made of square modules. Since 66 = 33 × 2, each QR module is represented as a 2×2 block of pixels.</p>
+<p>So the actual QR code grid is:</p>
+<p>33×33 modules</p>
+<p>A 33×33 QR code corresponds to QR version 4, because QR sizes follow:</p>
+<p>21 + 4 × (version - 1)</p>
+<p>For version 4:</p>
+<p>21 + 4 × 3 = 33</p>
+<p>The RGB image also contains red corruption. Splitting the channels shows that the red channel gives the cleanest QR data. The green/blue channels include more damage.</p>
+<p>This is another connection to the title: we have to choose the correct “child”/channel and discard the false or corrupted data.</p>
+<h3>Step 5: Downsampling to QR modules</h3>
+<p>I downsampled the image from 66×66 pixels into a 33×33 QR grid by taking each 2×2 block and deciding whether it should be black or white.</p>
+<p>I used the red channel and treated dark pixels as black:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>from PIL import Image
+img = Image.open(&quot;reconstructed_rgb.png&quot;).convert(&quot;RGB&quot;)
+N = 33
+modules = [[False for _ in range(N)] for _ in range(N)]
+for y in range(N):
+for x in range(N):
+vals = []
+for dy in range(2):
+for dx in range(2):
+r, g, b = img.getpixel((2 * x + dx, 2 * y + dy))
+vals.append(r)
+# Black if most pixels in this 2x2 block are dark in the red channel
+modules[y][x] = sum(v &lt; 128 for v in vals) &gt;= 2</pre></div>
+<p>At this point, the QR data is mostly there, but some of the required QR structural patterns are damaged.</p>
+<h3>Step 6: Repairing the QR code</h3>
+<p>QR codes have predictable structural areas:</p>
+<p>Three finder patterns in the top-left, top-right, and bottom-left corners</p>
+<p>White separators around those finder patterns</p>
+<p>Timing patterns along row 6 and column 6</p>
+<p>A fixed dark module for the QR version</p>
+<p>These areas can be repaired because their positions and shapes are known.</p>
+<p>For a 33×33 QR code, the finder patterns start at:</p>
+<p>(0, 0)</p>
+<p>(26, 0)</p>
+<p>(0, 26)</p>
+<p>I repaired them manually in the module grid.</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>def set_module(x, y, value):
+if 0 &lt;= x &lt; N and 0 &lt;= y &lt; N:
+modules[y][x] = value
+def draw_finder(x0, y0):
+# Draw 7x7 finder plus 1-module white separator
+for y in range(-1, 8):
+for x in range(-1, 8):
+X = x0 + x
+Y = y0 + y
+if not (0 &lt;= X &lt; N and 0 &lt;= Y &lt; N):</pre></div>
+<p>continue</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre># Separator
+if x in (-1, 7) or y in (-1, 7):
+set_module(X, Y, False)</pre></div>
+<p>continue</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre># Finder pattern:
+# black outer border, white inner ring, black 3x3 center
+black = (</pre></div>
+<p>x == 0 or x == 6 or</p>
+<p>y == 0 or y == 6 or</p>
+<p>(2 &lt;= x &lt;= 4 and 2 &lt;= y &lt;= 4)</p>
+<p>)</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>set_module(X, Y, black)
+draw_finder(0, 0)
+draw_finder(26, 0)
+draw_finder(0, 26)
+# Repair timing patterns
+for i in range(8, 25):
+value = (i % 2 == 0)
+set_module(i, 6, value)
+set_module(6, i, value)
+# Fixed dark module for version 4 QR
+set_module(8, 25, True)</pre></div>
+<p>Then I rendered the repaired QR with a quiet zone:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>from PIL import Image, ImageDraw
+scale = 12
+quiet = 4
+out_size = (N + quiet * 2) * scale
+out = Image.new(&quot;L&quot;, (out_size, out_size), 255)
+draw = ImageDraw.Draw(out)
+for y in range(N):
+for x in range(N):
+if modules[y][x]:
+x0 = (x + quiet) * scale
+y0 = (y + quiet) * scale
+draw.rectangle(
+[x0, y0, x0 + scale - 1, y0 + scale - 1],</pre></div>
+<p>fill=0</p>
+<p>)</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>out.save(&quot;repaired_qr.png&quot;)</pre></div>
+<h3>Step 7: Decoding the QR</h3>
+<p>After repairing the QR code, it became scannable.</p>
+<p>Using OpenCV:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>import cv2
+img = cv2.imread(&quot;repaired_qr.png&quot;)
+data, points, _ = cv2.QRCodeDetector().detectAndDecode(img)
+print(data)
+Output:
+boroCTF{I_f1%ed_wHat_w4$_br0Ken}</pre></div>
+<h3>Final Flag</h3>
+<p>boroCTF{I_f1%ed_wHat_w4$_br0Ken}</p>
+<h3>Takeaway</h3>
+<p>The main trick was not to trust the obvious embedded flag. The file was really a corrupted RGB hex dump. Once the fake text was removed, the dimensions revealed a 66×66 image. That image was a doubled 33×33 QR code, and after choosing the correct channel and repairing the QR’s known structural patterns, the real flag decoded cleanly.</p>
+        </section>
+
+        <section class="case-section" id="evidence" data-step="04">
+          <p class="eyebrow">proof locker</p>
+          <h2>Evidence</h2>
+          <div class="evidence-grid"><div class="evidence-card"><strong>Clue 01</strong><p>The fake boroCTF-looking text corrupts the hex stream.</p></div><div class="evidence-card"><strong>Clue 02</strong><p>Cleaned length factors as 66 rows of 66 RGB pixels plus row newlines.</p></div><div class="evidence-card"><strong>Clue 03</strong><p>QR structural patterns can be repaired because their positions are predictable.</p></div></div>
+          
+        </section>
+
+        <section class="flag-vault" id="flag">
+          <p class="eyebrow">final artifact</p>
+          <h2>Flag</h2>
+          <code>boroCTF{I_f1%ed_wHat_w4$_br0Ken}</code>
+        </section>
+
+        <section class="case-section" id="lessons" data-step="06">
+          <p class="eyebrow">after action report</p>
+          <h2>Lessons Learned</h2>
+          <ul><li>Do not trust the first flag-looking string you see.</li><li>Dimensions and factors can reveal hidden image structure.</li><li>Knowing QR fixed patterns makes manual repair possible.</li></ul>
+          <div class="footer-actions">
+            <a class="btn" href="../index.html">← Back to MyLibrary</a>
+            <a class="btn ghost" href="../../index.html">Back to Portfolio</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Babel&#x27;s Vault — boroCTF Writeup — Naim MyLibrary</title>
+  <meta name="description" content="Reversed a Library-of-Babel-style seed generator and decoded RGB triples as indexes into AUTHORSNOTE.txt." />
+  <link rel="stylesheet" href="../writeup-template.css" />
+</head>
+<body style="--accent:#c7ff68;--accent-2:#b37eff;">
+  <main class="case-shell">
+    <nav class="case-nav" aria-label="Writeup navigation">
+      <a class="case-brand" href="../index.html">
+        <span class="case-mark">NM</span>
+        <span>Naim MyLibrary</span>
+      </a>
+      <div class="case-links">
+        <a href="../../index.html">Portfolio</a>
+        <a href="../index.html">Library</a>
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#flag">Flag</a>
+      </div>
+    </nav>
+
+    <header class="case-hero">
+      <section class="case-brief">
+        <p class="eyebrow">boroCTF Crypto casefile</p>
+        <h1>Babel&#x27;s Vault</h1>
+        <p class="lead">Reversed a Library-of-Babel-style seed generator and decoded RGB triples as indexes into AUTHORSNOTE.txt.</p>
+        <div class="meta-row">
+          <span class="chip">CTF: boroCTF</span>
+          <span class="chip">Category: Crypto</span>
+          <span class="chip">Difficulty: Medium</span>
+          <span class="chip">300</span>
+          <span class="chip">185 solves</span>
+          <span class="chip">Tags: Custom Cipher · Base55 · RGB Indexing</span>
+        </div>
+      </section>
+
+      <aside class="case-panel" aria-label="Writeup status panel">
+        <div class="case-panel-inner">
+          <p class="eyebrow">mission telemetry</p>
+          <div class="status-line"><span>Status</span><strong>Solved</strong></div>
+          <div class="status-line"><span>Method</span><strong>Recon → Analyze → Exploit</strong></div>
+          <div class="status-line"><span>Evidence</span><strong>Commands + reasoning</strong></div>
+          <div class="status-line"><span>Published</span><strong>2026-06-15</strong></div>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="note" style="margin-top:18px;">This writeup is formatted for Naim's portfolio with the original solution flow preserved from the uploaded notes.</p>
+        </div>
+      </aside>
+    </header>
+
+    <div class="case-layout">
+      <aside class="case-toc">
+        <p>Case index</p>
+        <a href="#overview">00 / Overview</a>
+        <a href="#skills">01 / Skills</a>
+        <a href="#timeline">02 / Timeline</a>
+        <a href="#walkthrough">03 / Walkthrough</a>
+        <a href="#evidence">04 / Evidence</a>
+        <a href="#flag">05 / Flag</a>
+        <a href="#lessons">06 / Lessons</a>
+      </aside>
+
+      <article class="case-body">
+        <section class="case-section" id="overview" data-step="00">
+          <p class="eyebrow">operator brief</p>
+          <h2>Overview</h2>
+          <p>Reversed a Library-of-Babel-style seed generator and decoded RGB triples as indexes into AUTHORSNOTE.txt.</p>
+          <div class="evidence-grid">
+            <div class="evidence-card"><strong>Challenge</strong><p>Babel&#x27;s Vault from boroCTF.</p></div>
+            <div class="evidence-card"><strong>Category</strong><p>Crypto Writeups · Medium difficulty.</p></div>
+          </div>
+          <figure class="screenshot-frame">
+          <img src="../assets/babels-vault-challenge.png" alt="Babel&#x27;s Vault evidence screenshot" />
+          <figcaption>Original challenge panel showing babel.py and AUTHORSNOTE.txt.</figcaption>
+        </figure>
+        </section>
+
+        <section class="case-section" id="skills" data-step="01">
+          <p class="eyebrow">skills demonstrated</p>
+          <h2>Skills Demonstrated</h2>
+          <div class="skill-grid"><span>Python Reversal</span><span>Base Conversion</span><span>Code Review</span><span>Index Decoding</span></div>
+        </section>
+
+        <section class="case-section" id="timeline" data-step="02">
+          <p class="eyebrow">attack path</p>
+          <h2>Timeline</h2>
+          <div class="timeline"><div><strong>00</strong><p>Read the note and babel.py.</p></div><div><strong>01</strong><p>Reverse page_from_seed() into a seed.</p></div><div><strong>02</strong><p>Feed the seed into image_from_seed().</p></div><div><strong>03</strong><p>Decode RGB triples as indexes into the author note.</p></div></div>
+        </section>
+
+        <section class="case-section" id="walkthrough" data-step="03">
+          <p class="eyebrow">solution notes</p>
+          <h2>Walkthrough</h2>
+          <h3>Challenge</h3>
+<p>Description:</p>
+<p>My friend sent me a random codebase with a Library of Babel implementation. Apparently the author is well known to hide secrets in his code, but I don&#x27;t see any here.</p>
+<p>Flag format: boroCTF{}</p>
+<p>Files provided:</p>
+<p>AUTHORSNOTE.txt</p>
+<p>babel.py</p>
+<h3>1. Initial Analysis</h3>
+<p>The challenge gives us a Python script that claims to implement a small “Library of Babel” generator.</p>
+<p>The first interesting clue is in AUTHORSNOTE.txt. The author talks about old ciphers such as Caesar, Vigenere, XOR, and RSA, then says that older ciphers can still be used aesthetically if hidden well enough. The note also says the author wanted to create a cipher using the Library of Babel idea.</p>
+<p>So the note is not just flavor text. It is probably part of the cipher.</p>
+<h3>2. Understanding babel.py</h3>
+<p>The script defines this alphabet:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>ALPHABET = &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz., &quot;</pre></div>
+<p>This alphabet has 55 characters.</p>
+<p>The script has two main functions:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>def page_from_seed(seed: int):
+seed += HUGE_CONSTANT</pre></div>
+<p>chars = []</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>for _ in range(940):
+seed, remainder = divmod(seed, 55)
+chars.append(ALPHABET[remainder])
+return &quot;&quot;.join(chars)</pre></div>
+<p>This means the page text is generated by repeatedly converting the number into base 55.</p>
+<p>The second function is:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>def image_from_seed(seed: int):
+seed -= HUGE_CONSTANT_MINUS_ONE
+pixels = []
+for _ in range(225):
+seed, r = divmod(seed, 256)
+seed, g = divmod(seed, 256)
+seed, b = divmod(seed, 256)
+pixels.append((r, g, b))
+return pixels</pre></div>
+<p>This produces a 15x15 image, because:</p>
+<p>15 * 15 = 225 pixels</p>
+<p>Each pixel is an RGB triple. The program also prints the raw image values after displaying the image.</p>
+<h3>3. Key Observation</h3>
+<p>page_from_seed() generates exactly 940 characters.</p>
+<p>AUTHORSNOTE.txt also contains exactly 940 meaningful characters after removing the trailing newline.</p>
+<p>That strongly suggests that the author note is meant to be treated as a generated Babel page.</p>
+<p>So instead of trying random seeds, we can reverse the page generation.</p>
+<h3>4. Reversing page_from_seed</h3>
+<p>The function does this:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>seed, remainder = divmod(seed, 55)
+chars.append(ALPHABET[remainder])</pre></div>
+<p>This means every character in the page is one base-55 digit.</p>
+<p>So to reverse it, we convert the author note back into a big integer:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>number = 0
+for i, ch in enumerate(author_note):</pre></div>
+<p>number += ALPHABET.index(ch) * (55 ** i)</p>
+<p>Then we undo the huge constant:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>seed = number - PAGE_CONSTANT</pre></div>
+<p>This gives us a valid seed that reproduces AUTHORSNOTE.txt.</p>
+<h3>5. Using the Recovered Seed</h3>
+<p>After recovering the seed, we use it with image_from_seed().</p>
+<p>At first, the image itself does not clearly show the flag. But the raw RGB values are suspicious.</p>
+<p>The first RGB values look like this:</p>
+<p>(0, 0, 7)</p>
+<p>(0, 1, 6)</p>
+<p>(0, 3, 5)</p>
+<p>(0, 4, 4)</p>
+<p>(1, 0, 3)</p>
+<p>...</p>
+<p>Each RGB triple only contains digits from 0 to 9.</p>
+<p>So each pixel can be read as a 3-digit number:</p>
+<p>(0, 0, 7) -&gt; 007</p>
+<p>(0, 1, 6) -&gt; 016</p>
+<p>(0, 3, 5) -&gt; 035</p>
+<p>These numbers are indexes into the author note.</p>
+<p>So:</p>
+<p>index = r * 100 + g * 10 + b</p>
+<p>character = author_note[index]</p>
+<p>Doing this reveals the hidden message.</p>
+<h3>6. Solver Script</h3>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>from pathlib import Path
+import re
+# Read files</pre></div>
+<p>author_note = Path(&quot;AUTHORSNOTE.txt&quot;).read_text().rstrip(&quot;\n&quot;)</p>
+<p>babel_code = Path(&quot;babel.py&quot;).read_text()</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre># Extract alphabet
+ALPHABET = re.search(r&#x27;ALPHABET = &quot;(.*)&quot;&#x27;, babel_code).group(1)
+# Extract the two huge constants
+page_constant = int(re.findall(r&quot;seed \\+= (\\d+)&quot;, babel_code)[0])
+image_constant = int(re.findall(r&quot;seed -= (\\d+)&quot;, babel_code)[0])
+# Step 1: Reverse page_from_seed()
+number = 0
+for i, ch in enumerate(author_note):</pre></div>
+<p>number += ALPHABET.index(ch) * (55 ** i)</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>seed = number - page_constant
+# Step 2: Reproduce image_from_seed()
+image_seed = seed - image_constant
+pixels = []
+for _ in range(225):
+image_seed, r = divmod(image_seed, 256)
+image_seed, g = divmod(image_seed, 256)
+image_seed, b = divmod(image_seed, 256)
+pixels.append((r, g, b))
+# Step 3: Decode RGB triples as 3-digit indexes into the author note
+decoded = &quot;&quot;
+for r, g, b in pixels:
+index = r * 100 + g * 10 + b
+decoded += author_note[index]
+print(decoded[:50])</pre></div>
+<h3>7. Output</h3>
+<p>The decoded message starts with:</p>
+<p>boroCTFoneSeedCipherInInfinity</p>
+<p>After that, the output becomes repeated T characters because the remaining RGB triples decode to index 000, and author_note[0] is T.</p>
+<p>The meaningful hidden message is:</p>
+<p>boroCTFoneSeedCipherInInfinity</p>
+<p>Since the challenge gives the flag format as:</p>
+<p>boroCTF{}</p>
+<p>we wrap the secret part inside braces.</p>
+<h3>Final Flag</h3>
+<p>boroCTF{oneSeedCipherInInfinity}</p>
+        </section>
+
+        <section class="case-section" id="evidence" data-step="04">
+          <p class="eyebrow">proof locker</p>
+          <h2>Evidence</h2>
+          <div class="evidence-grid"><div class="evidence-card"><strong>Clue 01</strong><p>AUTHORSNOTE.txt has the same 940-character length generated by page_from_seed().</p></div><div class="evidence-card"><strong>Clue 02</strong><p>The alphabet length is 55, turning the note into a base-55 number.</p></div><div class="evidence-card"><strong>Clue 03</strong><p>RGB triples from image_from_seed() are 3-digit indexes into the note.</p></div></div>
+          
+        </section>
+
+        <section class="flag-vault" id="flag">
+          <p class="eyebrow">final artifact</p>
+          <h2>Flag</h2>
+          <code>boroCTF{oneSeedCipherInInfinity}</code>
+        </section>
+
+        <section class="case-section" id="lessons" data-step="06">
+          <p class="eyebrow">after action report</p>
+          <h2>Lessons Learned</h2>
+          <ul><li>Matching lengths are often a cryptographic clue.</li><li>Custom generators can usually be reversed by undoing arithmetic exactly.</li><li>Seemingly visual RGB data may actually be an indexing layer.</li></ul>
+          <div class="footer-actions">
+            <a class="btn" href="../index.html">← Back to MyLibrary</a>
+            <a class="btn ghost" href="../../index.html">Back to Portfolio</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

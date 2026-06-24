@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Double-fried — kitCTF / GPNCTF Writeup — Naim MyLibrary</title>
+  <meta name="description" content="Extracted syslog messages from a PCAP and reconstructed the flag from ordered single-character records." />
+  <link rel="stylesheet" href="../writeup-template.css" />
+</head>
+<body style="--accent:#7cffc4;--accent-2:#b37eff;">
+  <main class="case-shell">
+    <nav class="case-nav" aria-label="Writeup navigation">
+      <a class="case-brand" href="../index.html">
+        <span class="case-mark">NM</span>
+        <span>Naim MyLibrary</span>
+      </a>
+      <div class="case-links">
+        <a href="../../index.html">Portfolio</a>
+        <a href="../index.html">Library</a>
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#flag">Flag</a>
+      </div>
+    </nav>
+
+    <header class="case-hero">
+      <section class="case-brief">
+        <p class="eyebrow">kitCTF / GPNCTF Forensics casefile</p>
+        <h1>Double-fried</h1>
+        <p class="lead">Extracted syslog messages from a PCAP and reconstructed the flag from ordered single-character records.</p>
+        <div class="meta-row">
+          <span class="chip">CTF: kitCTF / GPNCTF</span>
+          <span class="chip">Category: Forensics</span>
+          <span class="chip">Difficulty: Easy</span>
+          <span class="chip">No points listed</span>
+          <span class="chip">Tags: Forensics · PCAP · Syslog · tshark · Timeline</span>
+        </div>
+      </section>
+
+      <aside class="case-panel" aria-label="Writeup status panel">
+        <div class="case-panel-inner">
+          <p class="eyebrow">mission telemetry</p>
+          <div class="status-line"><span>Status</span><strong>Solved</strong></div>
+          <div class="status-line"><span>Method</span><strong>Recon → Analyze → Exploit</strong></div>
+          <div class="status-line"><span>Evidence</span><strong>Commands + reasoning</strong></div>
+          <div class="status-line"><span>Published</span><strong>2026-06-24</strong></div>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="note" style="margin-top:18px;">This writeup was formatted into the new kitCTF/GPNCTF section while preserving the original solution notes.</p>
+        </div>
+      </aside>
+    </header>
+
+    <div class="case-layout">
+      <aside class="case-toc">
+        <p>Case index</p>
+        <a href="#overview">00 / Overview</a>
+        <a href="#skills">01 / Skills</a>
+        <a href="#timeline">02 / Timeline</a>
+        <a href="#walkthrough">03 / Walkthrough</a>
+        <a href="#evidence">04 / Evidence</a>
+        <a href="#flag">05 / Flag</a>
+        <a href="#lessons">06 / Lessons</a>
+      </aside>
+
+      <article class="case-body">
+        <section class="case-section" id="overview" data-step="00">
+          <p class="eyebrow">operator brief</p>
+          <h2>Overview</h2>
+          <p>Extracted syslog messages from a PCAP and reconstructed the flag from ordered single-character records.</p>
+          <div class="evidence-grid">
+            <div class="evidence-card"><strong>Challenge</strong><p>Double-fried from kitCTF / GPNCTF.</p></div>
+            <div class="evidence-card"><strong>Category</strong><p>Forensics · Easy difficulty.</p></div>
+          </div>
+        </section>
+
+        <section class="case-section" id="skills" data-step="01">
+          <p class="eyebrow">skills demonstrated</p>
+          <h2>Skills Demonstrated</h2>
+          <div class="skill-grid"><span>Network Forensics</span><span>tshark Filtering</span><span>Protocol Inspection</span><span>Timeline Reconstruction</span></div>
+        </section>
+
+        <section class="case-section" id="timeline" data-step="02">
+          <p class="eyebrow">attack path</p>
+          <h2>Timeline</h2>
+          <div class="timeline"><div><strong>00</strong><p>Open the provided kitchen_log.pcap.</p></div><div><strong>01</strong><p>Filter for syslog traffic.</p></div><div><strong>02</strong><p>Keep the ordered R0016-R0067 character records.</p></div><div><strong>03</strong><p>Join the characters into the final flag.</p></div></div>
+        </section>
+
+        <section class="case-section" id="walkthrough" data-step="03">
+          <p class="eyebrow">solution notes</p>
+          <h2>Walkthrough</h2>
+          <h3>Challenge 3: Double-fried (Network Forensics)</h3>
+<h4>Challenge Description</h4>
+<p>A <code>kitchen_log.pcap</code> file containing syslog messages. The flag is transmitted character by character.</p>
+<h4>Analysis</h4>
+<p>Using <code>tshark</code> to extract all syslog messages:</p>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>tshark -r kitchen_log.pcap -Y &quot;syslog&quot; -T fields -e _ws.col.Info</pre></div>
+<p>The output shows messages <code>R0016</code> through <code>R0067</code> containing the flag characters, with interleaved <code>Fxxxx</code> messages.</p>
+<h4>Message Order (by timestamp)</h4>
+<div class="table-wrap"><table><thead><tr><th>ID</th><th>Char</th></tr></thead><tbody><tr><td>R0016</td><td>G</td></tr><tr><td>R0017</td><td>P</td></tr><tr><td>R0018</td><td>N</td></tr><tr><td>R0019</td><td>C</td></tr><tr><td>R0020</td><td>T</td></tr><tr><td>R0021</td><td>F</td></tr><tr><td>R0022</td><td>{</td></tr><tr><td>R0023</td><td>N</td></tr><tr><td>R0024</td><td>I</td></tr><tr><td>R0025</td><td>C</td></tr><tr><td>R0026</td><td>e</td></tr><tr><td>R0027</td><td>,</td></tr><tr><td>R0028</td><td>space</td></tr><tr><td>R0029</td><td>y</td></tr><tr><td>R0030</td><td>0</td></tr><tr><td>R0031</td><td>U</td></tr><tr><td>R0032</td><td>space</td></tr><tr><td>R0033</td><td>f</td></tr><tr><td>R0034</td><td>O</td></tr><tr><td>R0035</td><td>u</td></tr><tr><td>R0036</td><td>N</td></tr><tr><td>R0037</td><td>D</td></tr><tr><td>R0038</td><td>space</td></tr><tr><td>R0039</td><td>o</td></tr><tr><td>R0040</td><td>U</td></tr><tr><td>R0041</td><td>7</td></tr><tr><td>R0042</td><td>space</td></tr><tr><td>R0043</td><td>w</td></tr><tr><td>R0044</td><td>H</td></tr><tr><td>R0045</td><td>0</td></tr><tr><td>R0046</td><td>space</td></tr><tr><td>R0047</td><td>D</td></tr><tr><td>R0048</td><td>I</td></tr><tr><td>R0049</td><td>D</td></tr><tr><td>R0050</td><td>space</td></tr><tr><td>R0051</td><td>n</td></tr><tr><td>R0052</td><td>o</td></tr><tr><td>R0053</td><td>T</td></tr><tr><td>R0054</td><td>space</td></tr><tr><td>R0055</td><td>b</td></tr><tr><td>R0056</td><td>3</td></tr><tr><td>R0057</td><td>L</td></tr><tr><td>R0058</td><td>O</td></tr><tr><td>R0059</td><td>N</td></tr><tr><td>R0060</td><td>G</td></tr><tr><td>R0061</td><td>space</td></tr><tr><td>R0062</td><td>7</td></tr><tr><td>R0063</td><td>H</td></tr><tr><td>R0064</td><td>e</td></tr><tr><td>R0065</td><td>r</td></tr><tr><td>R0066</td><td>3</td></tr><tr><td>R0067</td><td>}</td></tr></tbody></table></div>
+<h4>Extracting the Flag</h4>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre># Extract only the single-character messages
+tshark -r kitchen_log.pcap -Y &#x27;syslog.msg matches &quot;^[A-Za-z0-9{} _,]$&quot;&#x27; -T fields -e syslog.msg | tr -d &#x27;\n&#x27;</pre></div>
+<h4>Final Flag</h4>
+<div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>GPNCTF{NICe, y0U fOuND oU7 wH0 DID noT b3LONG 7Her3}</pre></div>
+        </section>
+
+        <section class="case-section" id="evidence" data-step="04">
+          <p class="eyebrow">proof locker</p>
+          <h2>Evidence</h2>
+          <div class="evidence-grid"><div class="evidence-card"><strong>Clue 01</strong><p>The PCAP contains syslog messages with interleaved noise.</p></div><div class="evidence-card"><strong>Clue 02</strong><p>R-prefixed messages carry the useful characters.</p></div><div class="evidence-card"><strong>Clue 03</strong><p>Timestamp order reconstructs the flag string.</p></div></div>
+        </section>
+
+        <section class="flag-vault" id="flag">
+          <p class="eyebrow">final artifact</p>
+          <h2>Flag</h2>
+          <code>GPNCTF{NICe, y0U fOuND oU7 wH0 DID noT b3LONG 7Her3}</code>
+        </section>
+
+        <section class="case-section" id="lessons" data-step="06">
+          <p class="eyebrow">after action report</p>
+          <h2>Lessons Learned</h2>
+          <ul><li>Forensics challenges often hide data in ordering, not encryption.</li><li>Protocol-specific filters reduce noise quickly.</li><li>Single-character messages should be checked for ordered reconstruction.</li></ul>
+          <div class="footer-actions">
+            <a class="btn" href="../index.html">← Back to MyLibrary</a>
+            <a class="btn ghost" href="../../index.html">Back to Portfolio</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>
