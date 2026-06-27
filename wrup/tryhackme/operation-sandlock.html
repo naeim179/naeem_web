@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Operation SandLock — TryHackMe Writeup — Naim MyLibrary</title>
-  <meta name="description" content="TryHackMe Operation SandLock write-up covering cryptography, reverse engineering, forensics, hash cracking, and hidden evidence extraction." />
+  <title>Operation SandLock — TryHackMe Write-up — Naim MyLibrary</title>
+  <meta name="description" content="Solved the Operation SandLock TryHackMe room by chaining crypto analysis, reverse engineering, forensics, hash cracking, and vault extraction." />
   <link rel="stylesheet" href="../writeup-template.css" />
 </head>
-<body style="--accent:#73fbff;--accent-2:#ff55b1;--acid:#c5ff6e;">
+<body style="--accent:#f0c66b;--accent-2:#ff7a5c;">
   <main class="case-shell">
     <nav class="case-nav" aria-label="Writeup navigation">
       <a class="case-brand" href="../index.html">
@@ -18,21 +18,21 @@
         <a href="../../index.html">Portfolio</a>
         <a href="../index.html">Library</a>
         <a href="#walkthrough">Walkthrough</a>
-        <a href="#summary">Summary</a>
+        <a href="#answers">Answers</a>
       </div>
     </nav>
 
     <header class="case-hero">
       <section class="case-brief">
-        <p class="eyebrow">TryHackMe casefile</p>
+        <p class="eyebrow">TryHackMe CTF casefile</p>
         <h1>Operation SandLock</h1>
-        <p class="lead">A CTF investigation chain covering cryptography, reverse engineering, forensics, file repair, and hash cracking.</p>
+        <p class="lead">Followed four chained locks through cryptography, reverse engineering, forensics, and hash cracking to uncover the final vault secret.</p>
         <div class="meta-row">
-          <span class="chip">CTF: TryHackMe</span>
-          <span class="chip">Category: Crypto · Reverse · Forensics</span>
-          <span class="chip">Difficulty: CTF-style</span>
-          <span class="chip">Status: Solved</span>
-          <span class="chip">Tags: CyberChef · Ghidra · Hashcat</span>
+          <span class="chip">Platform: TryHackMe</span>
+          <span class="chip">Category: Cryptography · Reverse Engineering · Forensics</span>
+          <span class="chip">Difficulty: CTF-style challenge</span>
+          <span class="chip">Room: Operation SandLock</span>
+          <span class="chip">Tags: CyberChef · Ghidra · XOR · Hashcat · Vault Analysis</span>
         </div>
       </section>
 
@@ -40,11 +40,11 @@
         <div class="case-panel-inner">
           <p class="eyebrow">mission telemetry</p>
           <div class="status-line"><span>Status</span><strong>Solved</strong></div>
-          <div class="status-line"><span>Method</span><strong>Crypto → Reverse → Forensics</strong></div>
-          <div class="status-line"><span>Evidence</span><strong>Commands + notes</strong></div>
+          <div class="status-line"><span>Method</span><strong>Crypto → RE → Forensics → Crack</strong></div>
+          <div class="status-line"><span>Evidence</span><strong>Decoded notes + binary + vault files</strong></div>
           <div class="status-line"><span>Published</span><strong>2026</strong></div>
           <div class="progress-track" aria-hidden="true"><span></span></div>
-          <p class="note" style="margin-top:18px;">Flags are intentionally redacted as <code>THM{flag_example}</code> for public publishing.</p>
+          <p class="note" style="margin-top:18px;">Public flags are intentionally redacted as <code>THM{flag_example}</code>, while the reproducible solve chain and recovered key material are documented.</p>
         </div>
       </aside>
     </header>
@@ -53,226 +53,171 @@
       <aside class="case-toc">
         <p>Case index</p>
         <a href="#overview">00 / Overview</a>
-        <a href="#tools">01 / Tools</a>
-        <a href="#walkthrough">02 / Walkthrough</a>
-        <a href="#summary">03 / Answer Summary</a>
-        <a href="#conclusion">04 / Conclusion</a>
+        <a href="#skills">01 / Skills</a>
+        <a href="#timeline">02 / Timeline</a>
+        <a href="#walkthrough">03 / Walkthrough</a>
+        <a href="#evidence">04 / Evidence</a>
+        <a href="#answers">05 / Final Answers</a>
+        <a href="#lessons">06 / Lessons</a>
       </aside>
 
       <article class="case-body">
         <section class="case-section" id="overview" data-step="00">
           <p class="eyebrow">operator brief</p>
-          <h2>Introduction</h2>
-          <p><strong>Operation SandLock</strong> is a TryHackMe CTF room designed to test analysis, reverse engineering, and forensics skills.</p>
-          <p>The story begins when the security team <strong>Error.exe</strong> discovers a compromised workstation in the heart of Amman. After collecting the evidence, the team recovers several suspicious files connected to an attacker known as <strong>The Sandman</strong>.</p>
-          <p>Each file appears to protect one part of a larger secret.</p>
+          <h2>Overview</h2>
+          <p><strong>Operation SandLock</strong> is a TryHackMe CTF room built around analysis, reverse engineering, and forensics. The story begins when the security team <strong>Error.exe</strong> discovers a compromised workstation in Amman and recovers suspicious files connected to an attacker known as <strong>The Sandman</strong>.</p>
           <p>The Sandman left one message behind:</p>
-          <div class="flag-vault"><code>Four locks. One truth.</code></div>
-          <p>The goal of this room is to follow the clues, analyze the files, solve each lock in order, and uncover the final secret.</p>
-        </section>
-
-        <section class="case-section" id="tools" data-step="01">
-          <p class="eyebrow">toolbox</p>
-          <h2>Tools Used</h2>
-          <div class="skill-grid">
-            <span>CyberChef</span>
-            <span>Ghidra</span>
-            <span>Linux terminal</span>
-            <span>file</span>
-            <span>strings</span>
-            <span>unzip</span>
-            <span>hexeditor</span>
-            <span>Hashcat</span>
-            <span>rockyou.txt</span>
-          </div>
-        </section>
-
-        <section class="case-section" id="walkthrough" data-step="02">
-          <p class="eyebrow">solution notes</p>
-          <h2>Task 1 — Introduction</h2>
-          <p>The first task introduces the storyline and explains the objective of the challenge. There is no technical answer required for this task.</p>
-
-          <h2>Task 2 — Crypto Analysis: The Encrypted Note</h2>
-          <h3>Challenge Overview</h3>
-          <p>The team’s crypto analyst, Laith, found a suspicious encrypted note. The file contained a strange hex string. Nothing was readable at first, but The Sandman left a clue:</p>
-          <div class="flag-vault"><code>The first lock listens to the city where it all began.</code></div>
-          <p>Since the story mentioned that the compromised workstation was found in <strong>Amman</strong>, the clue pointed back to the city name.</p>
-
-          <h3>Initial Analysis</h3>
-          <p>The encrypted note contained a hex-encoded value. Since the clue referenced the city where everything began, I used <code>amman</code> as the key.</p>
-          <p>The city name was important because it was not just part of the story; it was also the hint needed to unlock the first encrypted message.</p>
-
-          <h3>Decryption Using CyberChef</h3>
-          <p>I used CyberChef to process the encrypted note. The recipe was:</p>
-          <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>From Hex
-Vigenère Encode using the key: amman
-From Base64</pre></div>
-          <p>After decoding, the note revealed the first flag and a key fragment.</p>
-
-          <h3>First Flag</h3>
-          <div class="flag-vault"><code>THM{flag_example}</code></div>
-
-          <h3>Key Part 1</h3>
-          <p>The decoded output also revealed a Base32-looking value. After decoding it with <strong>From Base32</strong>, I recovered the first key part:</p>
-          <div class="flag-vault"><code>desert</code></div>
-
-          <h3>Task 2 Answers</h3>
+          <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>Four locks. One truth.</pre></div>
+          <p>The goal was to follow the clues, analyze each artifact, solve the locks in order, and uncover the final secret.</p>
           <div class="evidence-grid">
-            <div class="evidence-card"><strong>Decrypted flag from note.enc</strong><p><code>THM{flag_example}</code></p></div>
-            <div class="evidence-card"><strong>Key part 1</strong><p><code>desert</code></p></div>
+            <div class="evidence-card"><strong>Challenge</strong><p>Operation SandLock from TryHackMe.</p></div>
+            <div class="evidence-card"><strong>Core chain</strong><p>Encrypted note → Gatekeeper binary → Locked archive → Final vault.</p></div>
           </div>
+        </section>
 
-          <h2>Task 3 — Reverse Engineering: The Gatekeeper of the Sand</h2>
-          <h3>Challenge Overview</h3>
-          <p>Naim, the reverse engineer of the team, takes over this part of the operation. The provided binary asks for an access key when executed:</p>
+        <section class="case-section" id="skills" data-step="01">
+          <p class="eyebrow">portfolio value</p>
+          <h2>Skills Demonstrated</h2>
+          <div class="skill-grid">
+            <span>Hex Decoding</span>
+            <span>Vigenère Analysis</span>
+            <span>Base64 / Base32 Decoding</span>
+            <span>Ghidra Reverse Engineering</span>
+            <span>XOR Decoding</span>
+            <span>Password Chaining</span>
+            <span>JPEG Header Repair</span>
+            <span>Hashcat MD5 Cracking</span>
+            <span>Forensics Triage</span>
+            <span>Evidence Documentation</span>
+          </div>
+        </section>
+
+        <section class="case-section" id="timeline" data-step="02">
+          <p class="eyebrow">solve path</p>
+          <h2>Timeline</h2>
+          <div class="timeline">
+            <div><strong>00</strong><p>Read the room story and identified Amman as the clue for the first lock.</p></div>
+            <div><strong>01</strong><p>Decoded the encrypted note with CyberChef and recovered the first key fragment.</p></div>
+            <div><strong>02</strong><p>Analyzed the Gatekeeper binary in Ghidra, found the XOR routine, and recovered the access key.</p></div>
+            <div><strong>03</strong><p>Combined key fragments, unlocked the vault archive, repaired the extracted evidence, and found a hidden hash.</p></div>
+            <div><strong>04</strong><p>Cracked the MD5 hash with Hashcat, opened the final vault, and recovered the final flag.</p></div>
+          </div>
+        </section>
+
+        <section class="case-section" id="walkthrough" data-step="03">
+          <p class="eyebrow">solution notes</p>
+          <h2>Walkthrough</h2>
+
+          <h3>Task 1 — Introduction</h3>
+          <p>The first task introduces the storyline and explains the objective of the challenge. There is no technical answer required here; it sets the context for the rest of the investigation.</p>
+
+          <h3>Task 2 — Crypto Analysis: The Encrypted Note</h3>
+          <p>The crypto analyst found a suspicious encrypted note containing a hex-encoded value. The clue said:</p>
+          <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>The first lock listens to the city where it all began.</pre></div>
+          <p>Since the story started in Amman, I used <code>amman</code> as the key.</p>
+          <p>The CyberChef recipe was:</p>
+          <ol>
+            <li><strong>From Hex</strong></li>
+            <li><strong>Vigenère Encode</strong> using the key <code>amman</code></li>
+            <li><strong>From Base64</strong></li>
+          </ol>
+          <p>The decoded output revealed the first redacted flag and a Base32-looking value. Decoding that value with <strong>From Base32</strong> recovered the first key fragment:</p>
+          <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>KEY_PART_1 = desert</pre></div>
+
+          <h3>Task 3 — Reverse Engineering: The Gatekeeper of the Sand</h3>
+          <p>The provided binary asked for an access key:</p>
           <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>./gatekeeper
 Enter the access key:</pre></div>
-          <p>At first, the key recovered from the previous task, <code>desert</code>, may look like the correct password. However, the binary does not accept that value directly.</p>
-
-          <h3>Running File Analysis</h3>
-          <p>The binary name started with a dash:</p>
-          <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>-1782436588904.gatekeeper</pre></div>
-          <p>When I tried to run <code>file</code> normally, Linux treated the filename as command options:</p>
-          <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>file -1782436588904.gatekeeper</pre></div>
-          <p>To fix that, I used <code>--</code> before the filename or referenced the file with <code>./</code>:</p>
+          <p>The first fragment, <code>desert</code>, was not accepted directly. This showed that the previous key was only part of a longer chain.</p>
+          <p>The binary filename started with a dash, so running tools against it required either <code>--</code> or a relative path prefix:</p>
           <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>file -- -1782436588904.gatekeeper
 file ./-1782436588904.gatekeeper</pre></div>
-
-          <h3>Recommended Tool</h3>
-          <p>The correct tool to analyze the binary is:</p>
-          <div class="flag-vault"><code>Ghidra</code></div>
-          <p>Ghidra allows us to inspect the binary, view decompiled code, and understand how the input validation works.</p>
-
-          <h3>Reverse Engineering in Ghidra</h3>
-          <p>After importing the binary into Ghidra, I inspected the decompiled function responsible for checking the user input. The binary contained encoded strings and a decoding function.</p>
-          <p>The important part was that the program copied encoded data into memory, called another function, and then compared the decoded result with the user input using <code>strcmp()</code>.</p>
-
-          <h3>XOR Decoding Routine</h3>
-          <p>The decoding function used a simple XOR operation. It looped over the encoded bytes and XORed each byte with:</p>
-          <div class="flag-vault"><code>0x37</code></div>
-          <p>This means the hidden access key was not stored directly in plaintext. It was decoded at runtime before being compared to the input.</p>
+          <p>I used <strong>Ghidra</strong> to inspect the decompiled validation logic. The program copied encoded bytes into memory, decoded them at runtime, and compared the decoded result to the user input with <code>strcmp()</code>.</p>
+          <p>The decoding routine XORed each encoded byte with:</p>
+          <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>0x37</pre></div>
           <p>After decoding the hidden value, the correct access key was:</p>
-          <div class="flag-vault"><code>sands_everywhere</code></div>
+          <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>sands_everywhere</pre></div>
+          <p>Entering that key revealed the second redacted flag and the second key fragment:</p>
+          <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>KEY_PART_2 = -rabbit</pre></div>
 
-          <h3>Proof of Concept</h3>
-          <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>./-1782436588904.gatekeeper
-sands_everywhere</pre></div>
-          <p>The binary accepted the key and revealed the second flag and the second key fragment.</p>
-
-          <h3>Task 3 Answers</h3>
-          <div class="evidence-grid">
-            <div class="evidence-card"><strong>Tool</strong><p><code>Ghidra</code></p></div>
-            <div class="evidence-card"><strong>Correct access key</strong><p><code>sands_everywhere</code></p></div>
-            <div class="evidence-card"><strong>Second flag</strong><p><code>THM{flag_example}</code></p></div>
-            <div class="evidence-card"><strong>KEY_PART_2</strong><p><code>-rabbit</code></p></div>
-          </div>
-
-          <h2>Task 4 — Forensics: Hell Sands / The Vault</h2>
-          <h3>Challenge Overview</h3>
-          <p>After completing the previous stages, the team now had two separate key fragments:</p>
+          <h3>Task 4 — Forensics: Hell Sands / The Vault</h3>
+          <p>After Task 2 and Task 3, the chain had two fragments:</p>
           <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>KEY_PART_1 = desert
 KEY_PART_2 = -rabbit</pre></div>
-          <p>The clue says:</p>
-          <div class="flag-vault"><code>Truth waits inside, but do not believe what you see.</code></div>
-
-          <h3>Combining the Key Fragments</h3>
-          <p>The password was not a new value. It had to be built by combining the two key fragments from the previous tasks:</p>
-          <div class="flag-vault"><code>desert-rabbit</code></div>
-          <p>I used this password to extract the archive:</p>
-          <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>unzip secret-sands-1782576720114.zip
-Password: desert-rabbit</pre></div>
-          <p>The archive extracted a file named <code>222.jpg</code>.</p>
-
-          <h3>Checking the Extracted File</h3>
-          <p>Although the extracted file had a <code>.jpg</code> extension, I checked it using the <code>file</code> command:</p>
+          <p>Combining them produced the archive password:</p>
+          <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>desert-rabbit</pre></div>
+          <p>I used that password to extract the archive:</p>
+          <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>unzip secret-sands-1782576720114.zip</pre></div>
+          <p>The extracted file was named <code>222.jpg</code>, but <code>file</code> reported it as raw data:</p>
           <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>file 222.jpg
 222.jpg: data</pre></div>
-          <p>This means the file was not recognized as a valid JPEG image. Since the extension suggested it should be an image, I suspected that the file header was corrupted.</p>
-
-          <h3>Repairing the JPEG Header</h3>
-          <p>I opened the file using a hex editor:</p>
-          <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>hexeditor 222.jpg</pre></div>
-          <p>A valid JPEG file commonly starts with:</p>
-          <div class="flag-vault"><code>FF D8 FF E0</code></div>
-          <p>I replaced the corrupted first four bytes with <code>FF D8 FF E0</code>. After saving the file, it was recognized as a JPEG image.</p>
-
-          <h3>Viewing the Repaired Image</h3>
-          <p>After repairing the header, I opened the image and found a flag displayed inside it.</p>
-          <div class="flag-vault"><code>THM{flag_example}</code></div>
-
-          <h3>Hidden Evidence with strings</h3>
-          <p>The clue said not to believe what we see, so I inspected the image further using <code>strings</code>:</p>
+          <p>Because the extension suggested a JPEG image, I inspected the file header in a hex editor. A common JPEG header begins with:</p>
+          <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>FF D8 FF E0</pre></div>
+          <p>After replacing the corrupted first four bytes with the valid JPEG magic bytes, the image opened successfully and displayed a redacted flag.</p>
+          <p>The clue warned not to believe only what was visible, so I inspected the image with <code>strings</code> and found a hidden hash:</p>
           <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>strings 222.jpg
 VAULT_HASH=8621ffdbc5698829397d97767ac13db3</pre></div>
 
-          <h3>Task 4 Answers</h3>
-          <div class="evidence-grid">
-            <div class="evidence-card"><strong>Final flag hidden inside the vault</strong><p><code>THM{flag_example}</code></p></div>
-            <div class="evidence-card"><strong>Hash hidden inside the evidence</strong><p><code>8621ffdbc5698829397d97767ac13db3</code></p></div>
-          </div>
-
-          <h2>Task 5 — The Final Vault</h2>
-          <h3>Challenge Overview</h3>
-          <p>The previous task revealed a hidden hash inside the repaired image:</p>
-          <div class="flag-vault"><code>VAULT_HASH=8621ffdbc5698829397d97767ac13db3</code></div>
-          <p>The goal was to crack the hash, use the recovered value as the password, open the final vault, and retrieve the final flag.</p>
-
-          <h3>Cracking the Hash with Hashcat</h3>
-          <p>The hash is 32 hexadecimal characters long, which strongly suggests MD5. I saved it into a file and cracked it using Hashcat mode <code>0</code>:</p>
+          <h3>Task 5 — The Final Vault</h3>
+          <p>The hidden hash was 32 hexadecimal characters, which strongly suggested MD5:</p>
+          <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>8621ffdbc5698829397d97767ac13db3</pre></div>
+          <p>I saved the hash and cracked it with Hashcat using MD5 mode <code>-m 0</code>:</p>
           <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>echo -n "8621ffdbc5698829397d97767ac13db3" &gt; hash.txt
 hashcat -m 0 -a 0 hash.txt /usr/share/wordlists/rockyou.txt
 hashcat -m 0 --show hash.txt</pre></div>
-          <p>The output was:</p>
+          <p>Hashcat recovered the password:</p>
           <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>8621ffdbc5698829397d97767ac13db3:dragon</pre></div>
-          <p>The recovered password was:</p>
-          <div class="flag-vault"><code>dragon</code></div>
-
-          <h3>Unlocking the Final Vault</h3>
-          <p>I used the cracked password to extract the final vault archive:</p>
+          <p>I used <code>dragon</code> to unlock the final vault archive:</p>
           <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>unzip vault-1782576742090.zip
-Password: dragon
 cat final.txt</pre></div>
-          <p>The file contained the final flag.</p>
-          <div class="flag-vault"><code>THM{flag_example}</code></div>
+          <p>The final file contained the final redacted flag.</p>
 
-          <h3>Task 5 Answers</h3>
-          <div class="evidence-grid">
-            <div class="evidence-card"><strong>Password opens the final vault</strong><p><code>dragon</code></p></div>
-            <div class="evidence-card"><strong>Final flag</strong><p><code>THM{flag_example}</code></p></div>
-          </div>
+          <h3>Task 6 — Conclusion</h3>
+          <p>Operation SandLock ends after four chained locks. Laith handled the crypto analysis, Naim handled the reverse engineering, and Ahmad handled the forensics and final vault work. Each stage revealed a piece of the larger truth.</p>
         </section>
 
-        <section class="case-section" id="summary" data-step="03">
-          <p class="eyebrow">answers</p>
-          <h2>Final Answer Summary</h2>
+        <section class="case-section" id="evidence" data-step="04">
+          <p class="eyebrow">proof locker</p>
+          <h2>Evidence</h2>
           <div class="evidence-grid">
-            <div class="evidence-card"><strong>Task 2 flag</strong><p><code>THM{flag_example}</code></p></div>
-            <div class="evidence-card"><strong>Key part 1</strong><p><code>desert</code></p></div>
-            <div class="evidence-card"><strong>Gatekeeper tool</strong><p><code>Ghidra</code></p></div>
+            <div class="evidence-card"><strong>Crypto key</strong><p>The city clue pointed to <code>amman</code>, which decoded the encrypted note.</p></div>
+            <div class="evidence-card"><strong>First key fragment</strong><p><code>desert</code></p></div>
             <div class="evidence-card"><strong>Gatekeeper access key</strong><p><code>sands_everywhere</code></p></div>
-            <div class="evidence-card"><strong>Task 3 flag</strong><p><code>THM{flag_example}</code></p></div>
-            <div class="evidence-card"><strong>Key part 2</strong><p><code>-rabbit</code></p></div>
+            <div class="evidence-card"><strong>Second key fragment</strong><p><code>-rabbit</code></p></div>
             <div class="evidence-card"><strong>Combined vault password</strong><p><code>desert-rabbit</code></p></div>
             <div class="evidence-card"><strong>Hidden hash</strong><p><code>8621ffdbc5698829397d97767ac13db3</code></p></div>
-            <div class="evidence-card"><strong>Cracked hash password</strong><p><code>dragon</code></p></div>
-            <div class="evidence-card"><strong>Final flag</strong><p><code>THM{flag_example}</code></p></div>
+            <div class="evidence-card"><strong>Cracked password</strong><p><code>dragon</code></p></div>
+            <div class="evidence-card"><strong>Public flag handling</strong><p>Real flags are redacted as <code>THM{flag_example}</code>.</p></div>
           </div>
         </section>
 
-        <section class="case-section" id="conclusion" data-step="04">
+        <section class="flag-vault" id="answers">
+          <p class="eyebrow">final answer summary</p>
+          <h2>Final Answers</h2>
+          <div class="terminal"><div class="terminal-top"><span></span><span></span><span></span></div><pre>Task 2 flag: THM{flag_example}
+Key part 1: desert
+Gatekeeper tool: Ghidra
+Gatekeeper access key: sands_everywhere
+Task 3 flag: THM{flag_example}
+Key part 2: -rabbit
+Combined vault password: desert-rabbit
+Hidden hash: 8621ffdbc5698829397d97767ac13db3
+Cracked hash password: dragon
+Final flag: THM{flag_example}</pre></div>
+        </section>
+
+        <section class="case-section" id="lessons" data-step="06">
           <p class="eyebrow">after action report</p>
-          <h2>Conclusion</h2>
-          <p>Operation SandLock is complete. The investigation started with an encrypted note, moved through a protected binary, continued with a locked vault, and ended with hidden evidence inside the final extracted files.</p>
+          <h2>Lessons Learned</h2>
           <ul>
-            <li>Laith used cryptography skills to decode the encrypted note and recover the first key fragment.</li>
-            <li>Naim used reverse engineering skills to analyze the gatekeeper binary and recover the second key fragment.</li>
-            <li>Ahmad used forensics skills to unlock the vault, repair hidden evidence, and crack the final password.</li>
+            <li>Story clues can be technical hints, not just narrative decoration.</li>
+            <li>When a recovered value fails, treat it as a chain fragment instead of the final answer.</li>
+            <li>Filenames beginning with <code>-</code> should be handled with <code>--</code> or <code>./</code> to avoid option parsing issues.</li>
+            <li>Binary secrets are often decoded at runtime; checking decompiled logic and string comparisons can reveal the validation path.</li>
+            <li>File extensions cannot be trusted. Always verify evidence with <code>file</code>, <code>strings</code>, and a hex editor when needed.</li>
+            <li>Hidden hashes inside repaired evidence can lead to the final vault stage.</li>
           </ul>
-          <p>Throughout this room, several important CTF skills were practiced: hex decoding, Vigenère decoding, Base64 decoding, Base32 decoding, binary analysis, reverse engineering, XOR decoding, password chaining, file inspection, hex editing, hash cracking, and hidden data extraction.</p>
-          <div class="flag-vault"><code>Three analysts. Four locks. One truth.</code></div>
-          <p>Although the team unlocked the final vault, the case may not be fully closed. The Sandman is still unknown, and the evidence points to a larger operation.</p>
-          <p>Next time, the mission will not only be to open his locks. It will be to find him, track him, and finally catch him.</p>
-          <p><strong>Have a hack day.</strong></p>
+          <p>The Sandman left four locks behind, and each lock revealed part of the truth. Although the final vault was opened, the attacker remains unknown. The next mission will not only be to open the locks, but to track The Sandman and finally catch him.</p>
           <div class="footer-actions">
             <a class="btn" href="../index.html">← Back to MyLibrary</a>
             <a class="btn ghost" href="../../index.html">Back to Portfolio</a>
