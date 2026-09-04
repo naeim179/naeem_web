@@ -2,25 +2,39 @@ import ProjectCard from "./ProjectCard";
 
 const projects = [
   {
-    title: "Wazuh SIEM Attack & Defense Lab",
-    category: "Security Lab",
+    title: "Real-World Attack & Defense Simulation Lab",
+    category: "BLUE TEAM LAB",
     description:
-      "Built a defensive security lab focused on SIEM monitoring, attack simulation, detection, and remediation.",
-    tools: ["Wazuh", "Linux", "SIEM", "Detection"],
+      "Multi-VM cybersecurity lab focused on attack simulation, SIEM monitoring, log analysis, detection engineering, and remediation validation.",
+    tools: [
+      "Wazuh",
+      "Linux",
+      "Apache Logs",
+      "Detection",
+    ],
   },
   {
-    title: "Phishing Investigation",
-    category: "Incident Response",
+    title: "QRShield - AI QR Code Security Analyzer",
+    category: "SECURITY PROJECT",
     description:
-      "SOC-style investigation of a phishing attack using log analysis, IOC extraction, and threat analysis.",
-    tools: ["Splunk", "IOC", "Threat Hunting"],
+      "AI-powered QR security analyzer that evaluates QR payloads, calculates risk scores, and generates security reports.",
+    tools: [
+      "Python",
+      "FastAPI",
+      "Security Analysis",
+    ],
   },
   {
     title: "My Legacy Work",
-    category: "CTF Research",
+    category: "CTF RESEARCH",
     description:
-      "Previous cybersecurity journey including web exploitation, forensics, crypto, and reverse engineering challenges.",
-    tools: ["CTF", "Web", "Forensics"],
+      "Cybersecurity journey including CTF challenges, writeups, web exploitation, forensics, crypto, and reverse engineering.",
+    tools: [
+      "CTF",
+      "Web",
+      "Forensics",
+      "Reverse",
+    ],
   },
 ];
 
@@ -29,7 +43,7 @@ export default function FeaturedWork() {
     <section className="container py-20">
       <div className="mb-10">
         <p className="font-mono text-sm text-green-400">
-          &gt; featured_work
+          &gt; featured_security_work
         </p>
 
         <h2 className="mt-3 text-3xl font-bold text-white">
