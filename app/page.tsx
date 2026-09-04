@@ -1,6 +1,9 @@
 import About from "@/components/About";
+import Certifications from "@/components/Certifications";
 import Contact from "@/components/Contact";
+import Experience from "@/components/Experience";
 import FeaturedWork from "@/components/FeaturedWork";
+import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import Labs from "@/components/Labs";
 import Legacy from "@/components/Legacy";
@@ -17,12 +20,16 @@ export default function Home() {
         <Hero />
         <FeaturedWork />
         <About />
+        <Experience />
         <Skills />
+        <Certifications />
         <Reports />
         <Labs />
         <Legacy />
         <Contact />
       </main>
+
+      <Footer />
     </>
   );
 }
