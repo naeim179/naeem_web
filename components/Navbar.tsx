@@ -1,13 +1,34 @@
-export default function Navbar() {
-  const links = [
-    { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    { name: "Labs", href: "/labs" },
-    { name: "Reports", href: "/reports" },
-    { name: "Legacy", href: "/legacy" },
-    { name: "Contact", href: "/contact" },
-  ];
+const links = [
+  {
+    name: "Home",
+    href: "/",
+  },
+  {
+    name: "Reports",
+    href: "/reports",
+  },
+  {
+    name: "Labs",
+    href: "/labs",
+  },
+  {
+    name: "Legacy",
+    href: "/legacy",
+  },
+];
 
+const externalLinks = [
+  {
+    name: "GitHub",
+    href: "https://github.com/naeim179",
+  },
+  {
+    name: "LinkedIn",
+    href: "https://www.linkedin.com/in/naeim-althabata-427331316",
+  },
+];
+
+export default function Navbar() {
   return (
     <header className="fixed top-0 z-50 w-full">
       <nav className="container mt-4">
@@ -19,12 +40,24 @@ export default function Navbar() {
             <span className="text-green-400">&gt;</span> Naim
           </a>
 
-          <div className="hidden items-center gap-6 md:flex">
+          <div className="hidden items-center gap-5 md:flex">
             {links.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
                 className="text-sm text-slate-300 transition hover:text-green-400"
+              >
+                {link.name}
+              </a>
+            ))}
+
+            {externalLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-sky-400 transition hover:text-sky-300"
               >
                 {link.name}
               </a>
