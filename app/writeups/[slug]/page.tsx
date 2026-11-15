@@ -44,7 +44,7 @@ export default async function WriteupPage({
         <h1>{w.title}</h1>
         <p className="subpage-lead">{w.summary}</p>
         <div className="writeup-meta">
-          <span>{w.difficulty}</span>
+          {w.difficulty ? <span>{w.difficulty}</span> : null}
           <span>{w.readingMinutes} min read</span>
           {w.date ? (
             <time dateTime={w.date}>

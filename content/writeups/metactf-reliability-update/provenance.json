@@ -1,0 +1,7 @@
+{
+  "sourceFileName": "MetaCTF_Reliability_Update_Writeup.md",
+  "preservedFilesSHA256": {
+    "README.original.md": "4c6a7605e55419a870cf8fb01cff409c4e9a75e650c9c5a787daf684fdc7bc30"
+  },
+  "note": "Owner-supplied writeup. The reading version corrects only the boost-toggle count (16 toggles, 20 events total) and identifies the supplied validation output as reported evidence."
+}

@@ -1,0 +1,71 @@
+Recycler — Pwn Writeup
+
+Category: Binary Exploitation (Pwn)
+Points: 152
+Vulnerability: Use-After-Free (UAF) + Heap Metadata Corruption
+
+1. Analysis
+
+The challenge provides a custom heap allocator with commands to allocate, free, read, and edit memory slots.
+
+After analyzing the binary, I discovered a Use-After-Free (UAF) vulnerability: freed slots can still be accessed using the read and edit commands.
+
+This allows us to modify heap metadata and create overlapping allocations.
+
+2. Exploitation
+
+The exploitation process:
+
+Allocate three chunks of sizes 0x20, 0x400, and 0x360.
+
+Free slots 0 and 1, then allocate a new 0x40 chunk.
+
+Use the dangling pointer in slot 1 to read and modify freed heap metadata.
+
+Overwrite the free chunk's capacity field at offset 0x48 with 0x800, preserving the authentication data.
+
+Allocate chunks of sizes 0x400 and 0x3f0 to create an overlapping allocation.
+
+Read slot 3 to leak the encrypted flag from the vault at offset 0x810.
+
+3. Flag Decryption
+
+The leaked flag is encrypted using XOR with a 64-bit Linear Congruential Generator (LCG).
+
+Since we know the flag starts with MetaCTF{, we can recover the initial encryption state:
+
+state = int.from_bytes(
+
+    bytes(a ^ b for a, b in zip(ciphertext[:8], b"MetaCTF{")),
+
+    "little"
+
+)
+
+We then regenerate the keystream using:
+
+state = (
+
+    state * 0x5851F42D4C957F2D
+
+    + 0x14057B7EF767814F
+
+) & 0xFFFFFFFFFFFFFFFF
+
+XORing the ciphertext with the recovered keystream reveals the flag.
+
+4. Execution
+
+python3 recycler_solve.py
+
+Output:
+
+[+] FLAG: MetaCTF{r3cycl3d_pr0v3n4nc3_uk6q1x6o}
+
+5. Conclusion
+
+The challenge was solved by exploiting a Use-After-Free vulnerability to corrupt heap metadata, create overlapping allocations, leak encrypted vault data, and recover the flag using a known-plaintext attack against the LCG-based encryption.
+
+Flag: MetaCTF{r3cycl3d_pr0v3n4nc3_uk6q1x6o}
+
+

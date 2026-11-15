@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { metaCtfResult } from "@/lib/competitions";
 import { Arrow } from "./Icons";
 export default function Legacy({ compact = false }: { compact?: boolean }) {
   return (
@@ -18,6 +19,13 @@ export default function Legacy({ compact = false }: { compact?: boolean }) {
             Technical writeups across web security, cryptography, forensics,
             reverse engineering, and more. A record of how I approach unfamiliar
             problems.
+          </p>
+          <p className="metactf-highlight">
+            <strong>MetaCTF finalist</strong>
+            <span>
+              {metaCtfResult.teamRank}nd place in the finals ·{" "}
+              {metaCtfResult.personalPoints} personal points
+            </span>
           </p>
           <Link href="/writeups" className="text-link">
             {compact ? "Explore the writeups" : "Open the writeup library"}

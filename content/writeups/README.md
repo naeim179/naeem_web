@@ -1,6 +1,6 @@
 # CTF writeup library
 
-The canonical publication source is **naeim179/naeem_web**. The library combines the 28 preserved portfolio casefiles and The Will imported from `reverse-engineering-writeups`. All 29 entries are indexed in `catalog.json`.
+The canonical publication source is **naeim179/naeem_web**. The library combines the 28 preserved portfolio casefiles and The Will imported from `reverse-engineering-writeups`. All 33 entries are indexed in `catalog.json`, including four supplied MetaCTF writeups.
 
 ## Browse
 
@@ -42,6 +42,11 @@ The canonical publication source is **naeim179/naeem_web**. The library combines
 | TryHackMe | Forensics | [Operation SandLock](https://naim-workspace.vercel.app/writeups/tryhackme-operation-sandlock) | [Source](../../legacy/ctf-portfolio/wrup/tryhackme/operation-sandlock.html) |
 | JordanSec CTF | Reverse | [The Will](https://naim-workspace.vercel.app/writeups/jordansec-the-will) | [Source](jordansec-the-will/README.md) |
 
+| MetaCTF | Pwn | [Recycler](https://naim-workspace.vercel.app/writeups/metactf-recycler) | [Source](metactf-recycler/README.md) |
+| MetaCTF | Reverse | [Reliability Update](https://naim-workspace.vercel.app/writeups/metactf-reliability-update) | [Source](metactf-reliability-update/README.md) |
+| MetaCTF | Web | [Miki Antonelli](https://naim-workspace.vercel.app/writeups/metactf-miki-antonelli) | [Source](metactf-miki-antonelli/README.md) |
+| MetaCTF | Web | [FIA Race Control](https://naim-workspace.vercel.app/writeups/metactf-fia-race-control) | [Source](metactf-fia-race-control/README.md) |
+
 ## Add a writeup
 
 1. Create `content/writeups/<competition>-<challenge>/README.md` using `TEMPLATE.md` as a guide. Keep screenshots and solution files alongside it.
@@ -55,3 +60,9 @@ Do not replace the preserved archived HTML or the imported historical evidence w
 ## Remaining evidence
 
 The Will still needs the original executable or download link, its hash, and verified resource boundaries for full reproduction. Its published screenshot and original solver are retained, but no new verification or solve result is claimed.
+
+## MetaCTF participation
+
+The owner confirmed finalist participation at Princess Sumaya University for Technology. The supplied team scoreboard shows **22nd place in the finals**, **1,102 team points**, and **752 points** for the owner’s account, `Naim Althabata`. No event date, team name, or further placement has been inferred.
+
+The four published MetaCTF casefiles are the currently supplied set; more may be added later. Original uploads and embedded images are preserved with SHA-256 provenance. For complete reproduction, the original challenge inputs and referenced tools/solvers are still needed. The Reliability Update schedule and reported result JSON are retained as supplied evidence; only the demonstrable toggle-count typo was corrected in the reading version.

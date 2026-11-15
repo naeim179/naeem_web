@@ -22,8 +22,8 @@ const attr = (n: Node, key: string) =>
   "attrs" in n ? n.attrs.find((a) => a.name === key)?.value : undefined;
 
 test("catalog has unique slugs and only safe, existing source files", async () => {
-  assert.equal(writeups.length, 29);
-  assert.equal(new Set(writeups.map((w) => w.slug)).size, 29);
+  assert.ok(writeups.length >= 29);
+  assert.equal(new Set(writeups.map((w) => w.slug)).size, writeups.length);
   for (const w of writeups) {
     assert.match(w.slug, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
     assert.ok(!w.source.includes(".."));
@@ -44,6 +44,12 @@ test("all original archived files remain byte-for-byte identical", async () => {
   );
   for (const [file, expected] of Object.entries(manifest)) {
     const bytes = await fs.readFile(file);
+    if (/^legacy\/ctf-portfolio\/wrup\/[^/]+\/[^/]+\.html$/.test(file)) {
+      assert.ok(
+        writeups.some((entry) => entry.source === file),
+        "Original casefile must stay indexed: " + file,
+      );
+    }
     assert.equal(
       crypto.createHash("sha256").update(bytes).digest("hex"),
       expected,
@@ -161,4 +167,71 @@ test("legacy cross-links resolve to canonical casefiles and image URLs remain va
     undefined,
   );
   assert.equal(resolveWriteupURL("#walkthrough", writeups[0]), "#walkthrough");
+});
+
+test("MetaCTF original uploads and images remain intact, with internally consistent reported schedule data", async () => {
+  const entries = writeups.filter((entry) => entry.collectionId === "metactf");
+  assert.equal(entries.length, 4);
+  for (const entry of entries) {
+    const root = path.dirname(entry.source);
+    const manifest = JSON.parse(
+      await fs.readFile(path.join(root, "provenance.json"), "utf8"),
+    );
+    for (const [file, expected] of Object.entries(
+      manifest.preservedFilesSHA256,
+    )) {
+      assert.equal(
+        crypto
+          .createHash("sha256")
+          .update(await fs.readFile(path.join(root, file)))
+          .digest("hex"),
+        expected,
+        entry.slug + " " + file,
+      );
+    }
+    assert.equal(
+      entry.date,
+      null,
+      "Unconfirmed event dates must remain absent",
+    );
+  }
+  const root = "content/writeups/metactf-reliability-update";
+  const original = await fs.readFile(
+    path.join(root, "README.original.md"),
+    "utf8",
+  );
+  const blocks = [...original.matchAll(/```json\n([\s\S]*?)\n```/g)].map(
+    (match) => JSON.parse(match[1]),
+  );
+  const schedule = JSON.parse(
+    await fs.readFile(path.join(root, "driver_control_schedule.json"), "utf8"),
+  );
+  const result = JSON.parse(
+    await fs.readFile(path.join(root, "replay.reported.json"), "utf8"),
+  );
+  assert.deepEqual(schedule, blocks[0]);
+  assert.deepEqual(result, blocks[1]);
+  assert.equal(schedule.events.length, 20);
+  assert.ok(schedule.events.length <= 24);
+  assert.deepEqual(schedule.events[0], {
+    at_mm: 0,
+    aero_request: "corner",
+    boost: false,
+  });
+  assert.equal(
+    schedule.events.filter((event: { at_mm: number }) => event.at_mm >= 1604000)
+      .length,
+    16,
+  );
+  for (let i = 1; i < schedule.events.length; i++)
+    assert.ok(schedule.events[i].at_mm - schedule.events[i - 1].at_mm >= 3000);
+  assert.equal(
+    result.approved_lap_ms - result.candidate_lap_ms,
+    result.delta_ms,
+  );
+  assert.equal(result.delta_ms, 820);
+  assert.equal(result.candidate_delay_ms, 1380);
+  const reading = await fs.readFile(path.join(root, "README.md"), "utf8");
+  assert.ok(reading.includes("**16 changes**"));
+  assert.ok(reading.includes("**reported original result**"));
 });
