@@ -8,7 +8,7 @@ const links = [
   { href: "/#about", label: "About" },
   { href: "/#experience", label: "Experience" },
   { href: "/#credentials", label: "Credentials" },
-  { href: "/legacy", label: "Writeups" },
+  { href: "/writeups", label: "Writeups" },
 ];
 export default function Navbar() {
   const [open, setOpen] = useState(false);

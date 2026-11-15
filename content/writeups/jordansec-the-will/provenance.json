@@ -1,0 +1,12 @@
+{
+  "repository": "naeim179/reverse-engineering-writeups",
+  "commit": "579b80a86d226606cb772727f2e91e18e2c672e5",
+  "originalDirectory": "first-writeup",
+  "originalFilesSHA256": {
+    "sol.py": "85b8af80cfba8ea4f66b184ffaf3f8a2ba0c3b87782933cd8904d402cc66d5af",
+    "README.md": "0bcf03ae0867be82bdc176fd05f10905063db16e4b3dfca7623c2ca66fd2c7d4",
+    "images/image.png": "b980dfbf53da7659859574ede58c54354545d082869a1d4882327604571ac5fd"
+  },
+  "preservedOriginalReadme": "README.original.md",
+  "notes": "The solution script and screenshot are preserved unchanged. README.md is the edited reading version."
+}

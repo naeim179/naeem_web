@@ -17,6 +17,14 @@
 
 ## Final release
 
-- [ ] Owner reviews the design preview.
-- [ ] Merge and publish the approved design to the existing Next.js deployment.
-- [ ] Confirm the preferred primary portfolio URL. The CV still links to GitHub Pages, which serves the preserved old static site.
+- [x] Owner authorized publication.
+- [x] Merge and publish to the existing Next.js deployment.
+- [x] Publish at https://naim-workspace.vercel.app and update the CV hyperlinks.
+
+## Unified writeup library
+
+- [x] Merge all 29 existing casefiles into the portfolio repository.
+- [x] Preserve original HTML, solver, screenshot, and historical narrative with hashes.
+- [x] Add search, competition/category filters, sorting, accessible reading pages, and legacy URL redirects.
+- [x] Correct The Will documentation to match the unchanged solver.
+- [ ] Receive The Will challenge binary or its original download link, hash, and verified resource boundaries to reproduce the complete solve.

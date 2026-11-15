@@ -1,6 +1,6 @@
 # Naim Althabatah — Portfolio
 
-Next.js portfolio covering cybersecurity, freelance full-stack development, cloud integrations, and technical writeups. This repository is independent of `edc_website`; it only links to that public project as a case study.
+Next.js portfolio covering cybersecurity, freelance full-stack development, cloud integrations, and a unified technical writeup library. This repository is independent of `edc_website`; it only links to that public project as a case study.
 
 ## Run locally
 
@@ -12,6 +12,7 @@ npm run dev
 `predev` and `prebuild` prepare the archived CTF library automatically. No database, API keys, or paid services are required.
 
 ```sh
+npm test
 npm run lint
 npm run typecheck
 npm run build
@@ -24,15 +25,18 @@ npm start
 - `lib/reports.ts`: clearly scoped lab summaries and learning notes.
 - `app/legacy/page.tsx`: competition results already present in the old portfolio.
 - `public/Naim-Althabatah-CV.docx`: owner-provided downloadable CV.
+- `content/writeups/catalog.json`: canonical index for all writeups.
+- `content/writeups/README.md`: complete challenge index and publishing instructions.
+- `content/writeups/jordansec-the-will/`: imported reading version, original solver, screenshot, historical narrative, and provenance.
 - `legacy/ctf-portfolio/`: original CTF library and writeups, preserved.
 - `scripts/prepare-archive.mjs`: copies the library into generated `public/archive/` for Next.js hosting. Do not edit the generated copy.
 - `index.html`: previous static portfolio, preserved for reference. Next.js serves `app/page.tsx`, not this file.
 
 ## Routes
 
-`/`, `/work/educational-platform`, `/work/qrshield`, `/work/attack-defense-lab`, `/labs`, `/reports`, `/reports/wazuh-lab`, `/reports/phishing-investigation`, `/legacy`, `/archive/wrup/index.html`.
+`/`, `/work/educational-platform`, `/work/qrshield`, `/work/attack-defense-lab`, `/labs`, `/reports`, `/reports/wazuh-lab`, `/reports/phishing-investigation`, `/legacy`, `/writeups`, `/writeups/<slug>`.
 
-Older `/wrup/*`, `/writeups/index.html`, and `/legacy/ctf-portfolio/*` links redirect to the served archive. Unknown projects and reports use the 404 page.
+Older archive library and casefile URLs redirect to the unified library and their corresponding reading pages. Unknown projects, reports, and writeups use the 404 page.
 
 ## Hosting
 
@@ -40,7 +44,7 @@ The redesign targets the existing Next.js / Vercel application. It is not an exp
 
 ## Update the archive
 
-Follow `legacy/ctf-portfolio/ADD_WRITEUP.md`. Add casefiles under `legacy/ctf-portfolio/wrup/` and update its library data. The next dev/build refreshes the served archive.
+Follow `content/writeups/README.md`. Add new Markdown casefiles and a catalog entry in this repository. The archived HTML is retained unchanged for provenance and compatibility; the previous archive instructions describe the historical layout.
 
 ## Content accuracy
 
