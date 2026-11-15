@@ -19,10 +19,7 @@ export default function Legacy({ compact = false }: { compact?: boolean }) {
             reverse engineering, and more. A record of how I approach unfamiliar
             problems.
           </p>
-          <Link
-            href={compact ? "/legacy" : "/archive/wrup/index.html"}
-            className="text-link"
-          >
+          <Link href="/writeups" className="text-link">
             {compact ? "Explore the writeups" : "Open the writeup library"}
             <Arrow diagonal />
           </Link>

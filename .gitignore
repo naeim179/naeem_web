@@ -6,3 +6,5 @@ public/archive/
 .env*
 !.env.example
 .vercel/
+
+public/writeup-files/

@@ -24,10 +24,10 @@ export default function LegacyPage() {
       <h1 className="sr-only">CTF Writeups & Research</h1>
       <Legacy />
       <div className="archive-actions">
-        <a className="button button-ink" href="/archive/wrup/index.html">
+        <Link className="button button-ink" href="/writeups">
           Browse the library
           <Arrow diagonal />
-        </a>
+        </Link>
         <a
           className="text-link"
           href={profile.tryhackme}

@@ -1,7 +1,20 @@
 import type { NextConfig } from "next";
+import writeups from "./content/writeups/catalog.json";
 const config: NextConfig = {
   async redirects() {
     return [
+      {
+        source: "/archive/wrup/index.html",
+        destination: "/writeups",
+        permanent: true,
+      },
+      ...writeups
+        .filter((entry) => entry.archivePath)
+        .map((entry) => ({
+          source: entry.archivePath!,
+          destination: `/writeups/${entry.slug}`,
+          permanent: true,
+        })),
       {
         source: "/legacy/ctf-portfolio",
         destination: "/archive/wrup/index.html",
@@ -23,13 +36,8 @@ const config: NextConfig = {
         permanent: true,
       },
       {
-        source: "/writeups",
-        destination: "/archive/wrup/index.html",
-        permanent: true,
-      },
-      {
         source: "/writeups/index.html",
-        destination: "/archive/wrup/index.html",
+        destination: "/writeups",
         permanent: true,
       },
     ];
