@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
+import { metaCtfResult } from "@/lib/competitions";
 import Link from "next/link";
 import Legacy from "@/components/Legacy";
 import { profile } from "@/lib/portfolio";
 import { Arrow } from "@/components/Icons";
 export const metadata: Metadata = { title: "CTF Writeups & Research" };
-// Existing results from index.html. New results are added only after owner confirmation.
+// Existing results and the MetaCTF finals result confirmed by the owner.
 const results = [
+  {
+    name: `${metaCtfResult.name} — ${metaCtfResult.institution}`,
+    result: `Finals · ${metaCtfResult.teamRank}nd place`,
+    details: `Team score: ${metaCtfResult.teamPoints.toLocaleString("en-US")} points · My contribution: ${metaCtfResult.personalPoints} points`,
+  },
   {
     name: "National Cyber Security Center of Jordan v2",
     result: "Top 10 in Jordan",
@@ -54,13 +60,18 @@ export default function LegacyPage() {
       <div className="ranking-list">
         {results.map((item) => (
           <article className="ranking-row" key={item.name}>
-            <h3>{item.name}</h3>
+            <div>
+              <h3>{item.name}</h3>
+              {item.details ? (
+                <p className="ranking-detail">{item.details}</p>
+              ) : null}
+            </div>
             <span>{item.result}</span>
           </article>
         ))}
       </div>
       <p className="rank-caption">
-        Selected results previously published in my portfolio.
+        Selected competition results and participation milestones.
       </p>
       <p className="subpage-lead">
         Additional participation includes BRK CYS CTF 2026, AI Odyssey on

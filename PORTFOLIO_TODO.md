@@ -28,3 +28,12 @@
 - [x] Add search, competition/category filters, sorting, accessible reading pages, and legacy URL redirects.
 - [x] Correct The Will documentation to match the unchanged solver.
 - [ ] Receive The Will challenge binary or its original download link, hash, and verified resource boundaries to reproduce the complete solve.
+
+## MetaCTF update
+
+- [x] Add Recycler, Reliability Update, Miki Antonelli, and FIA Race Control from owner-supplied documents.
+- [x] Preserve original uploads and screenshots with provenance hashes.
+- [x] Record MetaCTF finalist participation at Princess Sumaya University for Technology.
+- [x] Record the owner-confirmed finals result: team rank 22nd, team score 1,102, personal score 752.
+- [ ] Add further MetaCTF writeups when the owner prepares them.
+- [ ] Receive original challenge inputs and the referenced Recycler solver if full solve reproduction is requested.

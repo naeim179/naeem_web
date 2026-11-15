@@ -129,7 +129,7 @@
     "collectionId": "boroctf",
     "category": "Pwn",
     "difficulty": "Beginner",
-    "summary": "Used an overflow in gets() to overwrite an adjacent stack string so the program\u2019s comparison succeeds without code execution.",
+    "summary": "Used an overflow in gets() to overwrite an adjacent stack string so the program’s comparison succeeds without code execution.",
     "tags": ["Stack Overflow", "gets()", "State Manipulation"],
     "skills": ["pwntools", "Stack Layout", "Buffer Overflow", "Logic Abuse"],
     "date": "2026-06-22",
@@ -170,7 +170,7 @@
     "collectionId": "boroctf",
     "category": "Crypto",
     "difficulty": "Easy",
-    "summary": "Decoded a Wingdings-style ciphertext using the \u201cdark, darker, yet darker\u201d hint to recover the flag.",
+    "summary": "Decoded a Wingdings-style ciphertext using the “dark, darker, yet darker” hint to recover the flag.",
     "tags": ["Wingdings", "Symbol Cipher", "Gaster Hint"],
     "skills": [
       "Encoding Analysis",
@@ -234,7 +234,7 @@
     "collectionId": "boroctf",
     "category": "Forensics",
     "difficulty": "Hard",
-    "summary": "Removed a fake embedded flag, reconstructed a 66\u00d766 RGB image, repaired a damaged QR code, and decoded the real flag.",
+    "summary": "Removed a fake embedded flag, reconstructed a 66×66 RGB image, repaired a damaged QR code, and decoded the real flag.",
     "tags": ["QR Repair", "Hex Dump", "Image Reconstruction"],
     "skills": ["PIL", "OpenCV", "QR Anatomy", "Data Cleaning"],
     "date": "2026-06-13",
@@ -335,7 +335,7 @@
   },
   {
     "slug": "kitctf-konigsberg-delivery-problem",
-    "title": "K\u00f6nigsberg Delivery Problem",
+    "title": "Königsberg Delivery Problem",
     "collection": "kitCTF",
     "collectionId": "kitctf",
     "category": "Reverse",
@@ -635,5 +635,97 @@
     "format": "markdown",
     "archivePath": null,
     "readingMinutes": 4
+  },
+  {
+    "slug": "metactf-recycler",
+    "title": "Recycler",
+    "category": "Pwn",
+    "difficulty": null,
+    "points": "152",
+    "summary": "A use-after-free in a custom allocator enables heap metadata corruption, overlapping allocations, and an encrypted flag leak followed by LCG state recovery.",
+    "tags": ["Use-after-free", "Heap metadata", "Overlapping chunks", "LCG"],
+    "skills": [
+      "Heap analysis",
+      "Known-plaintext attack",
+      "Python",
+      "Memory lifetime"
+    ],
+    "collection": "MetaCTF",
+    "collectionId": "metactf",
+    "date": null,
+    "solves": null,
+    "source": "content/writeups/metactf-recycler/README.md",
+    "format": "markdown",
+    "archivePath": null,
+    "readingMinutes": 2
+  },
+  {
+    "slug": "metactf-reliability-update",
+    "title": "Reliability Update",
+    "category": "Reverse",
+    "difficulty": null,
+    "points": null,
+    "summary": "Comparing AArch64 firmware in a software-in-the-loop runner reveals shared debounce state and a reported 820 ms lap-time advantage.",
+    "tags": ["AArch64", "Firmware", "Shared state", "Debounce"],
+    "skills": [
+      "Firmware comparison",
+      "SIL analysis",
+      "State interference",
+      "Schedule validation"
+    ],
+    "collection": "MetaCTF",
+    "collectionId": "metactf",
+    "date": null,
+    "solves": null,
+    "source": "content/writeups/metactf-reliability-update/README.md",
+    "format": "markdown",
+    "archivePath": null,
+    "readingMinutes": 6
+  },
+  {
+    "slug": "metactf-miki-antonelli",
+    "title": "Miki Antonelli",
+    "category": "Web",
+    "difficulty": "Medium–Hard",
+    "points": null,
+    "summary": "Chaining SQL injection, weak password hashing, a Next.js middleware bypass, and login argument injection in a MetaCTF web challenge.",
+    "tags": ["SQL injection", "MD5", "Middleware bypass", "Argument injection"],
+    "skills": [
+      "Database enumeration",
+      "Access control",
+      "Request analysis",
+      "Privilege escalation"
+    ],
+    "collection": "MetaCTF",
+    "collectionId": "metactf",
+    "date": null,
+    "solves": null,
+    "source": "content/writeups/metactf-miki-antonelli/README.md",
+    "format": "markdown",
+    "archivePath": null,
+    "readingMinutes": 8
+  },
+  {
+    "slug": "metactf-fia-race-control",
+    "title": "FIA Race Control",
+    "category": "Web",
+    "difficulty": null,
+    "points": null,
+    "summary": "Incident-report markup targets a privileged accreditation workflow; the supplied screenshots record the payload and the resulting PADDOCK access.",
+    "tags": ["Stored XSS", "Report review", "Session context", "Authorization"],
+    "skills": [
+      "Browser security",
+      "Stored input analysis",
+      "Privilege boundaries",
+      "Evidence analysis"
+    ],
+    "collection": "MetaCTF",
+    "collectionId": "metactf",
+    "date": null,
+    "solves": null,
+    "source": "content/writeups/metactf-fia-race-control/README.md",
+    "format": "markdown",
+    "archivePath": null,
+    "readingMinutes": 3
   }
 ]

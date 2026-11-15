@@ -1,0 +1,9 @@
+{
+  "sourceFileName": "New Microsoft Word Document.docx",
+  "preservedFilesSHA256": {
+    "source.original.docx": "dd0521f227240d326c08a354b67eec30e19d238ac52747114a80ad7470c5607b",
+    "images/image1.png": "b9f4cc3df7f418734f96a7742866a3ee473a13d3fdf3923156ed37440caa0bad",
+    "images/image2.png": "2d5add7e65459216a708d64d89e1884c236d76a4c1a0dd437eaac1c111061cb7"
+  },
+  "note": "Owner-supplied MetaCTF writeup. The reading version is edited for clarity; original document and embedded images are preserved. Reproduction is not newly claimed."
+}

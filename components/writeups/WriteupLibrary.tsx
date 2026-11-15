@@ -152,8 +152,13 @@ export default function WriteupLibrary({
             </ul>
             <div className="writeup-card-bottom">
               <span>
-                {w.readingMinutes} min read <span aria-hidden="true">·</span>{" "}
-                {w.difficulty}
+                {w.readingMinutes} min read
+                {w.difficulty ? (
+                  <>
+                    <span aria-hidden="true">·</span>
+                    {w.difficulty}
+                  </>
+                ) : null}
               </span>
               <Link href={`/writeups/${w.slug}`} aria-label={`Read ${w.title}`}>
                 <Arrow diagonal />
