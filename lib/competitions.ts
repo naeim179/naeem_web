@@ -11,3 +11,15 @@ export const metaCtfResult = {
   evidence:
     "Owner-supplied team scoreboard screenshot; finals stage confirmed by the owner.",
 };
+
+// Final result confirmed by the owner; scores and captain role are visible in the supplied team screenshot.
+export const tvxCtfResult = {
+  name: "TVX CTF",
+  team: "IV LEGION",
+  stage: "Final result",
+  teamRank: 31,
+  teamPoints: 2110,
+  role: "Captain",
+  scoreboardName: "Naim Althabata",
+  evidence: "/writeup-files/tvx-ending/evidence/team-scoreboard.png",
+};

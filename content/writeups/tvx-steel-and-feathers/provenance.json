@@ -1,0 +1,14 @@
+{
+  "sourceUpload": "for-myweb.rar",
+  "uploadSHA256": "d8de2b98ccf97ad781a6f4547a3a1c31718ed3e38ed3344a52e7b5c21c1d0de2",
+  "preservedFilesSHA256": {
+    "README.original.md": "0579b0fa7f1c1910af8d8ea559ec808a35e2e79df8237669c1758e9731363d29",
+    "steel_solver.py": "d27d0f8906d84c1b19b05567bd41783803219899b39d08a6155901464b89c502"
+  },
+  "notes": [
+    "Original upload documents, Markdown, solver files and screenshots are preserved byte-for-byte.",
+    "The reading version adds explicit evidence and reproduction limits. No supplied Windows executable or malware sample was present or executed.",
+    "Solve dates and challenge values are visible in the supplied solve history."
+  ],
+  "originalArchivePaths": {}
+}

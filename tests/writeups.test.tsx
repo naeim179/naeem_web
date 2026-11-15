@@ -235,3 +235,59 @@ test("MetaCTF original uploads and images remain intact, with internally consist
   assert.ok(reading.includes("**16 changes**"));
   assert.ok(reading.includes("**reported original result**"));
 });
+
+test("TVX source documents and screenshots remain intact, with honest reproduction limits", async () => {
+  const entries = writeups.filter((entry) => entry.collectionId === "tvxctf");
+  assert.equal(entries.length, 5);
+  for (const entry of entries) {
+    const root = path.dirname(entry.source);
+    const manifest = JSON.parse(await fs.readFile(path.join(root, "provenance.json"), "utf8"));
+    for (const [file, expected] of Object.entries(manifest.preservedFilesSHA256)) {
+      assert.equal(crypto.createHash("sha256").update(await fs.readFile(path.join(root, file))).digest("hex"), expected, entry.slug + " " + file);
+    }
+    assert.equal(entry.date, "2026-11-13", "Solve date is visible in supplied history");
+    assert.equal(entry.difficulty, null, "No official difficulty was supplied");
+    const doc = await readWriteup(entry);
+    assert.ok(doc.toc.length >= 7, entry.slug + " must expose its technical sections");
+  }
+  const root = "content/writeups/tvx-ending";
+  const original = await fs.readFile(path.join(root, "Ending_solve.py"), "utf8");
+  const reviewed = await fs.readFile(path.join(root, "Ending_solve.reviewed.py"), "utf8");
+  assert.equal(reviewed, original.replace("pc += signed_byte()", "displacement = signed_byte()\n            pc += displacement"));
+  const malware = await fs.readFile("content/writeups/tvx-malwarex/README.md", "utf8");
+  assert.match(malware, /accepted stage-three flag is \*\*not documented/);
+  assert.match(malware, /reported findings from the supplied document/);
+  assert.match(malware, /No malware was executed, downloaded, or contacted/);
+});
+
+test("TVX embedded-array reconstructions match both documented final flags", async () => {
+  const ror8 = (v: number, n: number) => ((v >>> n) | (v << (8 - n))) & 255;
+  const data = Buffer.from("a2d809c04ab438478fd5e716e67fbcdb025598ed4ce5e0b68866b0a04340eb2b46df5ebdfacd5b12", "hex");
+  const twist = Buffer.from(Array.from(data, (_, i) => {
+    const j = (i * 7 + 3) % data.length;
+    return ror8(data[j], j % 5 + 1) ^ ((0x37 + j * 11) & 255);
+  }));
+  assert.equal(twist.length, 40);
+  assert.equal(twist.toString("ascii"), "TVX{Fl4ggy_fl4g_fl4g_tw15ty_tw15t_tw15t}");
+  const blob = Buffer.from("e99392aa94e4f1b4468f04109d54a3594e398a3e773963fa02fb", "hex");
+  const schedule = Buffer.from("6d12a940f327885b", "hex");
+  const intermediate = Buffer.from(Array.from(blob, (_, i) => {
+    let value = blob[(5 * i + 1) % blob.length];
+    value ^= (51 + 11 * i) & 255;
+    value ^= schedule[i % schedule.length];
+    value = (value - ((3 * i * i + 25) & 255)) & 255;
+    return ror8(value, i % 5 + 1) ^ ((33 + 7 * i) & 255);
+  }));
+  assert.equal(intermediate.toString("ascii"), "{XVT_dn47_0S5_3hS_nu3n1h}5");
+  const summer = Buffer.alloc(blob.length);
+  for (let i = 0; i < intermediate.length; i++) {
+    const base = Math.floor(i / 4) * 4;
+    summer[base + Math.min(4, blob.length - base) - 1 - (i - base)] = intermediate[i];
+  }
+  assert.equal(summer.toString("ascii"), "TVX{4nd_S0_7h3_5un_Sh1n35}");
+  for (const [slug, flag] of [["tvx-twist-me-a-twister", twist.toString("ascii")], ["tvx-summer-is-over", summer.toString("ascii")]]) {
+    const doc = await readWriteup(getWriteup(slug)!);
+    const html = renderToStaticMarkup(renderWriteup(getWriteup(slug)!, doc));
+    assert.ok(nodeText(parseFragment(html)).includes(flag), slug);
+  }
+});

@@ -727,5 +727,141 @@
     "format": "markdown",
     "archivePath": null,
     "readingMinutes": 3
+  },
+  {
+    "slug": "tvx-ending",
+    "title": "Ending",
+    "collection": "TVX CTF",
+    "collectionId": "tvxctf",
+    "category": "Reverse",
+    "difficulty": null,
+    "points": "100",
+    "solves": null,
+    "date": "2026-11-13",
+    "summary": "Recover a hidden .NET flag by unpacking compressed bytecode, mapping a 16-bit virtual machine, and simplifying its stateful lookup-table loop.",
+    "tags": [
+      ".NET",
+      "Custom VM",
+      "GZIP",
+      "Static analysis"
+    ],
+    "skills": [
+      ".NET IL analysis",
+      "Bytecode emulation",
+      "16-bit arithmetic"
+    ],
+    "source": "content/writeups/tvx-ending/README.md",
+    "format": "markdown",
+    "archivePath": null,
+    "readingMinutes": 9
+  },
+  {
+    "slug": "tvx-twist-me-a-twister",
+    "title": "Twist Me a Twister",
+    "collection": "TVX CTF",
+    "collectionId": "tvxctf",
+    "category": "Reverse",
+    "difficulty": null,
+    "points": "100",
+    "solves": null,
+    "date": "2026-11-13",
+    "summary": "Reconstruct a .NET Reveal routine through index permutation, byte rotations, and position-dependent XOR, with a reproducible 40-byte result.",
+    "tags": [
+      ".NET",
+      "Permutation",
+      "XOR",
+      "ROR"
+    ],
+    "skills": [
+      ".NET IL analysis",
+      "Byte transformations",
+      "Python"
+    ],
+    "source": "content/writeups/tvx-twist-me-a-twister/README.md",
+    "format": "markdown",
+    "archivePath": null,
+    "readingMinutes": 6
+  },
+  {
+    "slug": "tvx-summer-is-over",
+    "title": "Summer Is Over",
+    "collection": "TVX CTF",
+    "collectionId": "tvxctf",
+    "category": "Reverse",
+    "difficulty": null,
+    "points": "100",
+    "solves": null,
+    "date": "2026-11-13",
+    "summary": "Follow .NET field data through layered byte transformations and a final four-byte block reversal to recover the expected input.",
+    "tags": [
+      ".NET",
+      "FieldRVA",
+      "XOR",
+      "Block reversal"
+    ],
+    "skills": [
+      "Static analysis",
+      "Byte arithmetic",
+      "Python"
+    ],
+    "source": "content/writeups/tvx-summer-is-over/README.md",
+    "format": "markdown",
+    "archivePath": null,
+    "readingMinutes": 9
+  },
+  {
+    "slug": "tvx-steel-and-feathers",
+    "title": "Steel and Feathers",
+    "collection": "TVX CTF",
+    "collectionId": "tvxctf",
+    "category": "Reverse",
+    "difficulty": null,
+    "points": "100",
+    "solves": null,
+    "date": "2026-11-13",
+    "summary": "Unpack a Base64/GZIP payload, reverse its byte obfuscation, and emulate a compact stack machine to reconstruct a flag.",
+    "tags": [
+      ".NET",
+      "Stack VM",
+      "GZIP",
+      "ROR"
+    ],
+    "skills": [
+      "Bytecode analysis",
+      "Stack-machine emulation",
+      "Python"
+    ],
+    "source": "content/writeups/tvx-steel-and-feathers/README.md",
+    "format": "markdown",
+    "archivePath": null,
+    "readingMinutes": 8
+  },
+  {
+    "slug": "tvx-malwarex",
+    "title": "MalwareX",
+    "collection": "TVX CTF",
+    "collectionId": "tvxctf",
+    "category": "Malware",
+    "difficulty": null,
+    "points": null,
+    "solves": null,
+    "date": "2026-11-13",
+    "summary": "A five-stage static-analysis case study covering sample identification, XOR strings, persistence, AES payload configuration, and XWorm network indicators.",
+    "tags": [
+      "Malware analysis",
+      ".NET",
+      "XOR",
+      "AES-256",
+      "XWorm"
+    ],
+    "skills": [
+      "Static malware analysis",
+      "Payload analysis",
+      "IOC reporting"
+    ],
+    "source": "content/writeups/tvx-malwarex/README.md",
+    "format": "markdown",
+    "archivePath": null,
+    "readingMinutes": 5
   }
 ]

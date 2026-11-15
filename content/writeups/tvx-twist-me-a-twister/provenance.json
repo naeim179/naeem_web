@@ -1,0 +1,14 @@
+{
+  "sourceUpload": "for-myweb.rar",
+  "uploadSHA256": "d8de2b98ccf97ad781a6f4547a3a1c31718ed3e38ed3344a52e7b5c21c1d0de2",
+  "preservedFilesSHA256": {
+    "README.original.md": "b17e407b23c44c5841743c1adc8f9c8577138b796b2be41e102eb196ede18f0f",
+    "TwistMeATwister_Writeup.docx": "c11cd5725c424f7791ff17bdd899eac9bccf368376339fb3a694faff2bf98b1b"
+  },
+  "notes": [
+    "Original upload documents, Markdown, solver files and screenshots are preserved byte-for-byte.",
+    "The reading version adds explicit evidence and reproduction limits. No supplied Windows executable or malware sample was present or executed.",
+    "Solve dates and challenge values are visible in the supplied solve history."
+  ],
+  "originalArchivePaths": {}
+}

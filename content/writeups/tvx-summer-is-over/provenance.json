@@ -1,0 +1,15 @@
+{
+  "sourceUpload": "for-myweb.rar",
+  "uploadSHA256": "d8de2b98ccf97ad781a6f4547a3a1c31718ed3e38ed3344a52e7b5c21c1d0de2",
+  "preservedFilesSHA256": {
+    "README.original.md": "5309e1ac556da885145e5e0cb8e1b4374e644893e73ef930e3f8968bc1cc34fd",
+    "SummerIsOver_Writeup.pdf": "508ec3a498b88674a78bc06c08a5315b375f9aaade89e1a31bf1b5f01ad7023e",
+    "solve_summerisover.py": "24d94626081614279947d80058711801728bb311689f23582a7f010942649051"
+  },
+  "notes": [
+    "Original upload documents, Markdown, solver files and screenshots are preserved byte-for-byte.",
+    "The reading version adds explicit evidence and reproduction limits. No supplied Windows executable or malware sample was present or executed.",
+    "Solve dates and challenge values are visible in the supplied solve history."
+  ],
+  "originalArchivePaths": {}
+}
