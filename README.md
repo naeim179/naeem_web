@@ -1,45 +1,51 @@
-# naeem_web — Fixed Portfolio + Writeups
+# Naim Althabatah — Portfolio
 
-Fixed structure:
+Next.js portfolio covering cybersecurity, freelance full-stack development, cloud integrations, and technical writeups. This repository is independent of `edc_website`; it only links to that public project as a case study.
 
-```text
-naeem_web/
-├── index.html
-├── wrup/
-│   ├── index.html
-│   ├── style.css
-│   ├── app.js
-│   ├── writeups.js
-│   ├── _template.html
-│   ├── writeup-template.css
-│   ├── web/
-│   ├── reverse/
-│   ├── pwn/
-│   ├── crypto/
-│   ├── forensics/
-│   └── misc/
-└── writeups/
-    └── index.html  # redirect to wrup for old links
+## Run locally
+
+```sh
+npm ci
+npm run dev
 ```
 
-Behavior:
+`predev` and `prebuild` prepare the archived CTF library automatically. No database, API keys, or paid services are required.
 
-1. Navbar `Writeups` in the main portfolio scrolls down to the Writeups section.
-2. Clicking the MyLibrary card opens `./wrup/index.html`.
-3. Inside MyLibrary, `Portfolio` and `Back to Portfolio` return to `../index.html`.
-4. Old links to `./writeups/index.html` redirect to `./wrup/index.html`.
+```sh
+npm run lint
+npm run typecheck
+npm run build
+npm start
+```
 
-To add a writeup, copy `wrup/_template.html` into the right category folder, then add it to `wrup/writeups.js`.
+## Content
 
+- `lib/portfolio.ts`: profile, project case studies, credentials, skills.
+- `lib/reports.ts`: clearly scoped lab summaries and learning notes.
+- `app/legacy/page.tsx`: competition results already present in the old portfolio.
+- `public/Naim-Althabatah-CV.docx`: owner-provided downloadable CV.
+- `legacy/ctf-portfolio/`: original CTF library and writeups, preserved.
+- `scripts/prepare-archive.mjs`: copies the library into generated `public/archive/` for Next.js hosting. Do not edit the generated copy.
+- `index.html`: previous static portfolio, preserved for reference. Next.js serves `app/page.tsx`, not this file.
 
-## Professional writeup format added
+## Routes
 
-The MyLibrary system now includes:
+`/`, `/work/educational-platform`, `/work/qrshield`, `/work/attack-defense-lab`, `/labs`, `/reports`, `/reports/wazuh-lab`, `/reports/phishing-investigation`, `/legacy`, `/archive/wrup/index.html`.
 
-- Category cabinets with search and filters.
-- Latest writeup cards with CTF name, points, date, and skills.
-- A stronger `_template.html` casefile with Overview, Skills, Timeline, Recon, Walkthrough, Evidence, Flag, and Lessons Learned.
-- Screenshot placeholder styling through `writeup-template.css`.
-- `ADD_WRITEUP.md` with the exact workflow for publishing new writeups.
+Older `/wrup/*`, `/writeups/index.html`, and `/legacy/ctf-portfolio/*` links redirect to the served archive. Unknown projects and reports use the 404 page.
 
-Use `wrup/_template.html` as the source for every new writeup. Copy it into the matching category folder, then add its metadata to `wrup/writeups.js`.
+## Hosting
+
+The redesign targets the existing Next.js / Vercel application. It is not an export for GitHub Pages. The old static `index.html` is intentionally retained; switching the primary portfolio URL or publishing a new production design happens after owner review.
+
+## Update the archive
+
+Follow `legacy/ctf-portfolio/ADD_WRITEUP.md`. Add casefiles under `legacy/ctf-portfolio/wrup/` and update its library data. The next dev/build refreshes the served archive.
+
+## Content accuracy
+
+Content is based on the supplied CV and existing portfolio. Training is labeled separately from certification; ISC2 is candidate status. New CTF / hackathon results are deferred until the owner supplies details. See `PORTFOLIO_TODO.md`.
+
+## Accessibility & motion
+
+The layout uses semantic headings, keyboard navigation, a skip link, visible focus, accessible mobile navigation, and reduced-motion support. Primary content stays visible when JavaScript is disabled. Project illustrations are decorative concepts rather than product screenshots.

@@ -1,2 +1,8 @@
 node_modules
 .next
+
+public/archive/
+*.tsbuildinfo
+.env*
+!.env.example
+.vercel/

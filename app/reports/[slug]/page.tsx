@@ -1,83 +1,59 @@
-const reports = {
-  "wazuh-lab": {
-    title: "Wazuh SIEM Attack & Defense Lab",
-    type: "Blue Team Report",
-    overview:
-      "A practical security lab focused on SIEM monitoring, attack detection, and defensive response.",
-    sections: [
-      "Environment Setup",
-      "Attack Simulation",
-      "Alert Detection",
-      "Investigation",
-      "Mitigation",
-      "Lessons Learned",
-    ],
-  },
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { reports } from "@/lib/reports";
+export const dynamicParams = false;
 
-  "phishing-investigation": {
-    title: "Phishing Investigation",
-    type: "Incident Response Report",
-    overview:
-      "SOC investigation workflow for analyzing phishing activity and identifying malicious indicators.",
-    sections: [
-      "Incident Overview",
-      "IOC Extraction",
-      "Log Analysis",
-      "Threat Investigation",
-      "Response Actions",
-    ],
-  },
-};
-
+export function generateStaticParams() {
+  return Object.keys(reports).map((slug) => ({ slug }));
+}
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const report = Object.entries(reports).find(([key]) => key === slug)?.[1];
+  return {
+    title: report?.title ?? "Report not found",
+    description: report?.summary,
+  };
+}
 export default async function ReportPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-
-  const report =
-    reports[slug as keyof typeof reports];
-
-  if (!report) {
-    return (
-      <main className="container py-32 text-white">
-        Report not found
-      </main>
-    );
-  }
-
+  const report = Object.entries(reports).find(([key]) => key === slug)?.[1];
+  if (!report) notFound();
   return (
-    <main className="container min-h-screen py-32">
-      <p className="font-mono text-sm text-green-400">
-        &gt; {report.type}
-      </p>
-
-      <h1 className="mt-4 text-4xl font-bold text-white">
-        {report.title}
-      </h1>
-
-      <div className="glass-card mt-8 p-8">
-        <h2 className="text-xl font-bold text-white">
-          Overview
+    <article className="wrap subpage">
+      <Link href="/reports" className="back-link">
+        ← All reports & notes
+      </Link>
+      <p className="eyebrow">{report.type}</p>
+      <h1>{report.title}</h1>
+      <p className="subpage-lead">{report.summary}</p>
+      <div className="case-body">
+        <h2>
+          Notes from
+          <br />
+          <em>the investigation.</em>
         </h2>
-
-        <p className="mt-4 text-slate-400">
-          {report.overview}
-        </p>
-
-        <h2 className="mt-8 text-xl font-bold text-white">
-          Investigation Flow
-        </h2>
-
-        <ul className="mt-4 space-y-3 text-slate-400">
+        <div>
           {report.sections.map((section) => (
-            <li key={section}>
-              ✓ {section}
-            </li>
+            <section key={section.heading}>
+              <h3>{section.heading}</h3>
+              <p>{section.body}</p>
+            </section>
           ))}
-        </ul>
+          <p className="case-note">{report.note}</p>
+        </div>
       </div>
-    </main>
+      <Link href="/labs" className="text-link">
+        Explore the security labs →
+      </Link>
+    </article>
   );
 }

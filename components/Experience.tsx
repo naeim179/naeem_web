@@ -1,44 +1,69 @@
+const experience = [
+  {
+    date: "2026",
+    duration: "APPROX. 4–5 MONTHS",
+    role: "Freelance Full-Stack Developer",
+    company: "Independent client project",
+    subtitle: "Educational platform · Cloud & payment integrations",
+    bullets: [
+      "Contributed across full-stack development and external service integration.",
+      "Connected Supabase, Cloudflare, and PayTabs within the website workflow.",
+      "Managed source code with GitHub and resolved integration and configuration issues.",
+    ],
+  },
+  {
+    date: "200 HOURS",
+    duration: "8-WEEK FIELD TRAINING",
+    role: "Cybersecurity Trainee",
+    company: "NCSCJO / Skidz Training",
+    subtitle: "Masar Cybersecurity Field Training Program",
+    bullets: [
+      "Practiced SOC monitoring, attack simulation, investigation, and remediation in controlled labs.",
+      "Configured Wazuh SIEM and investigated Apache logs, Bash history, and security alerts.",
+      "Developed and tested basic detection logic for common web attacks.",
+    ],
+  },
+];
 export default function Experience() {
   return (
-    <section className="container py-20">
-      <div className="glass-card p-8">
-        <p className="font-mono text-sm text-green-400">
-          &gt; experience_log
-        </p>
-
-        <h2 className="mt-3 text-3xl font-bold text-white">
-          Cybersecurity Experience
-        </h2>
-
-        <div className="mt-6">
-          <h3 className="text-xl font-bold text-sky-400">
-            Cybersecurity Trainee
-          </h3>
-
-          <p className="mt-2 text-slate-400">
-            National Cyber Security Center (NCSCJO) /
-            Skidz Training — Masar Cybersecurity Field Training Program
-          </p>
-
-          <p className="mt-2 font-mono text-sm text-green-400">
-            200 Hours | 8 Weeks
-          </p>
-
-          <ul className="mt-5 space-y-3 text-slate-300">
-            <li>
-              ✓ Configured Wazuh SIEM for log collection and alerting
-            </li>
-            <li>
-              ✓ Investigated Apache logs, Bash history, and security alerts
-            </li>
-            <li>
-              ✓ Practiced attack investigation and remediation workflows
-            </li>
-            <li>
-              ✓ Created basic detection logic for common web attacks
-            </li>
-          </ul>
+    <section id="experience" className="section wrap">
+      <div className="section-heading" data-reveal>
+        <div>
+          <p className="eyebrow">03 / EXPERIENCE</p>
+          <h2>
+            Learning by doing.
+            <br />
+            <em>Growing through work.</em>
+          </h2>
         </div>
+        <p>
+          Client work and structured training,
+          <br />
+          with a practical thread running through both.
+        </p>
+      </div>
+      <div className="timeline">
+        {experience.map((item) => (
+          <article className="experience-row" key={item.role} data-reveal>
+            <div className="experience-date">
+              <strong>{item.date}</strong>
+              <span>{item.duration}</span>
+            </div>
+            <div>
+              <p className="eyebrow">{item.company}</p>
+              <h3>{item.role}</h3>
+              <p className="experience-subtitle">{item.subtitle}</p>
+              <ul>
+                {item.bullets.map((text) => (
+                  <li key={text}>{text}</li>
+                ))}
+              </ul>
+            </div>
+            <span className="timeline-plus" aria-hidden="true">
+              ↗
+            </span>
+          </article>
+        ))}
       </div>
     </section>
   );

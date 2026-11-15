@@ -1,33 +1,64 @@
+import { certifications } from "@/lib/portfolio";
+import { Arrow } from "./Icons";
 export default function Certifications() {
-  const certifications = [
-    "Masar Cybersecurity Field Training Program - NCSCJO",
-    "Certified Associate Penetration Tester (CAPT) - Hackviser",
-    "Red Hat System Administration I (RH124)",
-    "Red Hat System Administration II (RH134)",
-    "CCNA Training - 60 Hours",
-    "CEH Training - 40 Hours",
-    "ISC2 Candidate",
-  ];
-
   return (
-    <section className="container py-20">
-      <div className="glass-card p-8">
-        <p className="font-mono text-sm text-green-400">
-          &gt; certifications
+    <section id="credentials" className="section wrap">
+      <div className="section-heading" data-reveal>
+        <div>
+          <p className="eyebrow">05 / CREDENTIALS</p>
+          <h2>
+            A foundation.
+            <br />
+            <em>Always expanding.</em>
+          </h2>
+        </div>
+        <p>
+          Professional certifications and completed training,
+          <br />
+          with links to the corresponding credentials.
         </p>
-
-        <h2 className="mt-3 text-3xl font-bold text-white">
-          Certifications & Training
-        </h2>
-
-        <ul className="mt-6 space-y-3 text-slate-300">
-          {certifications.map((cert) => (
-            <li key={cert}>
-              ✓ {cert}
-            </li>
-          ))}
-        </ul>
       </div>
+      <div className="credentials-grid">
+        {certifications.map((cert, index) => (
+          <article
+            className={
+              index === 0 ? "credential credential-featured" : "credential"
+            }
+            key={cert.title}
+            data-reveal
+          >
+            <div className="credential-top">
+              <span>{cert.type}</span>
+              <span aria-hidden="true">
+                {index === 0 ? "AWS" : String(index + 1).padStart(2, "0")}
+              </span>
+            </div>
+            <div>
+              <p className="eyebrow">{cert.issuer}</p>
+              <h3>{cert.title}</h3>
+              <p>{cert.detail}</p>
+              {"verification" in cert ? (
+                <p className="verification-id">
+                  Verification ID: {cert.verification}
+                </p>
+              ) : null}
+            </div>
+            <a
+              href={cert.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-link"
+            >
+              {index === 0 ? "Verify with AWS" : "View credential"}
+              <Arrow diagonal />
+            </a>
+          </article>
+        ))}
+      </div>
+      <p className="credential-footnote">
+        Also: ISC2 Candidate · Candidate status, not a professional
+        certification.
+      </p>
     </section>
   );
 }

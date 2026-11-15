@@ -1,73 +1,54 @@
-import LegacyCard from "./LegacyCard";
-
-const legacyItems = [
-  {
-    title: "CTF Journey",
-    description:
-      "A collection of cybersecurity challenges covering exploitation, investigation, and problem solving.",
-    skills: [
-      "Web Security",
-      "Forensics",
-      "Crypto",
-      "Reverse Engineering",
-    ],
-  },
-  {
-    title: "Writeups Archive",
-    description:
-      "Technical writeups documenting previous challenges, methodologies, and security research notes.",
-    skills: [
-      "Recon",
-      "Enumeration",
-      "Exploitation",
-    ],
-  },
-  {
-    title: "TryHackMe Experience",
-    description:
-      "Hands-on practice through guided cybersecurity rooms and practical security scenarios.",
-    skills: [
-      "Linux",
-      "Networking",
-      "Security Basics",
-    ],
-  },
-];
-
-export default function Legacy() {
+import Link from "next/link";
+import { Arrow } from "./Icons";
+export default function Legacy({ compact = false }: { compact?: boolean }) {
   return (
-    <section className="container py-20">
-      <div className="mb-10">
-        <p className="font-mono text-sm text-green-400">
-          &gt; my_legacy_work
-        </p>
-
-        <h2 className="mt-3 text-3xl font-bold text-white">
-          Cybersecurity Journey
-        </h2>
-
-        <p className="mt-3 max-w-2xl text-slate-400">
-          Previous cybersecurity work, CTF challenges, and technical
-          writeups that shaped my Blue Team journey.
-        </p>
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-3">
-        {legacyItems.map((item) => (
-          <LegacyCard
-            key={item.title}
-            {...item}
-          />
-        ))}
-      </div>
-
-      <div className="mt-10">
-        <a
-          href="/legacy/ctf-portfolio"
-          className="inline-block rounded-lg border border-green-500 px-5 py-3 font-mono text-sm text-green-400 transition hover:bg-green-500 hover:text-black"
-        >
-          Open Legacy Archive →
-        </a>
+    <section className={compact ? "library-section" : ""}>
+      <div
+        className={compact ? "wrap library-banner" : "library-banner"}
+        data-reveal
+      >
+        <div>
+          <p className="eyebrow">06 / NOTES FROM THE FIELD</p>
+          <h2>
+            Challenges solved.
+            <br />
+            <em>Lessons kept.</em>
+          </h2>
+          <p>
+            Technical writeups across web security, cryptography, forensics,
+            reverse engineering, and more. A record of how I approach unfamiliar
+            problems.
+          </p>
+          <Link
+            href={compact ? "/legacy" : "/archive/wrup/index.html"}
+            className="text-link"
+          >
+            {compact ? "Explore the writeups" : "Open the writeup library"}
+            <Arrow diagonal />
+          </Link>
+        </div>
+        <div className="library-art" aria-hidden="true">
+          <div>
+            <span>RESEARCH & WRITEUPS</span>
+            <span>↗</span>
+          </div>
+          <div>
+            <span>01 — WEB SECURITY</span>
+            <span>HTTP / JWT / SSTI</span>
+          </div>
+          <div>
+            <span>02 — FORENSICS</span>
+            <span>EVIDENCE / ANALYSIS</span>
+          </div>
+          <div>
+            <span>03 — REVERSE ENGINEERING</span>
+            <span>GHIDRA / GDB</span>
+          </div>
+          <div>
+            <span>04 — CRYPTOGRAPHY</span>
+            <span>LOGIC / CIPHERS</span>
+          </div>
+        </div>
       </div>
     </section>
   );
