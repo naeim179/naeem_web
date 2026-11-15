@@ -1,6 +1,6 @@
 # CTF writeup library
 
-The canonical publication source is **naeim179/naeem_web**. The library combines the 28 preserved portfolio casefiles and The Will imported from `reverse-engineering-writeups`. All 33 entries are indexed in `catalog.json`, including four supplied MetaCTF writeups.
+The canonical publication source is **naeim179/naeem_web**. The library combines the 28 preserved portfolio casefiles and The Will imported from `reverse-engineering-writeups`. All 38 entries are indexed in `catalog.json`, including four supplied MetaCTF writeups and five TVX CTF casefiles.
 
 ## Browse
 
@@ -47,6 +47,12 @@ The canonical publication source is **naeim179/naeem_web**. The library combines
 | MetaCTF | Web | [Miki Antonelli](https://naim-workspace.vercel.app/writeups/metactf-miki-antonelli) | [Source](metactf-miki-antonelli/README.md) |
 | MetaCTF | Web | [FIA Race Control](https://naim-workspace.vercel.app/writeups/metactf-fia-race-control) | [Source](metactf-fia-race-control/README.md) |
 
+| TVX CTF | Reverse | [Ending](https://naim-workspace.vercel.app/writeups/tvx-ending) | [Source](tvx-ending/README.md) |
+| TVX CTF | Reverse | [Twist Me a Twister](https://naim-workspace.vercel.app/writeups/tvx-twist-me-a-twister) | [Source](tvx-twist-me-a-twister/README.md) |
+| TVX CTF | Reverse | [Summer Is Over](https://naim-workspace.vercel.app/writeups/tvx-summer-is-over) | [Source](tvx-summer-is-over/README.md) |
+| TVX CTF | Reverse | [Steel and Feathers](https://naim-workspace.vercel.app/writeups/tvx-steel-and-feathers) | [Source](tvx-steel-and-feathers/README.md) |
+| TVX CTF | Malware | [MalwareX](https://naim-workspace.vercel.app/writeups/tvx-malwarex) | [Source](tvx-malwarex/README.md) |
+
 ## Add a writeup
 
 1. Create `content/writeups/<competition>-<challenge>/README.md` using `TEMPLATE.md` as a guide. Keep screenshots and solution files alongside it.
@@ -66,3 +72,12 @@ The Will still needs the original executable or download link, its hash, and ver
 The owner confirmed finalist participation at Princess Sumaya University for Technology. The supplied team scoreboard shows **22nd place in the finals**, **1,102 team points**, and **752 points** for the owner’s account, `Naim Althabata`. No event date, team name, or further placement has been inferred.
 
 The four published MetaCTF casefiles are the currently supplied set; more may be added later. Original uploads and embedded images are preserved with SHA-256 provenance. For complete reproduction, the original challenge inputs and referenced tools/solvers are still needed. The Reliability Update schedule and reported result JSON are retained as supplied evidence; only the demonstrable toggle-count typo was corrected in the reading version.
+
+
+## TVX CTF participation and source limits
+
+The owner confirmed the **final result: IV LEGION, 31st place, 2,110 team points**. The original team screenshot identifies Naim Althabata as captain. Individual score displays differ between screenshots, so no single personal total is asserted. Original scoreboard and solve-history images, as well as the original `for-myweb.rar`, are preserved under `tvx-ending/` with SHA-256 provenance.
+
+The supplied solve history records 13 November 2026 for the four reverse-engineering cases and the five MalwareX stages. These are recorded solve dates, not an inferred full event period. No challenge executables or malware samples were supplied. Summer Is Over and Twist Me a Twister were reproduced from their included arrays. The Ending jump correction is supplied separately from the unchanged original solver; the first-character Steel and Feathers example was checked, but neither complete VM solve was rerun against its absent executable.
+
+MalwareX retains the original report’s uncertainty. Its stage-three candidate was rejected; the solve history shows subsequent completion without revealing the accepted answer. The remaining technical indicators are reported source findings, not a newly verified forensic result.

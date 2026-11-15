@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
-import { metaCtfResult } from "@/lib/competitions";
+import { metaCtfResult, tvxCtfResult } from "@/lib/competitions";
 import Link from "next/link";
 import Legacy from "@/components/Legacy";
 import { profile } from "@/lib/portfolio";
 import { Arrow } from "@/components/Icons";
 export const metadata: Metadata = { title: "CTF Writeups & Research" };
-// Existing results and the MetaCTF finals result confirmed by the owner.
+// Competition results confirmed by the owner or retained from the original portfolio.
 const results = [
+  {
+    name: `${tvxCtfResult.name} — ${tvxCtfResult.team}`,
+    result: `Final result · ${tvxCtfResult.teamRank}st place`,
+    details: `Team score: ${tvxCtfResult.teamPoints.toLocaleString("en-US")} points · Team ${tvxCtfResult.role.toLowerCase()}`,
+  },
   {
     name: `${metaCtfResult.name} — ${metaCtfResult.institution}`,
     result: `Finals · ${metaCtfResult.teamRank}nd place`,

@@ -37,3 +37,15 @@
 - [x] Record the owner-confirmed finals result: team rank 22nd, team score 1,102, personal score 752.
 - [ ] Add further MetaCTF writeups when the owner prepares them.
 - [ ] Receive original challenge inputs and the referenced Recycler solver if full solve reproduction is requested.
+
+
+## TVX CTF update
+
+- [x] Add Ending, Twist Me a Twister, Summer Is Over, Steel and Feathers, and the five-stage MalwareX case study.
+- [x] Preserve the original RAR, documents, Markdown, PDF, solvers, and five evidence screenshots with SHA-256 provenance.
+- [x] Record the owner-confirmed final result: IV LEGION, 31st place, 2,110 team points; Naim Althabata as captain.
+- [x] Reproduce the two complete embedded-array transforms and check the VM first-character examples without running a Windows binary.
+- [x] Supply a reviewed Ending solver with corrected relative-jump operand handling, keeping its original unchanged.
+- [ ] Receive the accepted MalwareX stage-three answer and original analysis artifacts if full independent reproduction is requested.
+- [ ] Receive the challenge executables or original download links to reproduce the complete Ending and Steel and Feathers solves and recheck binary-specific claims.
+- [ ] Receive further TVX CTF writeups when prepared; only the five supplied casefiles are published.
