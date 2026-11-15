@@ -1,41 +1,49 @@
+import { profile } from "@/lib/portfolio";
+import { Arrow } from "./Icons";
 export default function Contact() {
   return (
-    <section className="container py-20">
-      <div className="glass-card p-8">
-        <p className="font-mono text-sm text-green-400">
-          &gt; contact_terminal
-        </p>
-
-        <h2 className="mt-3 text-3xl font-bold text-white">
-          Let's Connect
-        </h2>
-
-        <p className="mt-4 max-w-2xl text-slate-400">
-          Open for cybersecurity opportunities, SOC roles,
-          security discussions, and collaboration.
-        </p>
-
-        <div className="mt-8 space-y-4 font-mono text-sm">
+    <section id="contact" className="contact-section">
+      <div className="wrap contact-grid" data-reveal>
+        <div>
+          <p className="eyebrow">LET’S CONNECT</p>
+          <h2>
+            Have something
+            <br />
+            <em>in mind?</em>
+          </h2>
           <p>
-            <span className="text-sky-400">
-              email:
-            </span>{" "}
-            your-email@example.com
+            Open to cybersecurity opportunities, development projects,
+            <br />
+            and conversations that lead somewhere interesting.
           </p>
-
-          <p>
-            <span className="text-sky-400">
-              github:
-            </span>{" "}
-            github.com/naeim179
-          </p>
-
-          <p>
-            <span className="text-sky-400">
-              linkedin:
-            </span>{" "}
-            linkedin.com/in/naeim
-          </p>
+        </div>
+        <div className="contact-links">
+          <a href={`mailto:${profile.email}`} className="contact-email">
+            {profile.email}
+            <Arrow diagonal />
+          </a>
+          <div>
+            <a
+              href={profile.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LinkedIn <Arrow diagonal />
+            </a>
+            <a href={profile.github} target="_blank" rel="noopener noreferrer">
+              GitHub <Arrow diagonal />
+            </a>
+            <a
+              href={profile.tryhackme}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              TryHackMe <Arrow diagonal />
+            </a>
+          </div>
+          <a href={profile.resume} className="text-link light" download>
+            Download my CV <Arrow />
+          </a>
         </div>
       </div>
     </section>

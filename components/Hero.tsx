@@ -1,71 +1,80 @@
+import Link from "next/link";
+import { profile } from "@/lib/portfolio";
+import { Arrow } from "./Icons";
 export default function Hero() {
   return (
-    <section className="container flex min-h-screen items-center pt-32">
-      <div className="grid w-full gap-10 md:grid-cols-2">
-        <div className="flex flex-col justify-center">
-          <p className="mb-4 font-mono text-sm text-green-400">
-            &gt; cybersecurity analyst portfolio
+    <section className="hero">
+      <div className="wrap hero-grid">
+        <div className="hero-copy">
+          <p className="eyebrow">
+            <span className="status-dot" /> CYBERSECURITY × FULL-STACK
+            DEVELOPMENT
           </p>
-
-          <h1 className="text-4xl font-bold leading-tight text-white md:text-6xl">
+          <h1>
             Naim
             <br />
-            <span className="text-sky-400">
-              Cybersecurity Analyst
-            </span>
+            <em>Althabatah.</em>
           </h1>
-
-          <p className="mt-6 max-w-xl text-lg leading-8 text-slate-400">
-            Focused on SOC operations, SIEM monitoring, incident response,
-            threat detection, and security research through hands-on labs.
+          <p className="hero-description">
+            A security mindset.
+            <br />A builder’s perspective.
           </p>
-
-          <div className="mt-8 flex flex-wrap gap-4">
-            <a
-              href="/reports"
-              className="rounded-lg bg-green-500 px-6 py-3 font-medium text-black transition hover:bg-green-400"
-            >
-              View Reports
-            </a>
-
-            <a
-              href="/labs"
-              className="rounded-lg border border-slate-700 px-6 py-3 font-medium text-white transition hover:border-sky-400 hover:text-sky-400"
-            >
-              Explore Labs
+          <p className="hero-note">
+            I investigate how systems break, and build applications that bring
+            people and services together.
+          </p>
+          <div className="hero-actions">
+            <Link href="#work" className="button button-copper">
+              Explore my work <Arrow />
+            </Link>
+            <a href={profile.resume} className="text-link light" download>
+              Download CV <Arrow diagonal />
             </a>
           </div>
-
-          <div className="mt-8 flex items-center gap-3 font-mono text-sm text-green-400">
-            <span className="h-2 w-2 rounded-full bg-green-400" />
-            Available for cybersecurity opportunities
+          <div className="hero-location">
+            <span>BASED IN AMMAN, JORDAN</span>
+            <span>OPEN TO OPPORTUNITIES</span>
           </div>
         </div>
-
-        <div className="flex items-center justify-center">
-          <div className="glass-card w-full max-w-md p-6 font-mono text-sm text-slate-300">
-            <p className="text-green-400">$ system_status</p>
-
-            <div className="mt-4 space-y-3">
-              <p>
-                <span className="text-sky-400">role:</span> SOC Analyst
-              </p>
-
-              <p>
-                <span className="text-sky-400">focus:</span> Blue Team
-              </p>
-
-              <p>
-                <span className="text-sky-400">tools:</span> Splunk, Wazuh, ELK
-              </p>
-
-              <p>
-                <span className="text-sky-400">status:</span>{" "}
-                <span className="text-green-400">monitoring</span>
-              </p>
+        <div className="hero-composition">
+          <div className="orbit-caption">TWO DISCIPLINES. ONE PERSPECTIVE.</div>
+          <div className="orbit-system" aria-hidden="true">
+            <div className="orbit orbit-one" />
+            <div className="orbit orbit-two" />
+            <div className="orbit-cross horizontal" />
+            <div className="orbit-cross vertical" />
+            <div className="orbit-core">
+              N<span>179</span>
             </div>
+            <span className="orbit-node node-build">
+              BUILD<span>FULL-STACK & CLOUD</span>
+            </span>
+            <span className="orbit-node node-secure">
+              DEFEND<span>SECURITY & INVESTIGATION</span>
+            </span>
+            <span className="orbit-point" />
           </div>
+          <div className="hero-card">
+            <span className="aws-monogram">
+              aws<span>⌣</span>
+            </span>
+            <div>
+              <small>CERTIFIED FOUNDATION</small>
+              <strong>AWS Cloud Practitioner</strong>
+              <span>Cloud knowledge. Practical application.</span>
+            </div>
+            <span className="hero-card-year">2026</span>
+          </div>
+          <span className="composition-note">
+            Curious by nature. Practical by approach.
+          </span>
         </div>
+      </div>
+      <div className="wrap hero-bottom">
+        <span>SELECTED PORTFOLIO / 2026</span>
+        <Link href="#work">
+          SCROLL TO DISCOVER <span aria-hidden="true">↓</span>
+        </Link>
       </div>
     </section>
   );
