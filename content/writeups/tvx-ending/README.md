@@ -261,6 +261,10 @@ The [reviewed solver](Ending_solve.reviewed.py) changes only these lines. Synthe
 
 **IV LEGION finished in 31st place with 2,110 team points.** The owner confirmed that this is the final result. The supplied team screenshot identifies **Naim Althabata as captain**.
 
+The **Certificate of Achievement**, issued to **Naim Althabata** by **Tech Visions Team** on **13 November 2026**, confirms the final placement and team total. The supplied one-page PDF is preserved unchanged.
+
+[View or download the original certificate (PDF)](/certificates/tvx-ctf-2026-naim-althabata.pdf) · [Certificate in the portfolio](/#tvx-certificate)
+
 ![TVX CTF team IV LEGION scoreboard showing 31st place, 2110 team points, and Naim Althabata as captain](evidence/team-scoreboard.png)
 
 The team screenshot lists 1,810 points beside the captain’s name, while the separate player-profile screenshot displays 2,110. Those screenshots are retained as supplied; their differing individual totals are not reconciled or presented as a confirmed personal score. The confirmed result above uses the team total.

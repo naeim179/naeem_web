@@ -6,6 +6,7 @@ import crypto from "node:crypto";
 import { parseFragment, type DefaultTreeAdapterMap } from "parse5";
 import { renderToStaticMarkup } from "react-dom/server";
 import { writeups, getWriteup } from "../lib/writeups";
+import { tvxCtfResult } from "../lib/competitions";
 import {
   readWriteup,
   nodeText,
@@ -290,4 +291,19 @@ test("TVX embedded-array reconstructions match both documented final flags", asy
     const html = renderToStaticMarkup(renderWriteup(getWriteup(slug)!, doc));
     assert.ok(nodeText(parseFragment(html)).includes(flag), slug);
   }
+});
+
+test("TVX achievement keeps the original certificate and its document preview intact", async () => {
+  const record = JSON.parse(await fs.readFile("content/certificates/tvx-ctf-2026.json", "utf8"));
+  for (const [file, expected] of [[record.document, record.sha256], [record.preview, record.previewSHA256]]) {
+    assert.equal(crypto.createHash("sha256").update(await fs.readFile(file)).digest("hex"), expected);
+  }
+  assert.equal(record.finalTeamRank, tvxCtfResult.teamRank);
+  assert.equal(record.teamPoints, tvxCtfResult.teamPoints);
+  assert.equal(record.issuedOn, tvxCtfResult.certificate.issuedOn);
+  assert.equal(record.document, "public" + tvxCtfResult.certificate.pdf);
+  assert.equal(record.preview, "public" + tvxCtfResult.certificate.preview);
+  const entry = getWriteup("tvx-ending")!;
+  const rendered = renderToStaticMarkup(renderWriteup(entry, await readWriteup(entry)));
+  assert.ok(rendered.includes(`href="${tvxCtfResult.certificate.pdf}"`));
 });

@@ -1,0 +1,19 @@
+{
+  "sourceUpload": "031 - Naim Althabata.pdf",
+  "document": "public/certificates/tvx-ctf-2026-naim-althabata.pdf",
+  "sha256": "c6f7e62832f7c4a6cbf650cdcafc261fb63c7fc83415e4c65a66a4f010cd3f0a",
+  "pages": 1,
+  "recipientAsPrinted": "Naim Althabata",
+  "issuer": "Tech Visions Team",
+  "issuedOn": "2026-11-13",
+  "team": "IV LEGION",
+  "finalTeamRank": 31,
+  "teamPoints": 2110,
+  "preview": "public/certificates/tvx-ctf-2026-naim-althabata.jpg",
+  "previewSHA256": "a4217988651d20a237dd9a6a3f0350e37ab39337a29a1e544263b357128221ca",
+  "notes": [
+    "The original one-page PDF is preserved byte-for-byte; no document text, logos, margins or metadata were changed.",
+    "The JPEG is a full-page rendering using pdftoppm at 1600 pixels wide and JPEG quality 92; it is only a website preview.",
+    "The certificate documents a competition achievement, not a professional certification. Points are shown as the team total, consistent with the supplied final scoreboard."
+  ]
+}
