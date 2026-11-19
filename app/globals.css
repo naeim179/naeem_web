@@ -1090,6 +1090,53 @@ svg {
   color: var(--muted);
   margin-top: 24px;
 }
+.competition-credential {
+  margin-top: 32px;
+  padding: clamp(20px, 3vw, 36px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 48px);
+  border: 1px solid var(--line);
+  background: #f9f8f3;
+}
+.competition-credential-preview {
+  display: block;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+.competition-credential-preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.competition-credential-details .eyebrow { color: var(--copper); }
+.competition-credential-details h3 { font-size: clamp(26px, 2.7vw, 36px); }
+.competition-credential-issued {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.competition-credential-result {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 30px;
+  margin: 24px 0;
+}
+.competition-credential-result dt {
+  font: 10px/1.6 var(--font-geist-mono), monospace;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.competition-credential-result dd {
+  margin: 4px 0 0;
+  font: 27px/1.3 var(--font-serif);
+}
+.competition-credential-actions { display: flex; flex-wrap: wrap; gap: 16px 24px; }
+.competition-credential-actions .text-link { font-size: 12px; }
+@media (max-width: 760px) {
+  .competition-credential { grid-template-columns: minmax(0, 1fr); }
+}
 .library-section {
   border-top: 1px solid var(--line);
   padding-block: 90px;

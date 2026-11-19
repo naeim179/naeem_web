@@ -22,4 +22,13 @@ export const tvxCtfResult = {
   role: "Captain",
   scoreboardName: "Naim Althabata",
   evidence: "/writeup-files/tvx-ending/evidence/team-scoreboard.png",
+  certificate: {
+    title: "Certificate of Achievement",
+    issuer: "Tech Visions Team",
+    issuedOn: "2026-11-13",
+    pdf: "/certificates/tvx-ctf-2026-naim-althabata.pdf",
+    preview: "/certificates/tvx-ctf-2026-naim-althabata.jpg",
+    width: 1600,
+    height: 1133,
+  },
 };

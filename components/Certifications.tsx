@@ -1,4 +1,7 @@
 import { certifications } from "@/lib/portfolio";
+import { tvxCtfResult } from "@/lib/competitions";
+import Image from "next/image";
+import Link from "next/link";
 import { Arrow } from "./Icons";
 export default function Certifications() {
   return (
@@ -13,7 +16,7 @@ export default function Certifications() {
           </h2>
         </div>
         <p>
-          Professional certifications and completed training,
+          Professional certifications, training, and competition achievements,
           <br />
           with links to the corresponding credentials.
         </p>
@@ -59,6 +62,53 @@ export default function Certifications() {
         Also: ISC2 Candidate · Candidate status, not a professional
         certification.
       </p>
+      <article
+        id="tvx-certificate"
+        className="competition-credential"
+        aria-labelledby="tvx-certificate-title"
+        data-reveal
+      >
+        <a
+          className="competition-credential-preview"
+          href={tvxCtfResult.certificate.pdf}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="View Naim Althabata’s TVX CTF certificate as a PDF in a new tab"
+        >
+          <Image
+            src={tvxCtfResult.certificate.preview}
+            width={tvxCtfResult.certificate.width}
+            height={tvxCtfResult.certificate.height}
+            alt="TVX CTF Certificate of Achievement awarded to Naim Althabata of IV LEGION, confirming 31st place and 2,110 team points"
+            unoptimized
+          />
+        </a>
+        <div className="competition-credential-details">
+          <p className="eyebrow">Competition achievement</p>
+          <h3 id="tvx-certificate-title">
+            {tvxCtfResult.name}
+            <br />
+            {tvxCtfResult.certificate.title}
+          </h3>
+          <p className="competition-credential-issued">
+            {tvxCtfResult.certificate.issuer} ·{" "}
+            <time dateTime={tvxCtfResult.certificate.issuedOn}>13 Nov 2026</time>
+          </p>
+          <dl className="competition-credential-result">
+            <div><dt>Final placement</dt><dd>{tvxCtfResult.teamRank}st</dd></div>
+            <div><dt>Team points</dt><dd>{tvxCtfResult.teamPoints.toLocaleString("en-US")}</dd></div>
+            <div><dt>Team</dt><dd>{tvxCtfResult.team}</dd></div>
+          </dl>
+          <div className="competition-credential-actions">
+            <a href={tvxCtfResult.certificate.pdf} download="Naim-Althabata-TVX-CTF-Certificate.pdf" className="text-link">
+              Download certificate <Arrow diagonal />
+            </a>
+            <Link href="/writeups/tvx-ending" className="text-link">
+              Read TVX case study <Arrow diagonal />
+            </Link>
+          </div>
+        </div>
+      </article>
     </section>
   );
 }

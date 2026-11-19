@@ -44,6 +44,7 @@
 - [x] Add Ending, Twist Me a Twister, Summer Is Over, Steel and Feathers, and the five-stage MalwareX case study.
 - [x] Preserve the original RAR, documents, Markdown, PDF, solvers, and five evidence screenshots with SHA-256 provenance.
 - [x] Record the owner-confirmed final result: IV LEGION, 31st place, 2,110 team points; Naim Althabata as captain.
+- [x] Add the original TVX Certificate of Achievement issued 13 November 2026, with an unchanged PDF download, a document preview, and a link from the existing TVX result.
 - [x] Reproduce the two complete embedded-array transforms and check the VM first-character examples without running a Windows binary.
 - [x] Supply a reviewed Ending solver with corrected relative-jump operand handling, keeping its original unchanged.
 - [ ] Receive the accepted MalwareX stage-three answer and original analysis artifacts if full independent reproduction is requested.
