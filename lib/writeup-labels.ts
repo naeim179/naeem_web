@@ -7,6 +7,7 @@ export function categoryLabel(value: string) {
         Pwn: "Binary exploitation",
         Misc: "Miscellaneous",
         Web: "Web security",
+        Machine: "Machines",
       } as Record<string, string>
     )[value] ?? value
   );

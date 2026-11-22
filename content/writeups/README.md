@@ -1,6 +1,6 @@
 # CTF writeup library
 
-The canonical publication source is **naeim179/naeem_web**. The library combines the 28 preserved portfolio casefiles and The Will imported from `reverse-engineering-writeups`. All 41 entries are indexed in `catalog.json`, including four supplied MetaCTF writeups five TVX CTF casefiles, and three OVERPASS 2026 casefiles.
+The canonical publication source is **naeim179/naeem_web**. The library combines the 28 preserved portfolio casefiles and The Will imported from `reverse-engineering-writeups`. All 42 entries are indexed in `catalog.json`, including four supplied MetaCTF writeups, five TVX CTF casefiles, and four OVERPASS 2026 casefiles.
 
 ## Browse
 
@@ -95,4 +95,6 @@ IV LEGION qualified for the finals, placing 11th of 104 teams on 20 November 202
 | Reverse | [GBPASS](https://naim-workspace.vercel.app/writeups/overpass-gbpass) | [Reading version](overpass-gbpass/README.md) |
 | Reverse | [Shibboleth](https://naim-workspace.vercel.app/writeups/overpass-shibboleth) | [Reading version](overpass-shibboleth/README.md) |
 
-Original uploads and embedded images are preserved with SHA-256 provenance. Petty Cash retains the reported difference between the initial account and the captured administrator account; the reading version does not invent the missing transition. GBPASS includes a separate reviewed patch script correcting the original one-byte branch-address errors, plus a static ROM verification record. Shibboleth includes a reconstructed offline solver checked against the supplied ELF; the binary was not executed during publication. Further casefiles are being received in batches and will be added under their categories.
+| Machine | [Blindspot — User and Root](https://naim-workspace.vercel.app/writeups/overpass-blindspot) | [Reading version](overpass-blindspot/README.md) |
+
+Original uploads and embedded images are preserved with SHA-256 provenance. Petty Cash retains the reported difference between the initial account and the captured administrator account; the reading version does not invent the missing transition. GBPASS includes a separate reviewed patch script correcting the original one-byte branch-address errors, plus a static ROM verification record. Shibboleth includes a reconstructed offline solver checked against the supplied ELF; the binary was not executed during publication. Blindspot combines the two separately scored stages and includes the original audio, four embedded images, and an independently verified spectrogram. Further casefiles are being received in batches and will be added under their categories.
