@@ -6,6 +6,7 @@ import Skills from "@/components/Skills";
 import Certifications from "@/components/Certifications";
 import Legacy from "@/components/Legacy";
 import Contact from "@/components/Contact";
+import HireMe from "@/components/HireMe";
 export default function Home() {
   return (
     <>
@@ -16,6 +17,7 @@ export default function Home() {
       <Skills />
       <Certifications />
       <Legacy compact />
+      <HireMe />
       <Contact />
     </>
   );

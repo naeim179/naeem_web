@@ -67,11 +67,11 @@ export default function Navbar() {
             </Link>
           ))}
           <Link
-            href="/#contact"
+            href="/#hire"
             className="nav-contact"
             onClick={() => setOpen(false)}
           >
-            Let’s talk <Arrow diagonal />
+            Hire me <Arrow diagonal />
           </Link>
         </nav>
       </div>
