@@ -30,6 +30,9 @@ export default function Hero() {
             <a href={profile.resume} className="text-link light" download>
               Download CV <Arrow diagonal />
             </a>
+            <Link href="#hire" className="text-link light">
+              Work with me <Arrow diagonal />
+            </Link>
           </div>
           <div className="hero-location">
             <span>BASED IN AMMAN, JORDAN</span>
