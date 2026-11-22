@@ -1,0 +1,16 @@
+{
+  "sourceUploads": [
+    "Shibboleth_Full_Reverse_Engineering_Writeup.docx",
+    "shibboleth"
+  ],
+  "preservedFilesSHA256": {
+    "Shibboleth_Full_Reverse_Engineering_Writeup.docx": "7e57c635566bc9d230c1410c599b80347b1c44326055a097b7f7a72f2e7aaa42",
+    "shibboleth": "661b8e1da53a7a4b378bad3c28ac8adda7e73453e817d1d04e2a90f766d26d67"
+  },
+  "notes": [
+    "Owner-supplied original files and embedded images are preserved byte-for-byte.",
+    "All points and acceptance claims are attributed to the supplied writeup; team scoreboard metrics are not personal solve counts.",
+    "Publication checks were offline; no challenge host was contacted.",
+    "shibboleth_solve.py is a reconstructed offline script, not an original separately uploaded file. The ELF was not executed during publication."
+  ]
+}

@@ -50,3 +50,15 @@
 - [ ] Receive the accepted MalwareX stage-three answer and original analysis artifacts if full independent reproduction is requested.
 - [ ] Receive the challenge executables or original download links to reproduce the complete Ending and Steel and Feathers solves and recheck binary-specific claims.
 - [ ] Receive further TVX CTF writeups when prepared; only the five supplied casefiles are published.
+
+
+## OVERPASS 2026 qualifying update
+
+- [x] Record IV LEGION's 11th-of-104 qualifying result, 3,207 points, and 24/41 team solves; the owner confirmed qualification for the finals.
+- [x] Prepare a competition collection page linked from the library and competition experience, preserving the existing site design.
+- [x] Import Petty Cash (Web), GBPASS (Reverse), and Shibboleth (Reverse), with original documents and supplied challenge files preserved.
+- [x] Check the GBPASS ROM and correct one-byte addresses in a separate reviewed solver; keep the original script unchanged.
+- [x] Check the Shibboleth VM inversion and XOR result from the supplied ELF without executing it.
+- [x] Import Blindspot User + Root as one Machine casefile, preserving its document and audio and verifying the audio clue offline.
+- [ ] Receive the remaining category batches; the owner will say when the submission is complete.
+- [ ] Complete browser/asset regression checks and publish the assembled update to the existing Vercel project.

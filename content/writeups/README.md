@@ -1,6 +1,6 @@
 # CTF writeup library
 
-The canonical publication source is **naeim179/naeem_web**. The library combines the 28 preserved portfolio casefiles and The Will imported from `reverse-engineering-writeups`. All 38 entries are indexed in `catalog.json`, including four supplied MetaCTF writeups and five TVX CTF casefiles.
+The canonical publication source is **naeim179/naeem_web**. The library combines the 28 preserved portfolio casefiles and The Will imported from `reverse-engineering-writeups`. All 42 entries are indexed in `catalog.json`, including four supplied MetaCTF writeups, five TVX CTF casefiles, and four OVERPASS 2026 casefiles.
 
 ## Browse
 
@@ -81,3 +81,20 @@ The owner confirmed the **final result: IV LEGION, 31st place, 2,110 team points
 The supplied solve history records 13 November 2026 for the four reverse-engineering cases and the five MalwareX stages. These are recorded solve dates, not an inferred full event period. No challenge executables or malware samples were supplied. Summer Is Over and Twist Me a Twister were reproduced from their included arrays. The Ending jump correction is supplied separately from the unchanged original solver; the first-character Steel and Feathers example was checked, but neither complete VM solve was rerun against its absent executable.
 
 MalwareX retains the original report’s uncertainty. Its stage-three candidate was rejected; the solve history shows subsequent completion without revealing the accepted answer. The remaining technical indicators are reported source findings, not a newly verified forensic result.
+
+
+## OVERPASS 2026 — qualifiers
+
+Collection: https://naim-workspace.vercel.app/writeups/collections/overpass-2026
+
+IV LEGION qualified for the finals, placing 11th of 104 teams on 20 November 2026 with 3,207 team points and 24 of 41 challenges solved. These are qualifying-stage team totals. They are not a finals result or the author's individual solve count. The owner supplied event/scoreboard screenshots and confirmed the qualification; details are recorded in `content/competitions/overpass-2026.json`.
+
+| Category | Casefile | Source |
+| --- | --- | --- |
+| Web | [Petty Cash](https://naim-workspace.vercel.app/writeups/overpass-petty-cash) | [Reading version](overpass-petty-cash/README.md) |
+| Reverse | [GBPASS](https://naim-workspace.vercel.app/writeups/overpass-gbpass) | [Reading version](overpass-gbpass/README.md) |
+| Reverse | [Shibboleth](https://naim-workspace.vercel.app/writeups/overpass-shibboleth) | [Reading version](overpass-shibboleth/README.md) |
+
+| Machine | [Blindspot — User and Root](https://naim-workspace.vercel.app/writeups/overpass-blindspot) | [Reading version](overpass-blindspot/README.md) |
+
+Original uploads and embedded images are preserved with SHA-256 provenance. Petty Cash retains the reported difference between the initial account and the captured administrator account; the reading version does not invent the missing transition. GBPASS includes a separate reviewed patch script correcting the original one-byte branch-address errors, plus a static ROM verification record. Shibboleth includes a reconstructed offline solver checked against the supplied ELF; the binary was not executed during publication. Blindspot combines the two separately scored stages and includes the original audio, four embedded images, and an independently verified spectrogram. Further casefiles are being received in batches and will be added under their categories.

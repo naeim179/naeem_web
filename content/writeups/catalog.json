@@ -7,7 +7,12 @@
     "category": "Web",
     "difficulty": "Medium",
     "summary": "Submitted a malicious template to the render API in dev mode and used template object traversal to read /flag.txt.",
-    "tags": ["SSTI", "JSON API", "Dev Mode", "File Read"],
+    "tags": [
+      "SSTI",
+      "JSON API",
+      "Dev Mode",
+      "File Read"
+    ],
     "skills": [
       "API Testing",
       "Template Injection",
@@ -30,8 +35,17 @@
     "category": "Web",
     "difficulty": "Easy",
     "summary": "Forged an unsigned JWT by changing alg to none and role to admin, then accessed the admin page.",
-    "tags": ["JWT", "alg:none", "Auth Bypass"],
-    "skills": ["JWT Analysis", "Cookie Testing", "Access Control", "curl"],
+    "tags": [
+      "JWT",
+      "alg:none",
+      "Auth Bypass"
+    ],
+    "skills": [
+      "JWT Analysis",
+      "Cookie Testing",
+      "Access Control",
+      "curl"
+    ],
     "date": "2026-06-18",
     "points": null,
     "solves": null,
@@ -48,8 +62,18 @@
     "category": "Web",
     "difficulty": "Medium",
     "summary": "Used an ImageMagick SVG label:@ primitive to read local files from a file-upload image processor.",
-    "tags": ["ImageMagick", "SVG", "LFI", "File Read"],
-    "skills": ["curl", "SVG Payloads", "ImageMagick Abuse", "Enumeration"],
+    "tags": [
+      "ImageMagick",
+      "SVG",
+      "LFI",
+      "File Read"
+    ],
+    "skills": [
+      "curl",
+      "SVG Payloads",
+      "ImageMagick Abuse",
+      "Enumeration"
+    ],
     "date": "2026-06-14",
     "points": null,
     "solves": "210",
@@ -66,7 +90,11 @@
     "category": "Web",
     "difficulty": "Medium",
     "summary": "Abused a Jinja-style template injection in the admin report query to locate and read /flag.txt.",
-    "tags": ["SSTI", "Jinja2", "File Read"],
+    "tags": [
+      "SSTI",
+      "Jinja2",
+      "File Read"
+    ],
     "skills": [
       "Flask/Jinja SSTI",
       "curl",
@@ -89,7 +117,11 @@
     "category": "Reverse",
     "difficulty": "Medium",
     "summary": "Reversed a bike-lock binary that dynamically generated the flag from cumulative digit offsets into a lookup string.",
-    "tags": ["Ghidra", "Lookup Table", "Cumulative Indexing"],
+    "tags": [
+      "Ghidra",
+      "Lookup Table",
+      "Cumulative Indexing"
+    ],
     "skills": [
       "Static Analysis",
       "Algorithm Reversal",
@@ -112,8 +144,17 @@
     "category": "Pwn",
     "difficulty": "Easy",
     "summary": "Automated a remote service that requested a changing hex-sized payload on every round.",
-    "tags": ["Pwntools", "Automation", "Hex Parsing"],
-    "skills": ["Remote Scripting", "Regex", "Hex Conversion", "Pwntools"],
+    "tags": [
+      "Pwntools",
+      "Automation",
+      "Hex Parsing"
+    ],
+    "skills": [
+      "Remote Scripting",
+      "Regex",
+      "Hex Conversion",
+      "Pwntools"
+    ],
     "date": "2026-06-21",
     "points": null,
     "solves": null,
@@ -130,8 +171,17 @@
     "category": "Pwn",
     "difficulty": "Beginner",
     "summary": "Used an overflow in gets() to overwrite an adjacent stack string so the program’s comparison succeeds without code execution.",
-    "tags": ["Stack Overflow", "gets()", "State Manipulation"],
-    "skills": ["pwntools", "Stack Layout", "Buffer Overflow", "Logic Abuse"],
+    "tags": [
+      "Stack Overflow",
+      "gets()",
+      "State Manipulation"
+    ],
+    "skills": [
+      "pwntools",
+      "Stack Layout",
+      "Buffer Overflow",
+      "Logic Abuse"
+    ],
     "date": "2026-06-22",
     "points": null,
     "solves": null,
@@ -148,7 +198,11 @@
     "category": "Crypto",
     "difficulty": "Medium",
     "summary": "Reversed a Library-of-Babel-style seed generator and decoded RGB triples as indexes into AUTHORSNOTE.txt.",
-    "tags": ["Custom Cipher", "Base55", "RGB Indexing"],
+    "tags": [
+      "Custom Cipher",
+      "Base55",
+      "RGB Indexing"
+    ],
     "skills": [
       "Python Reversal",
       "Base Conversion",
@@ -171,7 +225,11 @@
     "category": "Crypto",
     "difficulty": "Easy",
     "summary": "Decoded a Wingdings-style ciphertext using the “dark, darker, yet darker” hint to recover the flag.",
-    "tags": ["Wingdings", "Symbol Cipher", "Gaster Hint"],
+    "tags": [
+      "Wingdings",
+      "Symbol Cipher",
+      "Gaster Hint"
+    ],
     "skills": [
       "Encoding Analysis",
       "Font-based Cipher",
@@ -194,8 +252,18 @@
     "category": "Crypto",
     "difficulty": "Medium",
     "summary": "Read the archive filenames as a hint, cracked encrypted ZIPs with John, then used a chip-themed targeted wordlist for the final password.",
-    "tags": ["John the Ripper", "ZIP", "Wordlists", "AES ZIP"],
-    "skills": ["zip2john", "John Rules", "7z Extraction", "Wordlist Filtering"],
+    "tags": [
+      "John the Ripper",
+      "ZIP",
+      "Wordlists",
+      "AES ZIP"
+    ],
+    "skills": [
+      "zip2john",
+      "John Rules",
+      "7z Extraction",
+      "Wordlist Filtering"
+    ],
     "date": "2026-06-11",
     "points": null,
     "solves": null,
@@ -212,7 +280,11 @@
     "category": "Forensics",
     "difficulty": "Easy",
     "summary": "Recovered a damaged ZIP archive appended after a PNG, repaired its signature, and unlocked it with the crocodile-themed password.",
-    "tags": ["PNG Polyglot", "ZIP Repair", "File Signatures"],
+    "tags": [
+      "PNG Polyglot",
+      "ZIP Repair",
+      "File Signatures"
+    ],
     "skills": [
       "binwalk",
       "File Signature Analysis",
@@ -235,8 +307,17 @@
     "category": "Forensics",
     "difficulty": "Hard",
     "summary": "Removed a fake embedded flag, reconstructed a 66×66 RGB image, repaired a damaged QR code, and decoded the real flag.",
-    "tags": ["QR Repair", "Hex Dump", "Image Reconstruction"],
-    "skills": ["PIL", "OpenCV", "QR Anatomy", "Data Cleaning"],
+    "tags": [
+      "QR Repair",
+      "Hex Dump",
+      "Image Reconstruction"
+    ],
+    "skills": [
+      "PIL",
+      "OpenCV",
+      "QR Anatomy",
+      "Data Cleaning"
+    ],
     "date": "2026-06-13",
     "points": null,
     "solves": null,
@@ -253,8 +334,18 @@
     "category": "Forensics",
     "difficulty": "Medium",
     "summary": "Ignored noisy payloads and decoded data hidden in TCP timestamp options using XOR key 0x2a.",
-    "tags": ["PCAP", "TCP Timestamp", "XOR", "Covert Channel"],
-    "skills": ["Wireshark", "Packet Analysis", "XOR Decoding", "Python"],
+    "tags": [
+      "PCAP",
+      "TCP Timestamp",
+      "XOR",
+      "Covert Channel"
+    ],
+    "skills": [
+      "Wireshark",
+      "Packet Analysis",
+      "XOR Decoding",
+      "Python"
+    ],
     "date": "2026-06-16",
     "points": null,
     "solves": null,
@@ -271,8 +362,17 @@
     "category": "Forensics",
     "difficulty": "Easy",
     "summary": "Amplified tiny near-white RGB differences and isolated a blue-channel signal to reveal the hidden flag.",
-    "tags": ["Steganography", "RGB Channels", "Contrast Stretch"],
-    "skills": ["PIL", "NumPy", "Channel Analysis", "Image Enhancement"],
+    "tags": [
+      "Steganography",
+      "RGB Channels",
+      "Contrast Stretch"
+    ],
+    "skills": [
+      "PIL",
+      "NumPy",
+      "Channel Analysis",
+      "Image Enhancement"
+    ],
     "date": "2026-06-12",
     "points": null,
     "solves": null,
@@ -289,7 +389,13 @@
     "category": "Reverse",
     "difficulty": "Easy",
     "summary": "Reversed a cooking-themed flag checker by undoing XOR salting, nibble swapping, array reversal, and the final target comparison.",
-    "tags": ["Reverse", "Ghidra", "XOR", "Nibble Swap", "Array Reversal"],
+    "tags": [
+      "Reverse",
+      "Ghidra",
+      "XOR",
+      "Nibble Swap",
+      "Array Reversal"
+    ],
     "skills": [
       "Static Analysis",
       "Ghidra Decompilation",
@@ -341,7 +447,13 @@
     "category": "Reverse",
     "difficulty": "Medium",
     "summary": "Converted a giant CFG/state-machine validator into a graph traversal problem and generated the required 250-value semicolon payload.",
-    "tags": ["Reverse", "Ghidra", "CFG", "Graph Theory", "State Machine"],
+    "tags": [
+      "Reverse",
+      "Ghidra",
+      "CFG",
+      "Graph Theory",
+      "State Machine"
+    ],
     "skills": [
       "Control-Flow Graph Analysis",
       "State Machine Reversal",
@@ -364,8 +476,19 @@
     "category": "Crypto",
     "difficulty": "Hard",
     "summary": "Exploited undersized SHA-256-derived ECDSA nonces on P-521 as a Hidden Number Problem and recovered the signing key with LLL/CVP.",
-    "tags": ["Crypto", "ECDSA", "P-521", "HNP", "LLL"],
-    "skills": ["ECDSA Math", "Nonce Bias Analysis", "Lattice Reduction", "CVP"],
+    "tags": [
+      "Crypto",
+      "ECDSA",
+      "P-521",
+      "HNP",
+      "LLL"
+    ],
+    "skills": [
+      "ECDSA Math",
+      "Nonce Bias Analysis",
+      "Lattice Reduction",
+      "CVP"
+    ],
     "date": "2026-06-24",
     "points": null,
     "solves": null,
@@ -382,7 +505,13 @@
     "category": "Crypto",
     "difficulty": "Easy",
     "summary": "Bypassed the NTRU-looking structure by reducing ciphertext coefficients modulo 3, which directly revealed the encoded message.",
-    "tags": ["Crypto", "NTRU-like", "Polynomial", "Modulo Leak", "Encoding"],
+    "tags": [
+      "Crypto",
+      "NTRU-like",
+      "Polynomial",
+      "Modulo Leak",
+      "Encoding"
+    ],
     "skills": [
       "Source Review",
       "Modular Arithmetic",
@@ -405,7 +534,13 @@
     "category": "Web",
     "difficulty": "Intro",
     "summary": "Abused Pydantic create_model forward-reference evaluation and typing.Literal to exfiltrate the FLAG environment variable through the schema endpoint.",
-    "tags": ["Web", "FastAPI", "Pydantic", "RCE", "Exfiltration"],
+    "tags": [
+      "Web",
+      "FastAPI",
+      "Pydantic",
+      "RCE",
+      "Exfiltration"
+    ],
     "skills": [
       "Source Review",
       "Python Internals",
@@ -428,7 +563,13 @@
     "category": "Pwn",
     "difficulty": "Intro",
     "summary": "Overflowed an order note into the adjacent price field and made the total negative to trigger the flag-printing coupon path.",
-    "tags": ["Pwn", "gets()", "Struct Overflow", "Integer Sign", "Logic Abuse"],
+    "tags": [
+      "Pwn",
+      "gets()",
+      "Struct Overflow",
+      "Integer Sign",
+      "Logic Abuse"
+    ],
     "skills": [
       "C Struct Layout",
       "Buffer Overflow",
@@ -451,7 +592,13 @@
     "category": "Misc",
     "difficulty": "Medium",
     "summary": "Abused an inconsistent HOLPy definition to make False provable with no assumptions and trigger the challenge win condition.",
-    "tags": ["Misc", "Proof Checker", "HOLPy", "Logic", "Inconsistency"],
+    "tags": [
+      "Misc",
+      "Proof Checker",
+      "HOLPy",
+      "Logic",
+      "Inconsistency"
+    ],
     "skills": [
       "Program Logic Analysis",
       "Proof Format Crafting",
@@ -474,7 +621,13 @@
     "category": "Misc",
     "difficulty": "Easy",
     "summary": "Used supported C file I/O inside a shell-based C interpreter to read /flag directly when system() was unavailable.",
-    "tags": ["Misc", "Interpreter", "File Read", "C I/O", "Sandbox Escape"],
+    "tags": [
+      "Misc",
+      "Interpreter",
+      "File Read",
+      "C I/O",
+      "Sandbox Escape"
+    ],
     "skills": [
       "Interpreter Behavior Analysis",
       "File I/O Abuse",
@@ -497,7 +650,13 @@
     "category": "Misc",
     "difficulty": "Medium",
     "summary": "Won a symlink TOCTOU race against a SUID Rust cat clone by switching a checked readable file into /flag before use.",
-    "tags": ["Misc", "SUID", "TOCTOU", "Symlink Race", "Rust"],
+    "tags": [
+      "Misc",
+      "SUID",
+      "TOCTOU",
+      "Symlink Race",
+      "Rust"
+    ],
     "skills": [
       "Linux Enumeration",
       "Race Conditions",
@@ -520,7 +679,13 @@
     "category": "Forensics",
     "difficulty": "Easy",
     "summary": "Extracted syslog messages from a PCAP and reconstructed the flag from ordered single-character records.",
-    "tags": ["Forensics", "PCAP", "Syslog", "tshark", "Timeline"],
+    "tags": [
+      "Forensics",
+      "PCAP",
+      "Syslog",
+      "tshark",
+      "Timeline"
+    ],
     "skills": [
       "Network Forensics",
       "tshark Filtering",
@@ -543,7 +708,12 @@
     "category": "OSINT",
     "difficulty": "Medium",
     "summary": "Solved nine worldwide geolocation cards and used the 9/10 progress state as proof to recover the displayed flag.",
-    "tags": ["OSINT", "Geolocation", "Panorama Analysis", "Landmark Matching"],
+    "tags": [
+      "OSINT",
+      "Geolocation",
+      "Panorama Analysis",
+      "Landmark Matching"
+    ],
     "skills": [
       "Geolocation OSINT",
       "Visual Clue Analysis",
@@ -626,8 +796,18 @@
     "category": "Reverse",
     "difficulty": "Medium",
     "summary": "Recovering an image hidden in an encrypted .NET resource: static analysis, AES-CBC, and PNG signature recovery.",
-    "tags": [".NET", "AES-CBC", "Embedded resources", "PNG"],
-    "skills": ["ILSpy", "Resource extraction", "Python", "File signatures"],
+    "tags": [
+      ".NET",
+      "AES-CBC",
+      "Embedded resources",
+      "PNG"
+    ],
+    "skills": [
+      "ILSpy",
+      "Resource extraction",
+      "Python",
+      "File signatures"
+    ],
     "date": null,
     "points": null,
     "solves": null,
@@ -643,7 +823,12 @@
     "difficulty": null,
     "points": "152",
     "summary": "A use-after-free in a custom allocator enables heap metadata corruption, overlapping allocations, and an encrypted flag leak followed by LCG state recovery.",
-    "tags": ["Use-after-free", "Heap metadata", "Overlapping chunks", "LCG"],
+    "tags": [
+      "Use-after-free",
+      "Heap metadata",
+      "Overlapping chunks",
+      "LCG"
+    ],
     "skills": [
       "Heap analysis",
       "Known-plaintext attack",
@@ -666,7 +851,12 @@
     "difficulty": null,
     "points": null,
     "summary": "Comparing AArch64 firmware in a software-in-the-loop runner reveals shared debounce state and a reported 820 ms lap-time advantage.",
-    "tags": ["AArch64", "Firmware", "Shared state", "Debounce"],
+    "tags": [
+      "AArch64",
+      "Firmware",
+      "Shared state",
+      "Debounce"
+    ],
     "skills": [
       "Firmware comparison",
       "SIL analysis",
@@ -689,7 +879,12 @@
     "difficulty": "Medium–Hard",
     "points": null,
     "summary": "Chaining SQL injection, weak password hashing, a Next.js middleware bypass, and login argument injection in a MetaCTF web challenge.",
-    "tags": ["SQL injection", "MD5", "Middleware bypass", "Argument injection"],
+    "tags": [
+      "SQL injection",
+      "MD5",
+      "Middleware bypass",
+      "Argument injection"
+    ],
     "skills": [
       "Database enumeration",
       "Access control",
@@ -712,7 +907,12 @@
     "difficulty": null,
     "points": null,
     "summary": "Incident-report markup targets a privileged accreditation workflow; the supplied screenshots record the payload and the resulting PADDOCK access.",
-    "tags": ["Stored XSS", "Report review", "Session context", "Authorization"],
+    "tags": [
+      "Stored XSS",
+      "Report review",
+      "Session context",
+      "Authorization"
+    ],
     "skills": [
       "Browser security",
       "Stored input analysis",
@@ -863,5 +1063,112 @@
     "format": "markdown",
     "archivePath": null,
     "readingMinutes": 5
+  },
+  {
+    "slug": "overpass-petty-cash",
+    "title": "Petty Cash",
+    "category": "Web",
+    "difficulty": "Medium",
+    "points": "200",
+    "summary": "Investigate profile-field mass assignment in an expense portal, separating the observed administrator access from the unrecorded account transition.",
+    "tags": [
+      "Mass assignment",
+      "Access control",
+      "Profile updates"
+    ],
+    "skills": [
+      "Web reconnaissance",
+      "Authorization analysis",
+      "Evidence review"
+    ],
+    "collection": "OVERPASS 2026",
+    "collectionId": "overpass-2026",
+    "date": "2026-11-20",
+    "solves": null,
+    "source": "content/writeups/overpass-petty-cash/README.md",
+    "format": "markdown",
+    "archivePath": null,
+    "readingMinutes": 3
+  },
+  {
+    "slug": "overpass-gbpass",
+    "title": "GBPASS",
+    "category": "Reverse",
+    "difficulty": null,
+    "points": null,
+    "summary": "Reverse a Game Boy ROM’s input constraints and tile-encoded victory message, with a reviewed branch patch and an unchanged original cartridge.",
+    "tags": [
+      "Game Boy",
+      "ROM patching",
+      "Byte analysis",
+      "Tile encoding"
+    ],
+    "skills": [
+      "SM83 analysis",
+      "Binary patching",
+      "Python"
+    ],
+    "collection": "OVERPASS 2026",
+    "collectionId": "overpass-2026",
+    "date": "2026-11-20",
+    "solves": null,
+    "source": "content/writeups/overpass-gbpass/README.md",
+    "format": "markdown",
+    "archivePath": null,
+    "readingMinutes": 7
+  },
+  {
+    "slug": "overpass-shibboleth",
+    "title": "Shibboleth",
+    "category": "Reverse",
+    "difficulty": null,
+    "points": "304",
+    "summary": "Invert a custom bytecode VM in a tiny x86-64 ELF to recover a 20-byte authentication key and decrypt its loopback-protocol response.",
+    "tags": [
+      "Custom VM",
+      "x86-64",
+      "Modular inverse",
+      "XOR"
+    ],
+    "skills": [
+      "Bytecode analysis",
+      "Linux syscalls",
+      "Protocol reconstruction",
+      "Python"
+    ],
+    "collection": "OVERPASS 2026",
+    "collectionId": "overpass-2026",
+    "date": "2026-11-20",
+    "solves": null,
+    "source": "content/writeups/overpass-shibboleth/README.md",
+    "format": "markdown",
+    "archivePath": null,
+    "readingMinutes": 13
+  },
+  {
+    "slug": "overpass-blindspot",
+    "title": "Blindspot — User and Root",
+    "category": "Machine",
+    "difficulty": "Medium",
+    "points": null,
+    "summary": "Follow Braille clues and an audio spectrogram across the User and Root stages of a private CTF machine.",
+    "tags": [
+      "Braille",
+      "Spectrogram",
+      "Linux"
+    ],
+    "skills": [
+      "Enumeration",
+      "Audio analysis",
+      "Linux"
+    ],
+    "collection": "OVERPASS 2026",
+    "collectionId": "overpass-2026",
+    "date": "2026-11-20",
+    "solves": null,
+    "source": "content/writeups/overpass-blindspot/README.md",
+    "format": "markdown",
+    "archivePath": null,
+    "readingMinutes": 8
   }
 ]

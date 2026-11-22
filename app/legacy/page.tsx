@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { metaCtfResult, tvxCtfResult } from "@/lib/competitions";
+import { metaCtfResult, tvxCtfResult, overpassResult } from "@/lib/competitions";
 import Link from "next/link";
 import Legacy from "@/components/Legacy";
 import { profile } from "@/lib/portfolio";
@@ -7,6 +7,11 @@ import { Arrow } from "@/components/Icons";
 export const metadata: Metadata = { title: "CTF Writeups & Research" };
 // Competition results confirmed by the owner or retained from the original portfolio.
 const results = [
+  {
+    name: `${overpassResult.name} — ${overpassResult.team}`,
+    result: `Qualifiers · ${overpassResult.teamRank}th / ${overpassResult.totalTeams} teams`,
+    details: `Qualified for the finals · Team score: ${overpassResult.teamPoints.toLocaleString("en-US")} points · ${overpassResult.teamSolves}/${overpassResult.totalChallenges} team solves`,
+  },
   {
     name: `${tvxCtfResult.name} — ${tvxCtfResult.team}`,
     result: `Final result · ${tvxCtfResult.teamRank}st place`,

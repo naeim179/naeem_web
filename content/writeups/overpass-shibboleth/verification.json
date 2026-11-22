@@ -1,0 +1,11 @@
+{
+  "bytes": 1080,
+  "sha256": "661b8e1da53a7a4b378bad3c28ac8adda7e73453e817d1d04e2a90f766d26d67",
+  "VMbytes": 141,
+  "recordsVerified": 20,
+  "secret": "$p34k_fr13nd_&_3nt3r",
+  "plaintext": "n0t_pr0n0unc3d_r1ght",
+  "virtualToFileOffsetBase": "0x400000",
+  "sockaddr": "02 00 11 67 7f 00 00 01",
+  "binaryExecuted": false
+}

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { metaCtfResult } from "@/lib/competitions";
+import { metaCtfResult, overpassResult } from "@/lib/competitions";
 import { Arrow } from "./Icons";
 export default function Legacy({ compact = false }: { compact?: boolean }) {
   return (
@@ -20,6 +20,13 @@ export default function Legacy({ compact = false }: { compact?: boolean }) {
             reverse engineering, and more. A record of how I approach unfamiliar
             problems.
           </p>
+          <p className="metactf-highlight">
+            <strong>{overpassResult.name} finalist</strong>
+            <span>11th of 104 teams in qualifiers · IV LEGION</span>
+          </p>
+          <Link href={overpassResult.collectionPath} className="text-link">
+            Explore OVERPASS <Arrow diagonal />
+          </Link>
           <p className="metactf-highlight">
             <strong>MetaCTF finalist</strong>
             <span>

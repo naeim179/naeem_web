@@ -307,3 +307,36 @@ test("TVX achievement keeps the original certificate and its document preview in
   const rendered = renderToStaticMarkup(renderWriteup(entry, await readWriteup(entry)));
   assert.ok(rendered.includes(`href="${tvxCtfResult.certificate.pdf}"`));
 });
+
+test("OVERPASS originals stay intact and published byte-level findings match the supplied challenges", async () => {
+  const entries = writeups.filter(entry => entry.collectionId === "overpass-2026");
+  assert.ok(entries.length >= 3);
+  for (const entry of entries) {
+    const root = path.dirname(entry.source);
+    const manifest = JSON.parse(await fs.readFile(path.join(root, "provenance.json"), "utf8"));
+    for (const [file, expected] of Object.entries(manifest.preservedFilesSHA256)) {
+      assert.equal(crypto.createHash("sha256").update(await fs.readFile(path.join(root, file))).digest("hex"), expected, entry.slug + " " + file);
+    }
+  }
+  const rom = await fs.readFile("content/writeups/overpass-gbpass/gbpass.gb");
+  assert.equal(rom.subarray(0x19c, 0x19f).toString("hex"), "cd6302");
+  assert.equal(rom.subarray(0x1d6, 0x1d8).toString("hex"), "2841");
+  assert.equal(0x1d6 + 2 + rom[0x1d7], 0x219);
+  const report = JSON.parse(await fs.readFile("content/writeups/overpass-gbpass/verification.json", "utf8"));
+  assert.equal(report.branchTarget, "0x219");
+  assert.equal(report.emulatorRerun, false);
+  assert.equal(report.originalROM_SHA256, crypto.createHash("sha256").update(rom).digest("hex"));
+  const elf = await fs.readFile("content/writeups/overpass-shibboleth/shibboleth");
+  const vm = elf.subarray(0x24c, 0x2d9);
+  assert.equal(vm.length, 141);
+  assert.equal(vm[140], 255);
+  const key = [];
+  for (let i = 0; i < 140; i += 7) {
+    assert.equal(vm.subarray(i, i + 5).toString("hex"), "0102030405");
+    assert.equal(vm[i + 6], 6);
+    const target = vm[i + 5];
+    key.push(((((target >>> 3) | (target << 5)) & 255) ^ 0x5a) * 0xb5 & 255);
+  }
+  assert.equal(Buffer.from(key).toString("ascii"), "$p34k_fr13nd_&_3nt3r");
+  assert.equal(Buffer.from(key.map((value, i) => value ^ elf[0x237 + i])).toString("ascii"), "n0t_pr0n0unc3d_r1ght");
+});
