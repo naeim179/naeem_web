@@ -3,6 +3,7 @@ import Link from "next/link";
 import { writeups, collections, categories } from "@/lib/writeups";
 import WriteupLibrary from "@/components/writeups/WriteupLibrary";
 import { Arrow } from "@/components/Icons";
+import CompetitionSpotlight from "@/components/writeups/CompetitionSpotlight";
 export const metadata: Metadata = {
   title: "CTF Writeup Library",
   description: `${writeups.length} technical CTF writeups across web security, reverse engineering, cryptography, forensics, OSINT, and binary exploitation.`,
@@ -40,6 +41,7 @@ export default function WriteupsPage() {
           </Link>
         </div>
       </div>
+      <CompetitionSpotlight />
       <WriteupLibrary
         entries={writeups}
         collections={collections}

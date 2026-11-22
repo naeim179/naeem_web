@@ -1,0 +1,14 @@
+{
+  "sourceUploads": [
+    "Petty_Cash_CTF_Writeup.docx"
+  ],
+  "preservedFilesSHA256": {
+    "Petty_Cash_CTF_Writeup.docx": "e1a1e976d60a95f2c176f3ae24d6a6dfa72bcebddc002a218edeffc895093faf",
+    "images/image1.png": "8a0c1306f320c416fc3bd87cec05f0a4132b4dc2ee2aee2c3a6e0d324681ed9b"
+  },
+  "notes": [
+    "Owner-supplied original files and embedded images are preserved byte-for-byte.",
+    "All points and acceptance claims are attributed to the supplied writeup; team scoreboard metrics are not personal solve counts.",
+    "Publication checks were offline; no challenge host was contacted."
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "sourceUploads": [
+    "GBPASS_Reverse_Engineering_Writeup.md",
+    "GBPASS_Reverse_Engineering_Writeup.docx",
+    "gbpass_solve.py",
+    "gbpass.gb"
+  ],
+  "preservedFilesSHA256": {
+    "README.original.md": "22a3e840e57675a370c3e0805842f9bd3bcc681ce6768cc207705986d5534b29",
+    "GBPASS_Reverse_Engineering_Writeup.docx": "837c97168c2939bb9b6b42bf08ae92efc3c4b457b426f473b5168970f40fd6b1",
+    "images/image1.png": "e02ef1c9a6dd2d0d71a7421ec8dfd4919ac7b01e49334d7beeb91d78d66d4b0c",
+    "gbpass_solve.py": "cb30cafaccb94328c49b1461defb8bcf0258bc02ec8beee6f0bda2a2806847b9",
+    "gbpass.gb": "01116fc708d5431f0e7bb2f39a774b56d41b0805c4b59870288ba6bb40318b33"
+  },
+  "notes": [
+    "Owner-supplied original files and embedded images are preserved byte-for-byte.",
+    "All points and acceptance claims are attributed to the supplied writeup; team scoreboard metrics are not personal solve counts.",
+    "Publication checks were offline; no challenge host was contacted.",
+    "Original script and Markdown contain one-byte address errors; the reading version and separate reviewed script use the ROM-verified offsets. No emulator run was performed during publication."
+  ],
+  "originalFileMapping": {
+    "README.original.md": "GBPASS_Reverse_Engineering_Writeup.md"
+  }
+}

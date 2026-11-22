@@ -3305,3 +3305,53 @@ svg {
   color: var(--muted);
   margin-top: 3px;
 }
+
+/* Competition collections share the portfolio's paper, copper, and ink palette. */
+.competition-spotlight {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 32px;
+  padding: 28px 32px;
+  margin-bottom: 38px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--copper);
+  background: #eeeee5;
+}
+.competition-spotlight .eyebrow { color: var(--copper); margin-bottom: 9px; }
+.competition-spotlight h2 { font-size: 28px; }
+.competition-spotlight > div > p:last-child { color: var(--muted); margin-top: 7px; font-size: 13px; }
+.competition-spotlight-rank strong { display: block; font: 42px/1.1 var(--font-serif); }
+.competition-spotlight-rank span { color: var(--muted); font-size: 12px; }
+.competition-spotlight > a { min-height: 44px; }
+.competition-heading { padding-block: 30px 38px; }
+.competition-heading > .eyebrow { color: var(--copper); margin-bottom: 24px; }
+.competition-heading h1 em { font-family: var(--font-serif); font-weight: 400; }
+.competition-links { display: flex; align-items: center; flex-wrap: wrap; gap: 24px; margin-top: 26px; }
+.competition-status { border: 1px solid #9eaf94; background: #e3e9da; border-radius: 5px; padding: 7px 12px; font-size: 12px; }
+.competition-stats { display: grid; grid-template-columns: repeat(3, 1fr); border-block: 1px solid var(--line); margin: 0; }
+.competition-stats > div { padding: 26px 32px; }
+.competition-stats > div:first-child { padding-left: 0; }
+.competition-stats > div + div { border-left: 1px solid var(--line); }
+.competition-stats dt { font: 10px/1.6 var(--font-geist-mono), monospace; color: var(--muted); letter-spacing: .08em; }
+.competition-stats dd { font: clamp(36px, 4.8vw, 62px)/1.2 var(--font-serif); margin: 12px 0 0; }
+.competition-stats small { color: var(--muted); font: 18px var(--font-geist-sans), sans-serif; }
+.competition-caption { color: var(--muted); font-size: 12px; margin-top: 14px; }
+.competition-casefiles { margin-top: 65px; }
+.competition-casefiles .section-heading { margin-bottom: 28px; }
+.competition-casefiles .section-heading > p { color: var(--muted); font-size: 13px; }
+@media (max-width: 760px) {
+  .competition-spotlight { grid-template-columns: 1fr auto; padding: 22px; gap: 22px; }
+  .competition-spotlight > a { grid-column: 1 / -1; }
+  .competition-stats > div { padding: 20px 14px; }
+  .competition-stats dd { font-size: 36px; }
+  .competition-stats small { display: block; font-size: 14px; margin-top: 6px; }
+  .competition-stats dt { font-size: 9px; letter-spacing: 0; }
+}
+@media (max-width: 380px) {
+  .competition-spotlight { gap: 16px; padding: 18px; }
+  .competition-spotlight h2 { font-size: 23px; }
+  .competition-spotlight-rank strong { font-size: 34px; }
+  .competition-stats > div { padding-inline: 9px; }
+  .competition-stats dd { font-size: 30px; }
+}

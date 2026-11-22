@@ -1,0 +1,22 @@
+{
+  "name": "OVERPASS 2026",
+  "collectionId": "overpass-2026",
+  "organizer": "bracken",
+  "date": "2026-11-20",
+  "stage": "Qualifiers",
+  "qualification": "Qualified for the finals",
+  "team": "IV LEGION",
+  "teamRank": 11,
+  "totalTeams": 104,
+  "teamPoints": 3207,
+  "teamSolves": 24,
+  "totalChallenges": 41,
+  "eventUrl": "https://ctf.bracken.sh/e/overpass",
+  "collectionPath": "/writeups/collections/overpass-2026",
+  "evidence": {
+    "source": "Owner-supplied event overview and scoreboard screenshots, received 22 November 2026.",
+    "qualification": "The owner confirmed qualification for the finals; the displayed placement belongs to the qualifying event, not the finals.",
+    "scoreScope": "The rank, points, and solved-challenge count are team totals; no personal score or personal solve count was supplied.",
+    "date": "20 Nov is shown in the event overview, whose banner identifies the 2026 event. No timezone is inferred."
+  }
+}

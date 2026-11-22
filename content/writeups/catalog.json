@@ -863,5 +863,86 @@
     "format": "markdown",
     "archivePath": null,
     "readingMinutes": 5
+  },
+  {
+    "slug": "overpass-petty-cash",
+    "title": "Petty Cash",
+    "category": "Web",
+    "difficulty": "Medium",
+    "points": "200",
+    "summary": "Investigate profile-field mass assignment in an expense portal, separating the observed administrator access from the unrecorded account transition.",
+    "tags": [
+      "Mass assignment",
+      "Access control",
+      "Profile updates"
+    ],
+    "skills": [
+      "Web reconnaissance",
+      "Authorization analysis",
+      "Evidence review"
+    ],
+    "collection": "OVERPASS 2026",
+    "collectionId": "overpass-2026",
+    "date": "2026-11-20",
+    "solves": null,
+    "source": "content/writeups/overpass-petty-cash/README.md",
+    "format": "markdown",
+    "archivePath": null,
+    "readingMinutes": 3
+  },
+  {
+    "slug": "overpass-gbpass",
+    "title": "GBPASS",
+    "category": "Reverse",
+    "difficulty": null,
+    "points": null,
+    "summary": "Reverse a Game Boy ROM’s input constraints and tile-encoded victory message, with a reviewed branch patch and an unchanged original cartridge.",
+    "tags": [
+      "Game Boy",
+      "ROM patching",
+      "Byte analysis",
+      "Tile encoding"
+    ],
+    "skills": [
+      "SM83 analysis",
+      "Binary patching",
+      "Python"
+    ],
+    "collection": "OVERPASS 2026",
+    "collectionId": "overpass-2026",
+    "date": "2026-11-20",
+    "solves": null,
+    "source": "content/writeups/overpass-gbpass/README.md",
+    "format": "markdown",
+    "archivePath": null,
+    "readingMinutes": 7
+  },
+  {
+    "slug": "overpass-shibboleth",
+    "title": "Shibboleth",
+    "category": "Reverse",
+    "difficulty": null,
+    "points": "304",
+    "summary": "Invert a custom bytecode VM in a tiny x86-64 ELF to recover a 20-byte authentication key and decrypt its loopback-protocol response.",
+    "tags": [
+      "Custom VM",
+      "x86-64",
+      "Modular inverse",
+      "XOR"
+    ],
+    "skills": [
+      "Bytecode analysis",
+      "Linux syscalls",
+      "Protocol reconstruction",
+      "Python"
+    ],
+    "collection": "OVERPASS 2026",
+    "collectionId": "overpass-2026",
+    "date": "2026-11-20",
+    "solves": null,
+    "source": "content/writeups/overpass-shibboleth/README.md",
+    "format": "markdown",
+    "archivePath": null,
+    "readingMinutes": 13
   }
 ]

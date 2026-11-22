@@ -1,3 +1,7 @@
+import overpass from "@/content/competitions/overpass-2026.json";
+
+export const overpassResult = overpass;
+
 // Finals placement and scores confirmed by the owner and supplied team scoreboard.
 export const metaCtfResult = {
   name: "MetaCTF",

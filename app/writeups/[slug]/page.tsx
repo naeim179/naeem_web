@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { writeups, getWriteup } from "@/lib/writeups";
 import { readWriteup, renderWriteup } from "@/lib/writeup-content";
 import { Arrow } from "@/components/Icons";
+import { overpassResult } from "@/lib/competitions";
 export const dynamicParams = false;
 export function generateStaticParams() {
   return writeups.map((w) => ({ slug: w.slug }));
@@ -30,12 +31,16 @@ export default async function WriteupPage({
   const w = getWriteup(slug);
   if (!w) notFound();
   const document = await readWriteup(w);
-  const index = writeups.findIndex((entry) => entry.slug === slug);
-  const next = writeups[(index + 1) % writeups.length];
+  const isOverpass = w.collectionId === overpassResult.collectionId;
+  const sequence = isOverpass
+    ? writeups.filter(entry => entry.collectionId === w.collectionId)
+    : writeups;
+  const index = sequence.findIndex((entry) => entry.slug === slug);
+  const next = sequence[(index + 1) % sequence.length];
   return (
     <div className="wrap subpage writeup-detail">
-      <Link href="/writeups" className="back-link">
-        ← All writeups
+      <Link href={isOverpass ? overpassResult.collectionPath : "/writeups"} className="back-link">
+        {isOverpass ? "← OVERPASS 2026 collection" : "← All writeups"}
       </Link>
       <header className="writeup-heading">
         <p className="eyebrow">
