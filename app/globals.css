@@ -3406,3 +3406,22 @@ svg {
   .competition-stats > div { padding-inline: 9px; }
   .competition-stats dd { font-size: 30px; }
 }
+.studio-shell { padding-block: 80px 120px; max-width: 850px; }
+.studio-shell h1 { font-size: clamp(42px, 6vw, 76px); margin: 15px 0; }
+.studio-shell > p { color: var(--muted); margin-bottom: 30px; }
+.studio-topline { display: flex; justify-content: space-between; align-items: center; }
+.studio-topline button { border: 0; background: transparent; text-decoration: underline; }
+.studio-form, .studio-form label { display: grid; gap: 11px; }
+.studio-form { gap: 24px; }
+.studio-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.studio-form label { font-weight: 600; font-size: 13px; }
+.studio-form input, .studio-form select, .studio-form textarea { width: 100%; border: 1px solid var(--line); border-radius: 3px; padding: 12px; background: #fff; color: var(--ink); font: inherit; }
+.studio-form textarea { resize: vertical; }
+.studio-button { width: fit-content; padding: 14px 22px; border: 1px solid var(--ink); background: var(--ink); color: var(--paper); }
+.studio-button.secondary { background: transparent; color: var(--ink); }
+.studio-button:disabled { opacity: .6; cursor: wait; }
+.studio-preview { padding: 20px; background: #e9ebe3; border: 1px solid var(--line); }
+.studio-preview h2 { margin-bottom: 10px; }
+.studio-preview pre { max-height: 380px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; margin-block: 20px; }
+.studio-form [role="alert"] { color: #9b3129; }
+@media (max-width: 650px) { .studio-fields { grid-template-columns: 1fr; } }
