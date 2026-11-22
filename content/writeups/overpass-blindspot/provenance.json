@@ -1,0 +1,18 @@
+{
+  "sourceUploads": [
+    "Blindspot_User_and_Root_CTF_Writeup.docx",
+    "handover.wav"
+  ],
+  "preservedFilesSHA256": {
+    "Blindspot_User_and_Root_CTF_Writeup.docx": "a37978ad02e2882913f119daa1ead40c0f2774641313a77a1bed08275fb9e26a",
+    "handover.wav": "fb30d016a8c43cb78865949a5e88fead66edc5ea7cf927d858c1f47ffabd5fd2",
+    "images/image4.png": "b86dbac51f2a47c1ab3f3494b191fdb92bc902e46dd946c0b8ec47dee6cb972d",
+    "images/image2.png": "376a3b4e9a2d6cfaeba14b4c8797f5265501b00f55db90a1003b3c4bf38b4bf0",
+    "images/image3.png": "bba9992517c697de3225ab17b57b4bdf3718b0ce9cc624e42266d788cc7a7801",
+    "images/image1.png": "3896172448dd38d05d1513ad244d9d95555320c03495693a0d4a689eedb4eeb9"
+  },
+  "notes": [
+    "Original uploads and embedded images preserved byte-for-byte.",
+    "Audio verified offline; SSH and root outcomes attributed to the author."
+  ]
+}
