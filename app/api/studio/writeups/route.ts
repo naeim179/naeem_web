@@ -28,8 +28,8 @@ function slugify(value: string) {
 }
 export async function POST(request: NextRequest) {
   if (!studioConfigured) return Response.json({ error: "Studio is not configured." }, { status: 404 });
-  if (Number(request.headers.get("content-length") || 0) > 12 * 1024 * 1024)
-    return Response.json({ error: "Upload exceeds the 12 MB request limit." }, { status: 413 });
+  if (Number(request.headers.get("content-length") || 0) > 4 * 1024 * 1024)
+    return Response.json({ error: "Upload exceeds the 4 MB request limit." }, { status: 413 });
   const identity = await getToken({ req: request, secret: process.env.AUTH_SECRET });
   if (identity?.ownerId !== "130230895")
     return Response.json({ error: "Access denied." }, { status: 403 });
@@ -55,6 +55,8 @@ export async function POST(request: NextRequest) {
     if (!collectionId || !slugify(title)) throw new Error("Use a title and competition name with Latin letters or numbers.");
     const files = data.getAll("attachments").filter((entry): entry is File => entry instanceof File && entry.size > 0);
     if (files.length > 5) throw new Error("Attach no more than five files.");
+    if (files.reduce((total, file) => total + file.size, 0) > 3 * 1024 * 1024)
+      throw new Error("Attachments exceed the 3 MB total limit.");
     const names = new Set<string>();
     for (const file of files) {
       const name = file.name.replace(/[^a-zA-Z0-9._-]/g, "-").slice(0, 100);

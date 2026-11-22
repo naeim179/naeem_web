@@ -34,7 +34,7 @@ export default function StudioEditor() {
     </div>
     <label>Short summary<textarea name="summary" rows={3} required maxLength={400} placeholder="What did you solve, and how?" /></label>
     <label>Writeup in Markdown<textarea name="body" rows={18} required minLength={80} maxLength={100000} placeholder="# Challenge title\n\n## Approach\n..." /></label>
-    <label>Supporting files (optional, up to 5 files of 2 MB each)<input name="attachments" type="file" multiple accept=".png,.jpg,.jpeg,.webp,.pdf,.md,.txt,.py,.zip,.wav,.docx" /></label>
+    <label>Supporting files (optional, up to 5 files of 2 MB each, 3 MB combined)<input name="attachments" type="file" multiple accept=".png,.jpg,.jpeg,.webp,.pdf,.md,.txt,.py,.zip,.wav,.docx" /></label>
     <button type="button" className="studio-button secondary" onClick={togglePreview}>{preview ? "Hide preview" : "Preview draft"}</button>
     {preview && <div className="studio-preview"><h2>{draft.title || "Untitled writeup"}</h2><p>{draft.summary || "No summary yet."}</p><pre>{draft.body || "No content yet."}</pre><p>Markdown formatting and attachments can be reviewed in the GitHub draft before publication.</p></div>}
     <button type="submit" className="studio-button" disabled={busy}>{busy ? "Submitting…" : "Create publishing request"}</button>
