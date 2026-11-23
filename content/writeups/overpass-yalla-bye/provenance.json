@@ -1,0 +1,23 @@
+{
+  "sourceUploads": [
+    "Yalla_Bye_CTF_Writeup.md",
+    "yalla_bye_solve.py",
+    "server.py",
+    "yalla_bye_solve (1).py"
+  ],
+  "preservedFilesSHA256": {
+    "README.original.md": "586fe5b6f87c0d29c8209713b625219dac7541cd1fc413956b3d62945ee738e7",
+    "yalla_bye_solve.py": "3c166ca4889aaf8b690a6d44b660fd73e541898e169add342e7bb898aa909fa6",
+    "server.py": "f72b7407d947c6b1d9d469b42afa92035b9d57753a109d8ad0ee49ed75c7e0a9",
+    "yalla_bye_solve (1).py": "3c166ca4889aaf8b690a6d44b660fd73e541898e169add342e7bb898aa909fa6"
+  },
+  "originalFileMapping": {
+    "README.original.md": "Yalla_Bye_CTF_Writeup.md"
+  },
+  "notes": [
+    "All four uploaded source files are preserved byte-for-byte.",
+    "The two solver uploads have identical SHA-256 hashes and contents.",
+    "The reading version replaces stale local-verification wording with results from an unmodified pycryptodome server and a local loopback run.",
+    "The author-provided screenshot reports successful remote use; publication did not contact the remote CTF service."
+  ]
+}

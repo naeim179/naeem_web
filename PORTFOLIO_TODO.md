@@ -64,5 +64,6 @@
 - [x] Check the GBPASS ROM and correct one-byte addresses in a separate reviewed solver; keep the original script unchanged.
 - [x] Check the Shibboleth VM inversion and XOR result from the supplied ELF without executing it.
 - [x] Import Blindspot User + Root as one Machine casefile, preserving its document and audio and verifying the audio clue offline.
+- [x] Import Yalla Bye (Crypto), preserve both uploaded solver copies and the challenge server, and verify the unmodified files locally.
 - [ ] Receive the remaining category batches; the owner will say when the submission is complete.
-- [ ] Complete browser/asset regression checks and publish the assembled update to the existing Vercel project.
+- [x] Complete browser/asset regression checks and publish the assembled update to the existing Vercel project.

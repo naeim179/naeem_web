@@ -1,0 +1,15 @@
+{
+  "solverSHA256": "3c166ca4889aaf8b690a6d44b660fd73e541898e169add342e7bb898aa909fa6",
+  "duplicateFilesIdentical": true,
+  "randomSessionsPassed": 5,
+  "checks": [
+    "Recovered key equals generated session key",
+    "Generated ticket accepted by unmodified server verifier",
+    "Tampered ticket rejected",
+    "Fourth signature request rejected",
+    "Unmodified solver and server complete successfully over loopback TCP"
+  ],
+  "endToEnd": "OVERPASS{LOCAL_TEST_SUCCESS}",
+  "scope": "Local only; no remote challenge service contacted.",
+  "remoteEvidence": "Owner screenshot reports successful root-admin verification and an OVERPASS flag; no remote run performed during publication."
+}

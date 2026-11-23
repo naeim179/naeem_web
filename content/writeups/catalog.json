@@ -1170,5 +1170,34 @@
     "format": "markdown",
     "archivePath": null,
     "readingMinutes": 8
+  },
+  {
+    "slug": "overpass-yalla-bye",
+    "title": "Yalla Bye",
+    "category": "Crypto",
+    "difficulty": null,
+    "points": "304",
+    "summary": "Recover an ECDSA private key from three related nonces, then forge an authenticated root-admin ticket.",
+    "tags": [
+      "ECDSA",
+      "secp256k1",
+      "Related nonces",
+      "AES-CTR",
+      "HMAC"
+    ],
+    "skills": [
+      "Cryptanalysis",
+      "Python",
+      "Source review",
+      "Protocol testing"
+    ],
+    "collection": "OVERPASS 2026",
+    "collectionId": "overpass-2026",
+    "date": "2026-11-20",
+    "solves": null,
+    "source": "content/writeups/overpass-yalla-bye/README.md",
+    "format": "markdown",
+    "archivePath": null,
+    "readingMinutes": 9
   }
 ]
