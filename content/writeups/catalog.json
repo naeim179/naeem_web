@@ -1199,5 +1199,31 @@
     "format": "markdown",
     "archivePath": null,
     "readingMinutes": 9
+  },
+  {
+    "slug": "overpass-parallax",
+    "title": "Parallax",
+    "category": "Crypto",
+    "difficulty": null,
+    "points": "464",
+    "summary": "A shared signing nonce links full and partial responses and exposes the beacon’s session keys.",
+    "tags": [
+      "Nonce reuse",
+      "Partial leakage",
+      "Digital signatures"
+    ],
+    "skills": [
+      "Protocol analysis",
+      "Source review",
+      "Cryptography"
+    ],
+    "collection": "OVERPASS 2026",
+    "collectionId": "overpass-2026",
+    "date": null,
+    "solves": null,
+    "source": "content/writeups/overpass-parallax/README.md",
+    "format": "markdown",
+    "archivePath": null,
+    "readingMinutes": 2
   }
 ]
