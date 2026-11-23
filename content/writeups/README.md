@@ -1,6 +1,6 @@
 # CTF writeup library
 
-The canonical publication source is **naeim179/naeem_web**. The library combines the 28 preserved portfolio casefiles and The Will imported from `reverse-engineering-writeups`. All 43 entries are indexed in `catalog.json`, including four supplied MetaCTF writeups, five TVX CTF casefiles, and five OVERPASS 2026 casefiles.
+The canonical publication source is **naeim179/naeem_web**. The library combines the 28 preserved portfolio casefiles and The Will imported from `reverse-engineering-writeups`. All 44 entries are indexed in `catalog.json`, including four supplied MetaCTF writeups, five TVX CTF casefiles, and six OVERPASS 2026 casefiles.
 
 ## Browse
 
@@ -95,6 +95,7 @@ IV LEGION qualified for the finals, placing 11th of 104 teams on 20 November 202
 | Reverse | [GBPASS](https://naim-workspace.vercel.app/writeups/overpass-gbpass) | [Reading version](overpass-gbpass/README.md) |
 | Reverse | [Shibboleth](https://naim-workspace.vercel.app/writeups/overpass-shibboleth) | [Reading version](overpass-shibboleth/README.md) |
 
+| Crypto | [Parallax](https://naim-workspace.vercel.app/writeups/overpass-parallax) | [Reading version](overpass-parallax/README.md) |
 | Crypto | [Yalla Bye](https://naim-workspace.vercel.app/writeups/overpass-yalla-bye) | [Reading version](overpass-yalla-bye/README.md) |
 | Machine | [Blindspot — User and Root](https://naim-workspace.vercel.app/writeups/overpass-blindspot) | [Reading version](overpass-blindspot/README.md) |
 
