@@ -12,6 +12,10 @@
 
 ## Deferred at the owner's request
 
+- [ ] Activate the private `/studio` writeup editor: create a GitHub OAuth App with homepage `https://naim-workspace.vercel.app` and callback `https://naim-workspace.vercel.app/api/auth/callback/github`.
+- [ ] Create a fine-grained GitHub token limited to `naeim179/naeem_web`, with Contents and Pull requests read/write permissions.
+- [ ] Add `AUTH_SECRET`, `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET`, and `STUDIO_GITHUB_TOKEN` to the Vercel **Production** environment, then redeploy. Set the values in Vercel; do not send secrets in chat or commit them.
+- [ ] Test owner sign-in at `/studio`, create one draft writeup, review the generated GitHub pull request, and merge it after checks pass. The editor currently returns 404 until the required settings are complete.
 - [ ] Receive new CTF / hackathon names, dates, team names, positions, and evidence links.
 - [ ] Update competition entries after receiving those details. Existing published results remain in the archive page.
 
