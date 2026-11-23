@@ -1,0 +1,24 @@
+{
+  "sourceUploads": [
+    "Parallax_Overpass_CTF_Writeup.md",
+    "parallax_solve.py",
+    "parallax_solve_fixed.py",
+    "Parallax_Solver_Working_the_final_and-got-the-flag.py",
+    "chall.py"
+  ],
+  "preservedFilesSHA256": {
+    "README.original.md": "a66cf7036edebb884534510d5e9353bb641865e83c9d110b7dd1a21ff5740846",
+    "parallax_solve.py": "353184d1e9fd9888714b5610be2503aee98bfc505bc0b6b0168f6fa55dfebc2a",
+    "parallax_solve_fixed.py": "e28d9fc7f6c759f274ebcc7ed6ea929b66f3b6b1db05a64c7bb5faeed0ea22bc",
+    "Parallax_Solver_Working_the_final_and-got-the-flag.py": "46fb95914ec0b8f04ba45ccfcb8d958a024bb4a63d9e6a1c2eef391eaa1c47b7",
+    "chall.py": "d2b82c0cbab34e7b25d20c83ab3392086df35c2be85456f68f89052dee74ce1b"
+  },
+  "originalFileMapping": {
+    "README.original.md": "Parallax_Overpass_CTF_Writeup.md"
+  },
+  "notes": [
+    "The final solver matches the complete Python appendix exactly after surrounding whitespace is removed.",
+    "The recorded successful remote run is supplied evidence; no remote service was contacted or lattice attack rerun during publication.",
+    "Original uploads are preserved byte-for-byte. Display equations are shown as text code blocks in the reading edition."
+  ]
+}

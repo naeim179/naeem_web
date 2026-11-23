@@ -1,21 +1,598 @@
-# Parallax
+# Parallax — Overpass CTF 2026
 
-## Challenge overview
+**Category:** Cryptography  
+**Challenge author:** notSUH1B  
+**Points:** 464  
+**Status:** Solved  
+**Flag:** `OVERPASS{parallax_4kztqbjmsum6nhkgjeff}`
 
-Parallax is a 464-point cryptography challenge from OVERPASS 2026 by notSUH1B. The beacon signs each request with two related reports: a full range response and a lower-precision Doppler response. The challenge asks whether an observer can impersonate the beacon and unlock its sealed logbook.
+## Source verification
 
-## Where the signing design fails
+The selected solution file exactly matches the Python appendix supplied with this write-up. The successful remote run below is the author’s recorded result. Publication checks compared the sources and Python syntax; the lattice attack was not rerun during publication.
 
-The beacon signs the two reports with separate private keys and distinct challenge labels, but uses the same secret nonce for both responses in each request. The public commitment therefore reflects a shared secret value. Restricting the Doppler response to its most significant bits still reveals information about that value and its relation to the signing keys.
+## Challenge description
 
-A fresh nonce for each request does not address reuse within the request itself. The risk comes from combining the full range response with the partial Doppler response across multiple observations. The shared nonce links those observations to the same pair of session keys.
+> The Parallax beacon countersigns every range request with a second, lower-precision doppler report. It will seal its logbook for a station that can sign as the beacon.
 
-## Impact
+The service exposes `SIGN`, `UNLOCK`, and `PROVE` commands. Every TCP connection is an independent session, so signatures and their associated private keys cannot be mixed across connections. The goal is to convince the server that we can produce a valid dual signature for a fresh 16-byte challenge and then decrypt the returned AES-GCM ciphertext.
 
-The writeup records a successful solve. The linked responses exposed enough information to recover the session signing keys, impersonate the beacon, and read its sealed logbook. The logbook also depended on those private scalars for its encryption key, so the signing compromise affected confidentiality as well as authentication.
+The remote instance used in this solve was `vps3.ctf.bracken.sh:30012`.
 
-## Design lessons
+## 1. Understanding the signing scheme
 
-Use reviewed signature implementations and generate a nonce independently for each signing operation, even when multiple signatures are produced for the same request. For a custom protocol that must expose a derived or rounded measurement, keep it separate from intermediate signature values.
+The server generates two secret scalars `x, y` modulo
 
-Use independent key material for signing and encryption. Review both how values are generated and how they are shared across operations, especially when multiple components emit data derived from the same secret.
+```python
+p = 2**256 - 189
+```
+
+and publishes `X = g^x mod P` and `Y = g^y mod P`.
+
+For a chosen message `m`, it samples a fresh nonce `k` and computes a single commitment:
+
+```python
+t = pow(g, k, P)
+```
+
+Two domain-separated challenges are then derived:
+
+```python
+c1 = SHA256(b"range"   + be(t, 256) + m) % p
+c2 = SHA256(b"doppler" + be(t, 256) + m) % p
+```
+
+**Important implementation detail:** `be(t, 256)` means a **256-byte** big-endian encoding of the commitment, not a 256-bit (32-byte) encoding.
+
+The response equations are
+
+```text
+s_1 = (k + c_1 x) \bmod p,
+\qquad
+s_2 = (k + c_2 y) \bmod p.
+```
+
+However, `SIGN` returns only `(t, s1, z)`, where
+
+```text
+z = s_2 \gg 250.
+```
+
+Thus, each query leaks only the **six most significant bits** of the second response. The signing limit is 110 queries per session.
+
+## 2. Vulnerability: the two signatures reuse one nonce
+
+Subtracting the responses eliminates the unknown nonce `k`:
+
+```text
+s_1 - s_2 = c_1 x - c_2 y \pmod p.
+```
+
+Define
+
+```text
+a_i = c_{1,i},\qquad b_i=-c_{2,i},
+```
+
+so that for each signature
+
+```text
+s_{2,i} = (s_{1,i} - a_i x - b_i y)\bmod p.
+```
+
+Let `W = 2^250`. The six-bit leak reveals the interval
+
+```text
+z_i W \leq s_{2,i} < (z_i+1)W,
+```
+
+with the final interval additionally limited by `s2 < p`.
+
+Writing `s2_i = z_i W + δ_i` gives `0 <= δ_i < W`. Consequently,
+
+```text
+a_i x+b_i y \equiv s_{1,i}-z_i W-\delta_i\pmod p.
+```
+
+Rather than try all unknown low bits of the second response, we solve this system of **approximate modular linear equations** using lattice reduction. With 110 samples, the attacker obtains up to 660 leaked bits of constraints against two 256-bit unknowns (512 bits altogether). This information-counting argument suggests recovery is plausible; it is not by itself a guarantee that a particular lattice reduction will succeed.
+
+## 3. Centering the errors
+
+To center each interval around zero, define the target
+
+```text
+u_i = s_{1,i} - (z_i W+W/2).
+```
+
+If
+
+```text
+\ell_i \equiv a_i x+b_i y\pmod p,
+```
+
+then
+
+```text
+\ell_i-u_i \equiv W/2-\delta_i\pmod p.
+```
+
+Choosing the appropriate integer representative therefore yields a small residual
+
+```text
+|\ell_i-u_i| \leq W/2 = 2^{249}.
+```
+
+The unknown vector `ell` belongs to a modular lattice generated by the two coefficient vectors plus multiples of `p` in each coordinate:
+
+```text
+\mathcal L = \{\,(a_i x+b_i y+p q_i)_{i=0}^{n-1}:x,y,q_i\in\mathbb Z\,\}.
+```
+
+Our task is to find a point of this lattice close to `u`: a closest-vector problem (CVP).
+
+## 4. Building the lattice and embedding the target
+
+A naive basis would add the full coefficient vectors and `n` diagonal rows containing `p`. Instead, the exploit uses a row-HNF-like construction to obtain an `n × n` basis without redundant secret-key coordinates.
+
+Set
+
+```text
+D=(a_0 b_1-a_1 b_0)\bmod p,
+```
+
+and compute `D^-1 mod p`. The first two lattice rows are
+
+```text
+B_{0,i}= (a_i b_1-b_i a_1)D^{-1}\bmod p,
+```
+
+```text
+B_{1,i}= (a_0 b_i-a_i b_0)D^{-1}\bmod p.
+```
+
+All remaining rows contain `p` in their own diagonal position, with zeros elsewhere. The first two columns of the first two rows form the identity matrix modulo `p`. This provides an invertible coordinate representation of the same modular lattice, provided `D != 0 mod p`.
+
+Next, use **Kannan's embedding** to convert the approximate CVP into a short-vector problem. Append a final row `(-u_0, ..., -u_{n-1}, T)` and a last column of zeros for the original lattice rows, where
+
+```text
+T=\lfloor W/3\rfloor.
+```
+
+Now the basis has dimension `(n+1) × (n+1)` — **111 × 111** for the 110 collected signatures. The desired short vector has the shape
+
+```text
+(\ell_0-u_0,\ldots,\ell_{n-1}-u_{n-1}, T).
+```
+
+Its first 110 coordinates are small error terms, making it a candidate for lattice reduction.
+
+The critical code is:
+
+```python
+W = 1 << 250
+n = len(sig)
+a = [row[0] for row in sig]
+b = [-row[1] for row in sig]
+z = [row[3] for row in sig]
+target = [row[2] - (row[3] * W + W // 2) for row in sig]
+
+D = (a[0] * b[1] - a[1] * b[0]) % p
+inv_D = pow(D, -1, p)
+
+M = IntegerMatrix(n + 1, n + 1)
+for i in range(n):
+    M[0, i] = ((a[i] * b[1] - b[i] * a[1]) * inv_D) % p
+    M[1, i] = ((a[0] * b[i] - a[i] * b[0]) * inv_D) % p
+for i in range(2, n):
+    M[i, i] = p
+
+T = W // 3
+for i in range(n):
+    M[n, i] = -target[i]
+M[n, n] = T
+```
+
+## 5. LLL followed by BKZ
+
+We first apply LLL (`delta=0.99`) and inspect the reduced basis. If that does not reveal a suitable short vector, we progressively increase the BKZ block size:
+
+```python
+LLL.reduction(M, delta=0.99)
+
+for beta in (35, 40, 45):
+    BKZ.reduction(
+        M,
+        BKZ.Param(block_size=beta, max_loops=1, flags=BKZ.VERBOSE),
+    )
+    # Test basis rows and small +/- combinations for secret-key candidates.
+```
+
+The full solver checks each reduced row and, optionally, pairwise sums and differences of the first 35 rows. For a candidate vector `v`, its last coordinate must equal `m*T` for a small nonzero integer `m`. Dividing out `m` reconstructs the first two coordinates of the underlying modular point:
+
+```text
+\ell_0 = (v_0/m+u_0)\bmod p,
+\quad
+\ell_1 = (v_1/m+u_1)\bmod p.
+```
+
+The two-by-two modular system then gives
+
+```text
+x=(\ell_0 b_1-\ell_1 b_0)D^{-1}\bmod p,
+```
+
+```text
+y=(a_0\ell_1-a_1\ell_0)D^{-1}\bmod p.
+```
+
+The exploit validates recovered candidates using **all 110 truncated outputs**, followed by the public-key checks
+
+```text
+g^x\equiv X\pmod P,\qquad g^y\equiv Y\pmod P.
+```
+
+These checks eliminate spurious short lattice vectors.
+
+### Observed successful run
+
+The attack was run inside Ubuntu on Windows Subsystem for Linux (WSL), with `fpylll`, `cysignals` and `pycryptodomex` installed. The successful command was:
+
+```bash
+python -u ~/parallax_solve.py \
+  --host vps3.ctf.bracken.sh \
+  --port 30012 \
+  --blocks 35,40,45
+```
+
+The significant output was:
+
+```text
+[*] Collecting 110 signatures in this session
+[*] LLL on a 111 x 111 lattice
+[*] BKZ block size 35
+End of BKZ loop    0, time =     6.033s, r_0 = 1.05e153
+End of BKZ: failure: loops limit exceeded in BKZ
+[*] BKZ block size 40
+End of BKZ loop    0, time =    24.197s, r_0 = 7.38e152
+End of BKZ: failure: loops limit exceeded in BKZ
+[*] BKZ block size 45
+End of BKZ loop    0, time =   302.085s, r_0 = 3.07e151
+End of BKZ: failure: loops limit exceeded in BKZ
+[+] x = 0x434d3b46346bb9b1398c0fbca0c18a6e6bc0f109aee7252a9bd2f163c7212b5e
+[+] y = 0x222c7c0de8b4ef28c127d6161cf960a3e8e1604efed9088391921755469e143e
+[+] FLAG: OVERPASS{parallax_4kztqbjmsum6nhkgjeff}
+```
+
+The phrase **“failure: loops limit exceeded”** comes from BKZ's stopping condition (`max_loops=1`); it does **not** mean the CTF attack failed. In this particular session, the key-recovery step succeeded after BKZ-45.
+
+Because the server has a 900-second idle timeout, the exploit starts a separate keepalive process that sends `HELP` while the parent performs BKZ. This does not extend the server's separate two-hour session lifetime.
+
+## 6. Forging the dual proof
+
+Once both secret keys were recovered, the server's signing mechanism was no longer secure. We requested `UNLOCK`, which returned a fresh random 16-byte message. Since we already knew `x` and `y`, we chose an arbitrary nonce `k=1` and generated the proof ourselves:
+
+```python
+msg = bytes.fromhex(peer.query("UNLOCK").split()[1])
+k = 1
+t = pow(g, k, P)
+s1 = (k + h(b"range", t, msg, p) * x) % p
+s2 = (k + h(b"doppler", t, msg, p) * y) % p
+response = peer.query(f"PROVE {hex(t)} {hex(s1)} {hex(s2)}")
+```
+
+The server verifies both modular exponentiation equations against `X` and `Y`, then returns a `SEAL` ciphertext and authentication tag. Unlike `SIGN`, the `PROVE` command requires the **full** `s2` value, which we can now calculate exactly.
+
+## 7. AES-GCM decryption
+
+The code derives its encryption key and nonce deterministically from the two secrets:
+
+```python
+key = hashlib.sha256(
+    y.to_bytes(32, "big") + x.to_bytes(32, "big")
+).digest()[::-1]
+
+nonce = hashlib.sha256(
+    ((x * y) % p).to_bytes(32, "big")
+).digest()[:12]
+
+ciphertext = bytes.fromhex(response.split()[1])
+tag = bytes.fromhex(response.split()[2])
+flag = AES.new(key, AES.MODE_GCM, nonce=nonce).decrypt_and_verify(ciphertext, tag)
+```
+
+The byte reversal on the SHA-256 digest used for the key is intentional and must match the challenge source. `decrypt_and_verify` validates the GCM authentication tag; a wrong key, nonce, or ciphertext should fail authentication rather than produce a trustworthy flag.
+
+The output was:
+
+```text
+OVERPASS{parallax_4kztqbjmsum6nhkgjeff}
+```
+
+## 8. Practical notes
+
+- The live instance displayed a UTF-8 `›` prompt, although the provided source showed an ASCII `>` prompt. The network parser had to recognize the deployed prompt, and the decorative banner had to be excluded when parsing `P`, `p`, `g`, `X`, `Y` and `MAX_SIGN`.
+- The installation used `pycryptodomex` (`from Cryptodome.Cipher import AES`); some environments instead use `pycryptodome` (`from Crypto.Cipher import AES`).
+- A new connection generates new `x` and `y`, so every signature and the final `UNLOCK`/`PROVE` exchange must occur in the same connection.
+- BKZ at larger block sizes can be substantially slower. In this successful run, blocks 35 and 40 were insufficient, whereas block 45 recovered the keys.
+
+## Conclusion
+
+Parallax fails because **two signature equations share the same nonce while one response leaks its most significant bits**. Eliminating the nonce turns the leak into many approximate modular linear equations in only two unknown secrets. A carefully constructed lattice, Kannan embedding, LLL, and BKZ-45 recovered both private keys. The recovered keys then permitted a valid dual proof and deterministic AES-GCM decryption of the flag.
+
+**Flag: `OVERPASS{parallax_4kztqbjmsum6nhkgjeff}`**
+
+---
+
+## Appendix: Full exploit code
+
+The complete tested-pattern solver is reproduced below. It supports both live UTF-8 and source ASCII prompts, verbose BKZ output, and both `Cryptodome` and `Crypto` AES import paths.
+
+```python
+#!/usr/bin/env python3
+"""Overpass CTF / Parallax -- shared-nonce, truncated-response lattice exploit.
+
+Dependencies: fpylll, cysignals, pycryptodomex (or pycryptodome).
+Run: python3 parallax_solve.py --host vps3.ctf.bracken.sh --port 30012
+"""
+
+import argparse
+import hashlib
+import multiprocessing as mp
+import socket
+import sys
+
+try:
+    from Cryptodome.Cipher import AES  # Kali/Debian: python3-pycryptodome
+except ImportError:
+    from Crypto.Cipher import AES  # pip: pycryptodome
+from fpylll import BKZ, IntegerMatrix, LLL
+
+LEAK_BITS = 6
+W = 1 << (256 - LEAK_BITS)
+# The deployed Overpass instance uses a UTF-8 right-angle quote (U+203A),
+# unlike the plain-ASCII prompt in the distributed source.
+PROMPTS = ("  › ".encode("utf-8"), b"  > ")
+
+
+class Peer:
+    def __init__(self, sock):
+        self.sock = sock
+        self.buffer = b""
+
+    def read_response(self):
+        while True:
+            # Both the deployed UTF-8 prompt and the source's ASCII prompt.
+            matches = [(self.buffer.find(marker), marker)
+                       for marker in PROMPTS if marker in self.buffer]
+            if matches:
+                pos, marker = min(matches, key=lambda x: x[0])
+                result = self.buffer[:pos]
+                self.buffer = self.buffer[pos + len(marker):]
+                return result.decode("utf-8", errors="replace").strip()
+            chunk = self.sock.recv(8192)
+            if not chunk:
+                raise ConnectionError("The challenge server closed the connection")
+            self.buffer += chunk
+
+    def query(self, command):
+        self.sock.sendall(command.encode("ascii") + b"\n")
+        return self.read_response()
+
+
+def keepalive(fd, stop):
+    """Separate process avoids losing the session during long BKZ calls.
+
+    The parent performs no socket I/O until this process has exited.
+    Only intended for POSIX/fork systems such as Kali Linux.
+    """
+    sock = socket.socket(fileno=fd)
+    sock.settimeout(30)
+    peer = Peer(sock)
+    try:
+        while not stop.wait(45):
+            peer.query("HELP")
+    except (OSError, ConnectionError) as exc:
+        print(f"[keepalive] {exc}", file=sys.stderr, flush=True)
+    finally:
+        sock.close()
+
+
+def h(tag, t, msg, p):
+    return int.from_bytes(
+        hashlib.sha256(tag + t.to_bytes(256, "big") + msg).digest(),
+        "big",
+    ) % p
+
+
+def make_lattice(sig, p):
+    """An (n+1)-dimensional Kannan embedding of the modular CVP.
+
+    L = { (a_i*x + b_i*y) mod p : x,y in Z/pZ } + p*Z^n.
+    A row-HNF-style basis avoids two redundant p-sized key coordinates.
+    """
+    n = len(sig)
+    a = [item[0] for item in sig]
+    b = [-item[1] for item in sig]
+    z = [item[3] for item in sig]
+    target = [item[2] - (item[3] * W + W // 2) for item in sig]
+
+    determinant = (a[0] * b[1] - a[1] * b[0]) % p
+    inv_det = pow(determinant, -1, p)
+
+    mat = IntegerMatrix(n + 1, n + 1)
+    for i in range(n):
+        mat[0, i] = ((a[i] * b[1] - b[i] * a[1]) * inv_det) % p
+        mat[1, i] = ((a[0] * b[i] - a[i] * b[0]) * inv_det) % p
+    for i in range(2, n):
+        mat[i, i] = p
+
+    # A short row (errors..., T) should appear after strong reduction.
+    T = W // 3
+    for i in range(n):
+        mat[n, i] = -target[i]
+    mat[n, n] = T
+    return mat, (a, b, z, target, inv_det, T)
+
+
+def find_key(mat, extra, sig, p, P, g, X, Y, pairs=False):
+    a, b, z, target, inv_det, T = extra
+    n = len(sig)
+    rows = [[int(mat[i, j]) for j in range(n + 1)] for i in range(n + 1)]
+
+    def check(v):
+        if v[n] % T:
+            return None
+        multiplier = v[n] // T
+        if not 1 <= abs(multiplier) <= 4:
+            return None
+        # Every true residual is bounded by W/2, including at MSB boundaries.
+        if any(abs(v[j]) > abs(multiplier) * (W // 2) for j in range(n)):
+            return None
+        inv_multiplier = pow(multiplier, -1, p)
+        l0 = ((v[0] + multiplier * target[0]) * inv_multiplier) % p
+        l1 = ((v[1] + multiplier * target[1]) * inv_multiplier) % p
+        x = ((l0 * b[1] - l1 * b[0]) * inv_det) % p
+        y = ((a[0] * l1 - a[1] * l0) * inv_det) % p
+        if not all(
+            ((item[2] - a[i] * x - b[i] * y) % p) // W == z[i]
+            for i, item in enumerate(sig)
+        ):
+            return None
+        if pow(g, x, P) == X and pow(g, y, P) == Y:
+            return x, y
+        return None
+
+    for row in rows:
+        answer = check(row)
+        if answer:
+            return answer
+
+    if pairs:
+        # The desired short vector may be a +/- combination of basis rows.
+        for i in range(min(n + 1, 35)):
+            for j in range(i + 1, min(n + 1, 35)):
+                for s in (-1, 1):
+                    v = [rows[i][k] + s * rows[j][k] for k in range(n + 1)]
+                    answer = check(v)
+                    if answer:
+                        return answer
+    return None
+
+
+def recover_key(sig, p, P, g, X, Y, blocks):
+    mat, extra = make_lattice(sig, p)
+    print(f"[*] LLL on a {mat.nrows} x {mat.ncols} lattice", flush=True)
+    LLL.reduction(mat, delta=0.99)
+    key = find_key(mat, extra, sig, p, P, g, X, Y, pairs=True)
+    if key:
+        return key
+
+    for beta in blocks:
+        if beta > mat.nrows:
+            continue
+        print(f"[*] BKZ block size {beta}", flush=True)
+        BKZ.reduction(mat, BKZ.Param(block_size=beta, max_loops=1, flags=BKZ.VERBOSE))
+        key = find_key(mat, extra, sig, p, P, g, X, Y, pairs=True)
+        if key:
+            return key
+    raise RuntimeError("Lattice reduction did not recover the keys; try larger BKZ blocks")
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--host", default="vps3.ctf.bracken.sh")
+    parser.add_argument("--port", type=int, default=30012)
+    parser.add_argument("--count", type=int, default=110)
+    parser.add_argument("--blocks", default="35,40,45")
+    args = parser.parse_args()
+
+    sock = socket.create_connection((args.host, args.port), timeout=30)
+    sock.settimeout(60)
+    peer = Peer(sock)
+    banner = peer.read_response()
+    # The live service has a decorative banner, HELP text and blank lines.
+    expected = {"P", "g", "p", "X", "Y", "MAX_SIGN"}
+    params = {}
+    for line in banner.splitlines():
+        if " = " not in line:
+            continue
+        name, value = line.strip().split(" = ", 1)
+        if name in expected:
+            params[name] = value.strip()
+    missing = expected.difference(params)
+    if missing:
+        raise RuntimeError(f"Server banner missing {sorted(missing)}; banner: {banner!r}")
+    P = int(params["P"], 0)
+    g = int(params["g"], 0)
+    p = int(params["p"], 0)
+    X = int(params["X"], 0)
+    Y = int(params["Y"], 0)
+    count = min(args.count, int(params["MAX_SIGN"]))
+    print(f"[*] Collecting {count} signatures in this session", flush=True)
+    assert count >= 3
+
+    sig = []
+    for i in range(count):
+        msg = i.to_bytes(4, "big")
+        response = peer.query("SIGN " + msg.hex()).split()
+        if len(response) != 4 or response[0] != "SIG":
+            raise RuntimeError(f"Unexpected SIGN response: {response}")
+        t, s1, z = int(response[1], 0), int(response[2], 0), int(response[3])
+        a = h(b"range", t, msg, p)
+        b = h(b"doppler", t, msg, p)
+        sig.append((a, b, s1, z))
+
+    # Only the child sends HELP; the parent performs no network calls during BKZ.
+    if peer.buffer:
+        raise RuntimeError("Unexpected buffered server output before forking")
+    ctx = mp.get_context("fork")
+    stop = ctx.Event()
+    worker = ctx.Process(target=keepalive, args=(sock.fileno(), stop), daemon=True)
+    worker.start()
+    try:
+        blocks = [int(x) for x in args.blocks.split(",")]
+        x, y = recover_key(sig, p, P, g, X, Y, blocks)
+    finally:
+        stop.set()
+        worker.join(timeout=5)
+        if worker.is_alive():
+            worker.terminate()
+            worker.join()
+
+    print("[+] x =", hex(x), flush=True)
+    print("[+] y =", hex(y), flush=True)
+
+    challenge = peer.query("UNLOCK").split()
+    if len(challenge) != 2 or challenge[0] != "MSG":
+        raise RuntimeError(f"Unexpected UNLOCK response: {challenge}")
+    msg = bytes.fromhex(challenge[1])
+
+    k = 1  # We know both secrets: a fresh nonce can be chosen arbitrarily.
+    t = pow(g, k, P)
+    s1 = (k + h(b"range", t, msg, p) * x) % p
+    s2 = (k + h(b"doppler", t, msg, p) * y) % p
+    response = peer.query(f"PROVE {hex(t)} {hex(s1)} {hex(s2)}").split()
+    if len(response) != 3 or response[0] != "SEAL":
+        raise RuntimeError(f"PROVE failed: {response}")
+
+    ciphertext, tag = bytes.fromhex(response[1]), bytes.fromhex(response[2])
+    key = hashlib.sha256(y.to_bytes(32, "big") + x.to_bytes(32, "big")).digest()[::-1]
+    nonce = hashlib.sha256(((x * y) % p).to_bytes(32, "big")).digest()[:12]
+    flag = AES.new(key, AES.MODE_GCM, nonce=nonce).decrypt_and_verify(ciphertext, tag)
+    print("[+] FLAG:", flag.decode(), flush=True)
+    sock.close()
+
+
+if __name__ == "__main__":
+    main()
+
+```
+
+
+## Download the original files
+
+- [Final solver matching this write-up](Parallax_Solver_Working_the_final_and-got-the-flag.py)
+- [Challenge source](chall.py)
+- [Earlier solver](parallax_solve.py)
+- [Intermediate fixed solver](parallax_solve_fixed.py)
+- [Original complete Markdown](README.original.md)
+- [File hashes and provenance](provenance.json)
